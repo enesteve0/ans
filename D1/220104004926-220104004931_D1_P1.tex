@@ -1,0 +1,683 @@
+% =====================================================================
+% CSE 341 -- Concepts of Programming Languages
+% Project D1 (Part 1) -- Design Specification for ANS
+% Students: 220104004926 & 220104004931
+% Compile with:  pdflatex 220104004926-220104004931_D1_P1.tex  (run twice)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Encoding, fonts, language ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}                    % Times serif (scalable Type 1)
+\usepackage[scaled=0.92]{helvet}         % Helvetica sans
+\usepackage{courier}                     % Courier monospace
+\usepackage[english]{babel}
+\usepackage{microtype}
+
+% ---------- Page geometry ----------
+\usepackage[a4paper,margin=2.0cm,top=2.0cm,bottom=2.2cm]{geometry}
+
+% ---------- Colour, graphics, hyperlinks ----------
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{0B3D91}
+\definecolor{ansrow}{HTML}{F4F6FB}
+\definecolor{ansgray}{HTML}{F5F5F5}
+\definecolor{ansborder}{HTML}{DDDDDD}
+\definecolor{anscaption}{HTML}{555555}
+\usepackage[colorlinks=true, linkcolor=ansblue, urlcolor=ansblue,
+            citecolor=ansblue, pdfborder={0 0 0}]{hyperref}
+
+% ---------- Typography ----------
+\usepackage[explicit]{titlesec}
+\titleformat{\section}
+  {\color{ansblue}\Large\bfseries\sffamily}
+  {\thesection}{0.6em}{#1}
+\titleformat{\subsection}
+  {\color{black}\normalsize\bfseries\sffamily}
+  {\thesubsection}{0.6em}{#1}
+\titlespacing*{\section}{0pt}{14pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+\setlength{\parskip}{4pt plus 1pt}
+\setlength{\parindent}{0pt}
+
+% ---------- Tables ----------
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{makecell}
+\usepackage{seqsplit}
+\renewcommand{\arraystretch}{1.18}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+
+% Header row helper (white text on ansblue)
+\newcommand{\thd}[1]{\textbf{\color{white}#1}}
+
+% ---------- Code listings ----------
+\usepackage{listings}
+\lstdefinelanguage{ANS}{
+  morekeywords={let,function,return,for,in,if,elif,else,print,
+                element,compound,reaction,reactants,products,
+                formula,name,atomic_mass,valence,symbol,
+                check,balanced,energy,exothermic,endothermic,
+                molar_mass,compute_yield,mol},
+  sensitive=true,
+  morecomment=[l]{\#},
+  morestring=[b]",
+  morestring=[b]'
+}
+\lstdefinestyle{ans}{
+  language=ANS,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\bfseries\color{ansblue},
+  commentstyle=\itshape\color{anscaption},
+  stringstyle=\color{black!70!ansblue},
+  numbers=none,
+  frame=single,
+  rulecolor=\color{ansborder},
+  backgroundcolor=\color{ansgray},
+  framesep=4pt,
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  breakatwhitespace=true,
+  upquote=true
+}
+\lstdefinestyle{ebnf}{
+  language={},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle={},
+  commentstyle={},
+  stringstyle={},
+  numbers=none,
+  frame=none,
+  backgroundcolor=\color{white},
+  aboveskip=4pt,
+  belowskip=6pt,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=false,
+  upquote=true,
+  literate={->}{{$\rightarrow$}}2
+}
+\lstset{style=ans}
+
+% Inline code shortcut
+\newcommand{\code}[1]{\texttt{#1}}
+
+% ---------- Header / footer ----------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}%
+  CSE 341 --- ANS Design Specification (D1, Part 1) $\cdot$
+  Students 220104004926 \& 220104004931}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+% ---------- PDF metadata ----------
+\hypersetup{
+  pdftitle  = {ANS -- Design Specification (D1, Part 1)},
+  pdfauthor = {220104004926 and 220104004931},
+  pdfsubject= {CSE 341 Project Part 1},
+  pdfkeywords={DSL, chemistry, Sebesta, EBNF, lexical analysis}
+}
+
+% Suppress section numbers in TOC etc. -- not used
+\setcounter{secnumdepth}{0}
+
+% =====================================================================
+\begin{document}
+
+% ---------------- Title block ----------------
+\begin{center}
+  {\footnotesize\color{anscaption}
+    CSE 341 --- Concepts of Programming Languages\par}
+  \vspace{2pt}
+  {\Huge\bfseries\sffamily\color{ansblue}
+    ANS: A Domain-Specific Language for Chemistry\par}
+  \vspace{4pt}
+  {\normalsize Design Specification (D1) --- Part 1\par}
+  {\footnotesize\color{anscaption}
+    Students: 220104004926 \& 220104004931 \quad$\cdot$\quad
+    Spring 2026 \quad$\cdot$\quad
+    Gebze Technical University\par}
+\end{center}
+\vspace{6pt}
+
+% =====================================================================
+\section{4.1\quad Language Overview}
+
+\textbf{Name.}\, ANS --- short for \textit{Atomic Notation Script}.
+
+\textbf{Domain.}\, ANS is a small DSL for declaring chemical elements,
+compounds, and reactions, verifying balance at compile time, and performing
+stoichiometric queries such as molar mass and theoretical yield. It targets
+undergraduate chemistry students and instructors who want to write
+calculations the way they appear in textbooks rather than as bare numerical
+code.
+
+\subsection{Sample program}
+\begin{lstlisting}
+# Declare elements
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+
+# Declare compounds
+compound water   { formula = H2O, name = "Water"          };
+compound methane { formula = CH4, name = "Methane"        };
+compound co2     { formula = CO2, name = "Carbon dioxide" };
+compound oxygen  { formula = O2,  name = "Oxygen"         };
+
+# Variables and a heterogeneous list
+let n        = 21.2;
+let elements = [H, O, C];
+let list     = [1, "two", 3.45, water, methane.formula, co2.name, H];
+
+# A user-defined function
+function molar_mass(compound) {
+    let formula = compound.formula;
+    let mass    = 0.0;
+    for (let element in formula) {
+        mass += element.atomic_mass * formula[element];
+    }
+    return mass;
+};
+
+# A reaction whose balance is checked at compile time
+reaction combustion {
+    reactants = CH4 + 2*O2,
+    products  = CO2 + 2*H2O,
+    check     = balanced,
+    energy    = exothermic 890.3 kJ/mol
+};
+
+# Stoichiometric queries
+molar_mass(water);
+compute_yield(combustion, 5.0 mol, CH4);
+
+# Conditional reporting
+if compute_yield(combustion, 5.0 mol, CH4) > 0 {
+    print "The yield of CH4 is positive, so combustion is possible.";
+} elif compute_yield(combustion, 5.0 mol, CH4) == 0 {
+    print "The yield is zero.";
+} else {
+    print "The yield is negative.";
+}
+\end{lstlisting}
+
+\subsection{Sebesta evaluation-criteria justification (Ch.~1)}
+
+Following Sebesta's Chapter~1 evaluation framework --- readability,
+writability, reliability, and overall cost --- ANS deliberately prioritizes
+\textbf{readability, writability, and reliability} while knowingly sacrificing
+some \textbf{cost, generality, and orthogonality}. Readability is favoured
+because the syntax mirrors chemistry vocabulary directly (\code{element},
+\code{compound}, \code{reaction}, \code{reactants}, \code{products},
+\code{balanced}) on top of a familiar C-like skeleton (\code{let}, braces,
+semicolons, function calls, \code{if}/\code{elif}/\code{else}), so the meaning
+of a program can be inferred from its surface form. Writability is favoured
+because common domain tasks --- declaring an element, writing a balanced
+equation as \code{CH4 + 2*O2 -> CO2 + 2*H2O}, or asking
+\code{molar\_mass(water)} --- are first-class constructs rather than
+user-coded library routines. Reliability is favoured through compile-time
+validation: the lexer recognises formula and unit literals as their own
+categories, the semantic checker verifies that every element symbol exists in
+the periodic table and that every reaction is atomically balanced before any
+value is computed, and units such as \code{mol} and \code{kJ/mol} are tracked
+rather than discarded. The accepted trade-offs are the higher implementation
+cost of formula parsing, unit handling, and balance checking, the loss of
+generality (ANS is unsuited to non-chemistry tasks), and reduced orthogonality
+(many fixed domain forms instead of a small set of freely combinable
+primitives). Sebesta explicitly notes that language design is a process of
+selecting trade-offs among these criteria; for a teaching-oriented chemistry
+DSL the gains in domain-specific clarity and safety outweigh the loss of
+general-purpose expressiveness.
+
+% =====================================================================
+\section{4.2\quad Lexical Structure}
+
+ANS uses the standard five-category lexical split --- identifiers, literals,
+keywords, operators, and separators --- that Sebesta describes as the output
+of a finite-automaton-based lexical analyser (\S4.2). Two practical wrinkles
+drive the design: (i)~chemical formulas like \code{H2O} must be
+distinguishable from user-defined names, and (ii)~several chemistry words
+(\code{reaction}, \code{compound}, \code{mol}) must still be usable as
+ordinary parameter names inside function bodies. ANS solves (i) by case
+(identifiers begin lowercase; element/formula tokens begin uppercase) and
+(ii)~by treating the chemistry words as \textit{contextual} keywords that the
+parser promotes only in the grammar positions where they are reserved.
+
+\renewcommand{\tabularxcolumn}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+% A small helper so a regex column entry is set in monospace, scriptsize,
+% and broken at any character if needed.
+\newcommand{\rx}[1]{\scriptsize\ttfamily\seqsplit{#1}}
+{\footnotesize
+\rowcolors{2}{white}{ansrow}
+\arrayrulecolor{ansborder}
+\begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}p{2.7cm}
+                                >{\RaggedRight\arraybackslash}p{6.0cm}
+                                Y@{}}
+\arrayrulecolor{ansborder}\toprule
+\rowcolor{ansblue}\thd{Category} & \thd{ANS meaning / examples} & \thd{Pattern (Python-style regex)}\\
+\midrule
+Identifiers
+  & User-defined names: \code{water}, \code{methane}, \code{num}, \code{reactant\_mol}
+  & \rx{[a-z\_][A-Za-z0-9\_]*}\\
+Number literals
+  & Integers, decimals, scientific: \code{20}, \code{1.008}, \code{6.02e23}
+  & \rx{(?:0|[1-9][0-9]*)(?:\textbackslash.[0-9]+)?(?:[eE][+-]?[0-9]+)?}\\
+String literals
+  & \code{"Hydrogen"}, \code{"Water"}, \code{"Carbon dioxide"}
+  & \rx{"(?:[\^{}"\textbackslash\textbackslash{}\textbackslash{}r\textbackslash{}n]|\textbackslash\textbackslash["\textbackslash\textbackslash{}nrt])*"}\\
+Char literals
+  & \code{'H'}, \code{'\textbackslash{}n'}
+  & \rx{'(?:[\^{}'\textbackslash\textbackslash{}\textbackslash{}r\textbackslash{}n]|\textbackslash\textbackslash['\textbackslash\textbackslash{}nrt])'}\\
+Formula literals
+  & Element symbols / formulas: \code{H}, \code{O}, \code{H2O}, \code{CH4}, \code{CO2}, \code{O2}
+  & \rx{(?:[A-Z][a-z]?(?:[1-9][0-9]*)?)+}\\
+Unit literals
+  & \code{mol}, \code{g}, \code{kg}, \code{g/mol}, \code{kg/mol}, \code{kJ}, \code{kJ/mol}
+  & \rx{(?<![A-Za-z0-9\_])(?:kg/mol|g/mol|kJ/mol|mol|kg|g|kJ)(?![A-Za-z0-9\_])}\\
+Keywords (hard)
+  & \code{let}, \code{function}, \code{return}, \code{for}, \code{in}, \code{if}, \code{elif}, \code{else}, \code{print}
+  & matched as identifier, then keyword-table lookup\\
+Keywords (contextual)
+  & \code{element}, \code{compound}, \code{reaction}, \code{reactants},
+    \code{products}, \code{formula}, \code{name}, \code{atomic\_mass},
+    \code{valence}, \code{symbol}, \code{check}, \code{balanced},
+    \code{energy}, \code{exothermic}, \code{endothermic}
+  & promoted to keywords only in their grammar positions\\
+Operators
+  & \code{=}\, \code{+}\, \code{-}\, \code{*}\, \code{/}\, \code{+=}\, \code{-=}\, \code{*=}\, \code{/=}\, \code{==}\, \code{!=}\, \code{<}\, \code{<=}\, \code{>}\, \code{>=}
+  & \rx{==|!=|<=|>=|\textbackslash{}+=|-=|\textbackslash{}*=|/=|=|[+\textbackslash{}-*/<>]}\\
+Separators
+  & \code{\{}\, \code{\}}\, \code{(}\, \code{)}\, \code{[}\, \code{]}\, \code{,}\, \code{;}\, \code{.}
+  & \rx{[\{\}()\textbackslash{}[\textbackslash{}],;.]}\\
+Comments
+  & \code{\#} line comment to end of line
+  & \rx{\#[\^{}\textbackslash{}r\textbackslash{}n]*}\\
+Whitespace
+  & spaces, tabs, newlines (separator only, not a token)
+  & \rx{[\textbackslash{} \textbackslash{}t\textbackslash{}f\textbackslash{}r\textbackslash{}n]+}\\
+\bottomrule
+\end{tabularx}}
+\par\vspace{4pt}
+
+\textbf{Lexer ordering rules.}\, Match the longer pattern first within each
+group: \code{kJ/mol} before \code{kJ}; \code{g/mol} before \code{g}; compound
+assignments such as \code{+=} before \code{+}; and \code{==}, \code{<=},
+\code{>=}, \code{!=} before their single-character forms. Identifiers are
+matched first, then promoted to \textit{KEYWORD} if their lexeme is in the
+reserved-word table --- Sebesta's standard technique for names vs. reserved
+words (\S5.1).
+
+% =====================================================================
+\newpage
+\section{4.3\quad Syntax (EBNF)}
+
+The grammar below is written in Sebesta-style EBNF (\S3.1--3.2): non-terminals
+appear in angle brackets, terminals in double quotes, \code{\{ X \}} means
+zero or more repetitions of X, \code{[ X ]} means optional, and \code{|}
+separates alternatives. The grammar is unambiguous for the implemented
+subset; ambiguity-resolution decisions are listed at the end of this section.
+
+\begin{lstlisting}[style=ebnf]
+(* ============================================================
+   ANS Grammar (Part 1) -- Sebesta-style EBNF
+   ============================================================ *)
+
+(* ---------- Program structure ---------- *)
+<program>           ::= { <top_level_statement> } EOF
+
+<top_level_statement> ::= <variable_declaration> ";"
+                        | <assignment_statement>  ";"
+                        | <element_declaration>   ";"
+                        | <compound_declaration>  ";"
+                        | <reaction_declaration>  ";"
+                        | <function_declaration>
+                        | <if_statement>
+                        | <expression_statement>  ";"
+
+(* ---------- Blocks and statements ---------- *)
+<block>             ::= "{" { <statement> } "}"
+
+<statement>         ::= <variable_declaration>           ";"
+                      | <assignment_statement>           ";"
+                      | <augmented_assignment_statement> ";"
+                      | <return_statement>               ";"
+                      | <for_statement>
+                      | <if_statement>
+                      | <print_statement>                ";"
+                      | <expression_statement>           ";"
+
+<variable_declaration>  ::= "let" <identifier> "=" <expression>
+<assignment_statement>  ::= <assignable> "=" <expression>
+<augmented_assignment_statement>
+                        ::= <assignable> <aug_op> <expression>
+<aug_op>                ::= "+=" | "-=" | "*=" | "/="
+<return_statement>      ::= "return" [ <expression> ]
+<print_statement>       ::= "print" <expression>
+<expression_statement>  ::= <expression>
+
+(* ---------- Functions and loops ---------- *)
+<function_declaration> ::= "function" <identifier>
+                           "(" [ <parameter_list> ] ")" <block> ";"
+<parameter_list>       ::= <identifier> { "," <identifier> }
+
+<for_statement>        ::= "for" "(" "let" <identifier> "in" <expression> ")"
+                           <block>
+
+(* ---------- Conditionals (no dangling-else: braces required) ---------- *)
+<if_statement>         ::= "if" <expression> <block>
+                           { "elif" <expression> <block> }
+                           [ "else" <block> ]
+
+(* ---------- Domain-specific declarations ---------- *)
+<element_declaration>  ::= "element" <element_symbol>
+                           "{" <element_field_list> "}"
+<element_symbol>       ::= <formula_literal>
+<element_field_list>   ::= <element_field> { "," <element_field> } [ "," ]
+<element_field>        ::= "atomic_mass" "=" <number_literal>
+                         | "valence"     "=" <number_literal>
+                         | "symbol"      "=" <string_literal>
+
+<compound_declaration> ::= "compound" <identifier>
+                           "{" <compound_field_list> "}"
+<compound_field_list>  ::= <compound_field> { "," <compound_field> } [ "," ]
+<compound_field>       ::= "formula" "=" <formula_literal>
+                         | "name"    "=" <string_literal>
+
+<reaction_declaration> ::= "reaction" <identifier>
+                           "{" <reaction_field_list> "}"
+<reaction_field_list>  ::= <reaction_field> { "," <reaction_field> } [ "," ]
+<reaction_field>       ::= "reactants" "=" <reaction_expression>
+                         | "products"  "=" <reaction_expression>
+                         | "check"     "=" <balance_check>
+                         | "energy"    "=" <energy_expression>
+<balance_check>        ::= "balanced"
+<energy_expression>    ::= <energy_kind> <quantity_literal>
+<energy_kind>          ::= "exothermic" | "endothermic"
+
+(* ---------- Reaction expressions (own grammar, separate from arithmetic) ---------- *)
+<reaction_expression>  ::= <reaction_term> { "+" <reaction_term> }
+<reaction_term>        ::= <reaction_species>
+                         | <coefficient> "*" <reaction_species>
+<coefficient>          ::= <number_literal>
+<reaction_species>     ::= <formula_literal> | <identifier>
+
+(* ---------- General expressions (precedence encoded in the grammar) ---------- *)
+<expression>                ::= <or_expression>
+<or_expression>             ::= <and_expression>
+                                { "||" <and_expression> }
+<and_expression>            ::= <equality_expression>
+                                { "&&" <equality_expression> }
+<equality_expression>       ::= <relational_expression>
+                                { ("==" | "!=") <relational_expression> }
+<relational_expression>     ::= <additive_expression>
+                                { ("<" | "<=" | ">" | ">=") <additive_expression> }
+<additive_expression>       ::= <multiplicative_expression>
+                                { ("+" | "-") <multiplicative_expression> }
+<multiplicative_expression> ::= <unary_expression>
+                                { ("*" | "/") <unary_expression> }
+<unary_expression>          ::= [ "-" ] <postfix_expression>
+<postfix_expression>        ::= <primary_expression> { <postfix_op> }
+<postfix_op>                ::= "." <identifier>
+                              | "[" <expression> "]"
+                              | "(" [ <argument_list> ] ")"
+
+<primary_expression>        ::= <quantity_literal>
+                              | <number_literal>
+                              | <string_literal>
+                              | <char_literal>
+                              | <formula_literal>
+                              | <list_literal>
+                              | <identifier>
+                              | "(" <expression> ")"
+
+<argument_list>             ::= <expression> { "," <expression> }
+<quantity_literal>          ::= <number_literal> <unit_literal>
+<list_literal>              ::= "[" [ <expression> { "," <expression> } ] "]"
+
+(* ---------- Assignable LHS (subset of postfix; no calls allowed) ---------- *)
+<assignable>          ::= <identifier> { <assignable_postfix> }
+<assignable_postfix>  ::= "." <identifier>
+                        | "[" <expression> "]"
+
+(* ---------- Lexical (terminals from the lexer) ---------- *)
+<identifier>      ::= IDENTIFIER       (* [a-z_][A-Za-z0-9_]*           *)
+<number_literal>  ::= NUMBER_LITERAL
+<string_literal>  ::= STRING_LITERAL
+<char_literal>    ::= CHAR_LITERAL
+<formula_literal> ::= FORMULA_LITERAL  (* (?:[A-Z][a-z]?(?:[1-9][0-9]*)?)+ *)
+<unit_literal>    ::= UNIT_LITERAL
+\end{lstlisting}
+
+\subsection{Ambiguity-resolution annotations}
+
+{\footnotesize
+\rowcolors{2}{white}{ansrow}
+\arrayrulecolor{ansborder}
+\begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}p{4.0cm} Y@{}}
+\arrayrulecolor{ansborder}\toprule
+\rowcolor{ansblue}\thd{Source of ambiguity} & \thd{How ANS resolves it}\\
+\midrule
+Operator precedence
+  & Encoded by the cascade
+    \textit{or} $\to$ \textit{and} $\to$ equality $\to$ relational $\to$
+    additive $\to$ multiplicative $\to$ unary $\to$ postfix $\to$ primary.
+    Therefore \code{a + b * c} parses as \code{a + (b * c)} and
+    \code{a < b + c} parses as \code{a < (b + c)}. All binary operators are
+    left-associative because each level repeats with \code{\{ ... \}}.\\
+Reaction vs. arithmetic +/*
+  & Reactions have their own non-terminal \code{<reaction\_expression>},
+    separate from \code{<expression>}. Inside a reaction, \code{+} separates
+    chemical species and \code{*} binds a coefficient to a formula, so
+    \code{CH4 + 2*O2} parses unambiguously as \code{CH4 + (2*O2)}.\\
+Stoichiometric coefficient vs. subscript
+  & ANS requires the explicit form \code{2*O2} rather than \code{2O2}. This
+    removes the ambiguity between a coefficient and a leading digit of a
+    (non-existent) formula token, and keeps \code{FORMULA\_LITERAL} purely
+    uppercase-led.\\
+Formula literal vs. identifier
+  & Identifiers begin with a lowercase letter or underscore; formula literals
+    begin with an uppercase letter. Thus \code{water} is always an identifier
+    and \code{H2O} is always a formula. A bare \code{H} is lexically a
+    \code{FORMULA\_LITERAL}; the parser interprets it as an
+    \code{<element\_symbol>} only when it follows the keyword \code{element}.\\
+Contextual keywords
+  & \code{reaction}, \code{compound}, \code{mol}, \code{formula}, etc.\ are
+    recognised as keywords only in the grammar positions where they appear
+    above. Outside those positions they remain identifiers, which is why
+    \code{function compute\_yield(reaction, mol, compound) \{ ... \}} is
+    legal.\\
+Dangling-else
+  & ANS requires braces around every then/elif/else body
+    (see \code{<if\_statement>}). The classical dangling-else ambiguity
+    therefore cannot arise: every \code{else} attaches to a uniquely
+    delimited \code{<block>}.\\
+Function call vs. assignment target
+  & \code{<assignable>} deliberately omits the call postfix
+    \code{'(' ... ')'}. Therefore \code{f(x) = e} is a syntax error,
+    removing the ambiguity between calling a function and assigning to its
+    result.\\
+Field order in declarations
+  & \code{<element\_field\_list>}, \code{<compound\_field\_list>}, and
+    \code{<reaction\_field\_list>} accept fields in any order syntactically;
+    the semantic checker enforces that each required field appears exactly
+    once. This keeps the grammar LL(1) while still rejecting duplicate or
+    missing fields with a precise error message.\\
+\bottomrule
+\end{tabularx}}
+
+% =====================================================================
+\newpage
+\section{4.6\quad Names, Binding, Scope, Lifetime}
+
+\subsection{Rules for legal identifiers (Sebesta \S5.1)}
+
+An ANS identifier matches \code{[a-z\_][A-Za-z0-9\_]*}: it begins with a
+lowercase letter or underscore and continues with letters, digits, or
+underscores. ANS is \textbf{case-sensitive}, so \code{water} and \code{Water}
+are distinct names. Tokens that begin with an uppercase letter (e.g.\
+\code{H}, \code{O2}, \code{H2O}) are \textit{formula literals}, never
+identifiers, which keeps chemistry notation visually separated from program
+names. The hard reserved words \code{let, function, return, for, in, if,
+elif, else, print} may never be used as identifiers. The chemistry words
+\code{element, compound, reaction, reactants, products, formula, name,
+atomic\_mass, valence, symbol, check, balanced, energy, exothermic,
+endothermic} are \textit{contextual} keywords in the sense of Sebesta's
+discussion of keywords vs.\ reserved words: they are reserved only where the
+grammar expects them, so
+\code{function compute\_yield(reaction, mol, compound) \{ ... \}} is a legal
+declaration. A name may not be declared twice in the same scope; a name in
+an inner scope may shadow an outer name, and the type checker emits a warning
+when this shadows a top-level chemistry declaration.
+
+\subsection{Bindings: compile time vs.\ run time (Sebesta \S5.2)}
+
+{\footnotesize
+\rowcolors{2}{white}{ansrow}
+\arrayrulecolor{ansborder}
+\begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}p{5.4cm}
+                               >{\RaggedRight\arraybackslash}p{4.0cm}
+                               Y@{}}
+\arrayrulecolor{ansborder}\toprule
+\rowcolor{ansblue}\thd{Binding} & \thd{When} & \thd{Example}\\
+\midrule
+Operator symbol $\to$ meaning
+  & Language-design time
+  & \code{+}, \code{*}, \code{==}, \code{\&\&}\\
+Lexeme $\to$ token category
+  & Lex / compile time
+  & \code{water} $\to$ IDENTIFIER, \code{H2O} $\to$ FORMULA\_LITERAL\\
+Identifier $\to$ declaration
+  & Compile time (static scope walk)
+  & \code{mass} refers to its enclosing \code{let}\\
+Variable $\to$ inferred type
+  & Compile time
+  & \code{let n = 21.2;} $\Rightarrow$ \code{n : Float}\\
+Element / compound / reaction name $\to$ declaration
+  & Compile time
+  & \code{water}, \code{combustion}\\
+Formula validity, balance check, unit compatibility
+  & Compile time
+  & \code{check = balanced} verified statically\\
+Parameter $\to$ argument value
+  & Run time
+  & \code{compute\_yield(combustion, 5.0 mol, CH4)}\\
+Local variable $\to$ memory cell
+  & Run time (on entry)
+  & stack-allocated when block is entered\\
+Variable $\to$ value
+  & Run time
+  & \code{mass += element.atomic\_mass * formula[element]}\\
+Function name $\to$ return value
+  & Run time
+  & \code{return product\_mol;}\\
+\bottomrule
+\end{tabularx}}
+\par\vspace{2pt}
+
+ANS therefore uses mostly \textbf{static} bindings for names, types, and
+chemistry validation, and \textbf{dynamic} bindings for storage and values
+--- exactly the mix Sebesta recommends when reliability is more important
+than late flexibility (\S5.4.3).
+
+\subsection{Scoping rule: static (lexical) scoping (Sebesta \S5.5)}
+
+ANS uses \textbf{static, lexical scoping}. The reference of every name is
+determined from the program text alone: a name resolves to the nearest
+enclosing declaration in the source --- block, loop body, function body,
+then enclosing function (if nested), then top level. The reasoning follows
+Sebesta's argument that static scope makes both the human reader and the
+compiler able to determine the meaning of every name without simulating
+execution.
+
+\textbf{What would break under dynamic scoping.}\, Consider:
+
+\begin{lstlisting}
+let water = methane;          # 'water' shadowed at top level
+
+function f() {
+    return molar_mass(water);  # what does 'water' refer to?
+}
+
+function g() {
+    let water = co2;
+    return f();                # caller introduces a local 'water'
+}
+\end{lstlisting}
+
+Under static scoping \code{f} always uses the top-level \code{water} visible
+where it was \textit{defined}, so \code{g()} still computes the molar mass of
+methane. Under dynamic scoping \code{f} would instead capture \code{g}'s
+local \code{water} and silently switch to CO\textsubscript{2}. For a chemistry
+DSL this is intolerable: a stoichiometric calculation must not depend on the
+call chain. Dynamic scoping would also defeat the compile-time
+formula-validity and balance checks, because the type checker could no longer
+determine which compound a function will read at run time. ANS therefore
+commits to static scoping; the small loss of run-time flexibility is exactly
+the trade-off named in \S4.1.
+
+\subsection{Lifetimes (Sebesta \S5.4.3)}
+
+{\footnotesize
+\rowcolors{2}{white}{ansrow}
+\arrayrulecolor{ansborder}
+\begin{tabularx}{\linewidth}{@{}>{\RaggedRight\arraybackslash}p{5.0cm}
+                               >{\RaggedRight\arraybackslash}p{4.0cm}
+                               Y@{}}
+\arrayrulecolor{ansborder}\toprule
+\rowcolor{ansblue}\thd{Entity} & \thd{Lifetime category} & \thd{Notes}\\
+\midrule
+Top-level element / compound / reaction declarations
+  & Static (program lifetime)
+  & Allocated once at program start; visible to every later statement and
+    function.\\
+Top-level \code{let} variables
+  & Static (program lifetime)
+  & Single binding from the \code{let} until program termination.\\
+Function parameters
+  & Stack-dynamic
+  & Allocated on call; deallocated on return. Supports recursion.\\
+\code{let} variables inside a function or block
+  & Stack-dynamic
+  & Allocated when the declaration is elaborated; freed when the enclosing
+    block exits.\\
+Loop variable in \code{for (let x in ...)}
+  & Stack-dynamic, scoped to the loop
+  & A fresh binding per iteration, so closures over \code{x} do not alias.\\
+List values, compound objects, reaction objects
+  & Heap-managed by the implementation
+  & Not user-visible: ANS has no \code{new} / \code{delete} and no pointers,
+    so heap management is automatic, not ``explicit heap-dynamic'' in
+    Sebesta's sense.\\
+\bottomrule
+\end{tabularx}}
+\par\vspace{2pt}
+
+Local variables are \textbf{stack-dynamic} rather than static so that
+repeated calls to \code{molar\_mass} or \code{compute\_yield} cannot leak
+state from one invocation to the next, and so that recursion (anticipated for
+Part~2's reaction search and balance solver) is supported. ANS deliberately
+exposes no \textbf{explicit heap-dynamic} construct: there are no pointers,
+no \code{new}/\code{delete}, and no aliasing. This costs some flexibility but
+eliminates an entire class of unreliability errors --- a trade-off that is
+consistent with the readability/reliability prioritisation declared in
+\S4.1.
+
+\vspace{6pt}
+{\footnotesize\itshape\color{anscaption}
+Part~2 will extend this document with \S4.4 Semantics, \S4.5 Type System,
+\S4.7 Expressions \& Assignment, and \S4.8 Design Rationale, all consistent
+with the decisions stated above.\par}
+
+\end{document}
