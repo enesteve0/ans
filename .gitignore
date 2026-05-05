@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# C++
+*.o
+*.out
+*.a
+*.so
+*.exe
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
