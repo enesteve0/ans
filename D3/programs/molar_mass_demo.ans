@@ -1,0 +1,40 @@
+// Program 1 — Molar Mass Calculator
+// Exercises: element/compound declarations, function definition,
+//             for loop, if/elif/else, function call, list literal
+
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+element N { atomic_mass = 14.007, valence = 3, symbol = "N" };
+
+compound water    { formula = H2O,  name = "Water"            };
+compound methane  { formula = CH4,  name = "Methane"          };
+compound co2      { formula = CO2,  name = "Carbon dioxide"   };
+compound ammonia  { formula = NH3,  name = "Ammonia"          };
+
+function molar_mass(compound c) {
+    let formula = c.formula;
+    let mass = 0.0;
+    for (let element in formula) {
+        mass += element.atomic_mass * formula[element];
+    }
+    return mass;
+};
+
+function classify_mass(compound c) {
+    let mass = molar_mass(c);
+    if (mass < 20.0) {
+        print "Light molecule.";
+    }
+    elif (mass < 50.0) {
+        print "Medium molecule.";
+    }
+    else {
+        print "Heavy molecule.";
+    }
+};
+
+let compounds = [water, methane, co2, ammonia];
+for (let c in compounds) {
+    classify_mass(c);
+};

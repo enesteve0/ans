@@ -1,0 +1,6 @@
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+
+compound co2 {
+    formula = CO2,
+    name = "Carbon dioxide
+};

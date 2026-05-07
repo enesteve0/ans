@@ -1,0 +1,8 @@
+// Missing semicolon after variable declaration
+element H {
+    atomic_mass = 1.008,
+    valence = 1,
+    symbol = "H"
+}
+// ^ missing ';' after the closing brace
+let x = 5.0;

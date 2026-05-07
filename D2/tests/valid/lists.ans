@@ -1,0 +1,23 @@
+// Heterogeneous list literals and indexing
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+
+compound water   { formula = H2O, name = "Water" };
+compound methane { formula = CH4, name = "Methane" };
+compound co2     { formula = CO2, name = "Carbon dioxide" };
+
+// Mixed-type list
+let list = [1, "two", 3.45, 4, 5, water, methane.formula, co2.name, H];
+
+// List of elements
+let elements = [H, O, C];
+
+// List of compounds
+let compounds = [water, methane, co2];
+
+// Empty list
+let empty = [];
+
+// Nested access
+let first_name = compounds[0].name;

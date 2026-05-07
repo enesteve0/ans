@@ -1,0 +1,7 @@
+// Unknown field name inside element body
+element H {
+    atomic_mass = 1.008,
+    valence = 1,
+    symbol = "H",
+    protons = 1
+};

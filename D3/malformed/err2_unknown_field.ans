@@ -1,0 +1,6 @@
+element O {
+    atomic_mass = 15.999,
+    valence = 2,
+    symbol = "O",
+    protons = 8
+};

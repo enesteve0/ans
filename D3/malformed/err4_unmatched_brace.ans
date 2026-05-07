@@ -1,0 +1,8 @@
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+
+function compute(compound c) {
+    let mass = 0.0;
+    for (let e in c.formula) {
+        mass += e.atomic_mass;
+    return mass;
+};

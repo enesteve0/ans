@@ -1,0 +1,43 @@
+// Expression precedence, postfix chains, quantity literals
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound water { formula = H2O, name = "Water" };
+
+// Arithmetic precedence
+let a = 1.0 + 2.0 * 3.0;       // 7.0
+let b = (1.0 + 2.0) * 3.0;     // 9.0
+let c = 10.0 / 2.0 - 1.0;      // 4.0
+let d = -3.14 * 2.0;            // negative unary
+
+// Comparison
+let eq = 1.0 == 1.0;
+let ne = 2.0 != 3.0;
+let lt = 1.0 < 2.0;
+let le = 1.0 <= 1.0;
+let gt = 5.0 > 3.0;
+let ge = 4.0 >= 4.0;
+
+// Postfix chains
+let sym = water.name;
+let fm  = water.formula;
+
+// Quantity literals
+let mass_g    = 18.015 g/mol;
+let mass_kg   = 0.018  kg/mol;
+let energy_kj = 890.3  kJ/mol;
+let amount    = 5.0    mol;
+let grams     = 100.0  g;
+let kilograms = 1.0    kg;
+let kilojoules = 285.0 kJ;
+
+// Scientific notation
+let avogadro = 6.02e23;
+let tiny     = 1.0e-10;
+
+// Augmented assignment
+let x = 10.0;
+x += 5.0;
+x -= 2.0;
+x *= 3.0;
+x /= 2.0;

@@ -1,0 +1,52 @@
+// Program 2 — Combustion Reaction Analysis
+// Exercises: reaction declaration (check = balanced, exothermic energy),
+//             typed parameters (reaction r, compound c),
+//             function definition and call, augmented assignment
+
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+
+compound methane { formula = CH4, name = "Methane"        };
+compound oxygen  { formula = O2,  name = "Oxygen"         };
+compound co2     { formula = CO2, name = "Carbon dioxide" };
+compound water   { formula = H2O, name = "Water"          };
+
+reaction combustion {
+    reactants = CH4 + 2*O2,
+    products  = CO2 + 2*H2O,
+    check     = balanced,
+    energy    = exothermic 890.3 kJ/mol
+};
+
+function molar_mass(compound c) {
+    let formula = c.formula;
+    let mass = 0.0;
+    for (let element in formula) {
+        mass += element.atomic_mass * formula[element];
+    }
+    return mass;
+};
+
+function compute_yield(reaction r, compound c) {
+    let products  = r.products;
+    let reactants = r.reactants;
+    let reactant_mol = 1.0 / mol(reactants[c]);
+    let product_mol  = reactant_mol * mol(products[c]);
+    return product_mol;
+};
+
+function print_reaction_summary(reaction r, compound fuel, compound product) {
+    let yield_val = compute_yield(r, fuel);
+    let mass      = molar_mass(product);
+    if (yield_val > 0.0) {
+        print "Reaction produces output.";
+    }
+    else {
+        print "No product formed.";
+    }
+};
+
+print_reaction_summary(combustion, methane, co2);
+compute_yield(combustion, CH4);
+molar_mass(water);

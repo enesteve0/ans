@@ -1,0 +1,3 @@
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+
+let result = 5.0 @ 2.0;

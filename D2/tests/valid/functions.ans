@@ -1,0 +1,47 @@
+// Function declarations — typed and untyped parameters, return
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+
+compound water   { formula = H2O,  name = "Water" };
+compound methane { formula = CH4,  name = "Methane" };
+compound co2     { formula = CO2,  name = "Carbon dioxide" };
+compound oxygen  { formula = O2,   name = "Oxygen" };
+
+reaction combustion {
+    reactants = CH4 + 2*O2,
+    products  = CO2 + 2*H2O,
+    check     = balanced,
+    energy    = exothermic 890.3 kJ/mol
+};
+
+// Typed parameters
+function molar_mass(compound c) {
+    let formula = c.formula;
+    let mass = 0.0;
+    for (let element in formula) {
+        mass += element.atomic_mass * formula[element];
+    }
+    return mass;
+};
+
+function compute_yield(reaction r, compound c) {
+    let products = r.products;
+    let reactants = r.reactants;
+    let reactant_mol = 1.0 / mol(reactants[c]);
+    let product_mol = reactant_mol * mol(products[c]);
+    return product_mol;
+};
+
+// Untyped parameter
+function double_val(x) {
+    return x * 2.0;
+};
+
+// No parameters
+function get_avogadro() {
+    return 6.02e23;
+};
+
+molar_mass(water);
+compute_yield(combustion, CH4);
