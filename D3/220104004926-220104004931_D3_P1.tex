@@ -1,0 +1,142 @@
+% =====================================================================
+% CSE 341 -- Concepts of Programming Languages
+% Project D3 (Part 1) -- Example Programs & Test Report for ANS
+% Students: 220104004926 & 220104004931
+% Compile with: tectonic 220104004926-220104004931_D3_P1.tex
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[a4paper,margin=1.65cm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{upquote}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{codebg}{HTML}{F8FAFC}
+\definecolor{codeborder}{HTML}{CBD5E1}
+
+\hypersetup{
+  pdftitle={D3 - Example Programs and Test Report},
+  pdfauthor={Yusuf Hamza Çelebi and Enes Özkan}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt}
+\setlist[description]{leftmargin=1.9cm, style=nextline, itemsep=3pt, topsep=2pt}
+
+\lstdefinestyle{terminal}{
+  basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeborder},
+  framerule=0.3pt,
+  xleftmargin=3pt,
+  xrightmargin=3pt,
+  aboveskip=5pt,
+  belowskip=5pt,
+  columns=fullflexible,
+  keepspaces=true,
+  upquote=true,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=false
+}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries D3 -- Example Programs \& Test Report}\\[2pt]
+  {\large ANS -- Atomic Notation Script}\\[4pt]
+  Yusuf Hamza Çelebi (220104004926) and Enes Özkan (220104004931)\\
+  CSE 341 -- Programming Languages, Spring 2026
+\end{center}
+
+\section*{Purpose and Parser Under Test}
+
+This report documents the Part 1 D3 tests for the ANS lexer and parser. The parser under test is the C implementation in \code{D2/}, run as \code{D2/ans <file>}. A valid program must parse with exit code \code{0}; a malformed program must be rejected with a useful diagnostic containing the file name, line number, column, and message.
+
+\section*{Three Valid Programs}
+
+The full valid source files are submitted in \code{D3/programs/}. The parser accepts all three programs silently, which is the expected success behavior for \code{D2/ans <file>}.
+
+\begin{itemize}
+  \item \textbf{\code{molar\_mass\_demo.ans} (40 lines).}
+  Exercises \code{element} and \code{compound} declarations, functions, typed parameters, list literals, \code{for}, \code{if}/\code{elif}/\code{else}, member access, index access, and function calls. Result: accepted, exit \code{0}.
+
+  \item \textbf{\code{combustion\_analysis.ans} (52 lines).}
+  Exercises a \code{reaction} declaration, formula literals, \code{check = balanced}, exothermic energy quantity, typed \code{reaction}/\code{compound} parameters, nested calls, and augmented assignment. Result: accepted, exit \code{0}.
+
+  \item \textbf{\code{multi\_reaction\_survey.ans} (70 lines).}
+  Exercises multiple reactions, formula-literal and identifier species, compound lists, loop counters, relational expressions, character and string literals, and repeated function calls. Result: accepted, exit \code{0}.
+\end{itemize}
+
+Verification run:
+\begin{lstlisting}[style=terminal]
+D2/ans D3/programs/combustion_analysis.ans     OK
+D2/ans D3/programs/molar_mass_demo.ans         OK
+D2/ans D3/programs/multi_reaction_survey.ans   OK
+\end{lstlisting}
+
+Together, these examples cover the required DSL surface: primitive literals (\code{number}, \code{string}, \code{char}, contextual words), structured chemistry declarations (\code{element}, \code{compound}, \code{reaction}), functions with parameters, expression precedence, control flow, list traversal, and the chemistry-specific reaction syntax.
+
+\section*{Five Malformed Programs}
+
+The full malformed source files are submitted in \code{D3/malformed/}. Each malformed file is intentionally small so the reported line number points directly to the syntax or lexical problem.
+
+\begin{itemize}
+  \item \textbf{\code{err1\_missing\_semicolon.ans}.}
+  Missing \code{;} after an \code{element} declaration. The parser reports the next token, \code{let}, at line 7 where the semicolon was required.
+
+  \item \textbf{\code{err2\_unknown\_field.ans}.}
+  Invalid field name \code{protons} inside an \code{element} body. The parser reports the unknown field at line 5, then a recovery error at the following \code{=}.
+
+  \item \textbf{\code{err3\_bad\_identifier.ans}.}
+  Illegal character \code{@} in an expression. The lexer reports the illegal character with line and column, then the parser reports the missing semicolon.
+
+  \item \textbf{\code{err4\_unmatched\_brace.ans}.}
+  Missing closing brace for a \code{for} block inside a function. The parser reports a syntax error near the premature \code{;}, followed by EOF recovery diagnostics.
+
+  \item \textbf{\code{err5\_unterminated\_string.ans}.}
+  String literal reaches a newline before a closing quote. The lexer reports the unterminated string at line 5, then parser recovery reports the broken compound body.
+\end{itemize}
+
+Actual parser output:
+\begin{lstlisting}[style=terminal]
+=== D3/malformed/err1_missing_semicolon.ans ===
+D3/malformed/err1_missing_semicolon.ans:7:1: error: expected ';' but got let
+
+=== D3/malformed/err2_unknown_field.ans ===
+D3/malformed/err2_unknown_field.ans:5:5: error: unknown element field 'protons'
+D3/malformed/err2_unknown_field.ans:5:13: error: expected '}' but got =
+
+=== D3/malformed/err3_bad_identifier.ans ===
+D3/malformed/err3_bad_identifier.ans:3:18: error: unexpected character '@'
+D3/malformed/err3_bad_identifier.ans:3:18: error: expected ';' but got @
+
+=== D3/malformed/err4_unmatched_brace.ans ===
+D3/malformed/err4_unmatched_brace.ans:8:2: error: unexpected token ; in expression
+D3/malformed/err4_unmatched_brace.ans:9:1: error: expected ';' but got
+D3/malformed/err4_unmatched_brace.ans:9:1: error: expected '}' but got
+D3/malformed/err4_unmatched_brace.ans:9:1: error: expected ';' but got
+
+=== D3/malformed/err5_unterminated_string.ans ===
+D3/malformed/err5_unterminated_string.ans:5:13: error: unterminated string literal
+D3/malformed/err5_unterminated_string.ans:5:13: error: expected STRING but got "
+D3/malformed/err5_unterminated_string.ans:6:2: error: expected '}' but got ;
+D3/malformed/err5_unterminated_string.ans:7:1: error: expected ';' but got
+\end{lstlisting}
+
+\section*{Conclusion}
+
+The valid examples demonstrate that the Part 1 parser accepts non-trivial ANS programs using declarations, expressions, control structures, functions, and the chemistry-specific reaction construct. The malformed examples show that lexical errors, missing separators, invalid declaration fields, unmatched braces, and unterminated strings are rejected with line-numbered, actionable diagnostics.
+
+\end{document}
