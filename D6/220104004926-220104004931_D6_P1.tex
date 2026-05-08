@@ -1,0 +1,127 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% Project D6 (Part 1): Contribution Report for ANS
+% Students: 220104004926 Yusuf Hamza Çelebi, 220104004931 Enes Özkan
+% Compile with: tectonic 220104004926-220104004931_D6_P1.tex
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=1.65cm,top=1.45cm,bottom=1.65cm]{geometry}
+
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscaption}{HTML}{6B7280}
+\definecolor{anscodebg}{HTML}{F9FAFB}
+\definecolor{ansborder}{HTML}{E5E7EB}
+\usepackage[colorlinks=true, linkcolor=ansblue, urlcolor=ansblue,
+            citecolor=ansblue, pdfborder={0 0 0}]{hyperref}
+
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.08}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}%
+  CSE 341: ANS Contribution Report (D6, Part 1) \(\cdot\)
+  Students 220104004926 \& 220104004931}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\linespread{1.02}
+\setcounter{secnumdepth}{0}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\ownerE}{Enes}
+\newcommand{\ownerH}{Hamza}
+
+\hypersetup{
+  pdftitle  = {ANS Contribution Report (D6, Part 1)},
+  pdfauthor = {220104004926 Yusuf Hamza Çelebi and 220104004931 Enes Özkan},
+  pdfsubject= {CSE 341 Project Part 1},
+  pdfkeywords={DSL, chemistry, contribution report, ANS}
+}
+
+\begin{document}
+
+\begin{center}
+  {\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+  \vspace{2pt}
+  {\Large\bfseries\sffamily ANS: Alchemist's Notation Script\par}
+  \vspace{2pt}
+  {\normalsize Contribution Report (D6), Part 1\par}
+  \vspace{4pt}
+  {\footnotesize\color{anscaption}
+    Students: 220104004926 Yusuf Hamza Çelebi \& 220104004931 Enes Özkan
+    \(\cdot\) Spring 2026 \(\cdot\) Gebze Technical University\par}
+\end{center}
+\vspace{3pt}
+
+\textbf{Partner key.}
+E = 220104004931 Enes Özkan.
+H = 220104004926 Yusuf Hamza Çelebi.
+For every row, the reviewer is the other partner. For D1, ``owner'' means primary responsibility for the shared design decision in that section; each partner prepared and submitted their own individual D1 PDF.
+
+\vspace{3pt}
+\rowcolors{2}{anscodebg}{white}
+\small
+\begin{tabularx}{\textwidth}{@{} L{1.25cm} Y L{2.0cm} L{2.0cm} @{}}
+\toprule
+\rowcolor{ansblue}
+\textcolor{white}{\textbf{Part}} &
+\textcolor{white}{\textbf{Item}} &
+\textcolor{white}{\textbf{Owner}} &
+\textcolor{white}{\textbf{Reviewer}} \\
+\midrule
+D1 & 4.1 Language Overview & H - \ownerH & E - \ownerE \\
+D1 & 4.2 Lexical Structure & E - \ownerE & H - \ownerH \\
+D1 & 4.3 Syntax and EBNF & H - \ownerH & E - \ownerE \\
+D1 & 4.6 Names, Binding, Scope, and Lifetime & E - \ownerE & H - \ownerH \\
+\midrule
+D2 & Build system, README, and command-line usage & H - \ownerH & E - \ownerE \\
+D2 & Lexer and token definitions & H - \ownerH & E - \ownerE \\
+D2 & Parser and grammar implementation & E - \ownerE & H - \ownerH \\
+D2 & AST structures, AST dump, and cleanup & H - \ownerH & E - \ownerE \\
+D2 & Error reporting and parser recovery & E - \ownerE & H - \ownerH \\
+D2 & Valid and invalid parser test cases & E - \ownerE & H - \ownerH \\
+\midrule
+D3 & \code{molar\_mass\_demo.ans} & H - \ownerH & E - \ownerE \\
+D3 & \code{combustion\_analysis.ans} & H - \ownerH & E - \ownerE \\
+D3 & \code{multi\_reaction\_survey.ans} & H - \ownerH & E - \ownerE \\
+D3 & \code{err1\_missing\_semicolon.ans} & E - \ownerE & H - \ownerH \\
+D3 & \code{err2\_unknown\_field.ans} & E - \ownerE & H - \ownerH \\
+D3 & \code{err3\_bad\_identifier.ans} & E - \ownerE & H - \ownerH \\
+D3 & \code{err4\_unmatched\_brace.ans} & E - \ownerE & H - \ownerH \\
+D3 & \code{err5\_unterminated\_string.ans} & E - \ownerE & H - \ownerH \\
+D3 & Written test report and verification output & E - \ownerE & H - \ownerH \\
+\midrule
+D5 & Enes individual retrospective & E - \ownerE & H - \ownerH \\
+D5 & Hamza individual retrospective & H - \ownerH & E - \ownerE \\
+\bottomrule
+\end{tabularx}
+
+\normalsize
+\vspace{7pt}
+\textbf{Declaration and signatures.}
+We confirm that this report describes our Part 1 contribution split honestly, and that both partners reviewed the work assigned to the other partner.
+
+\vspace{7pt}
+\begin{tabularx}{\textwidth}{@{} X X @{}}
+\textbf{Typed signature:} 220104004926 Yusuf Hamza Çelebi &
+\textbf{Typed signature:} 220104004931 Enes Özkan \\
+\end{tabularx}
+
+\end{document}
