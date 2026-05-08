@@ -1,6 +1,6 @@
-# ANS — Lexer & Parser (D3)
+# ANS - Lexer & Parser (D2, Part 1)
 
-A hand-written C lexer and recursive-descent parser for the ANS (Atomic Notation Script) domain-specific language.
+A hand-written C lexer and recursive-descent parser for the ANS (Alchemist's Notation Script) domain-specific language.
 
 ---
 
@@ -70,7 +70,7 @@ Program
 ## Project layout
 
 ```
-D3/
+D2/
 ├── Makefile
 ├── README.md
 ├── include/
