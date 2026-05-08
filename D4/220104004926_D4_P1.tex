@@ -1,0 +1,222 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% Project D4 (Part 1): AI Usage Journal
+% Student: 220104004926 Yusuf Hamza Çelebi
+% Compile with: tectonic 220104004926_D4_P1.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[varqu,varl]{zi4}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.25cm,top=2.0cm,bottom=2.15cm]{geometry}
+
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscaption}{HTML}{6B7280}
+\definecolor{anscodebg}{HTML}{F9FAFB}
+\usepackage[colorlinks=true, linkcolor=ansblue, urlcolor=ansblue,
+            citecolor=ansblue, pdfborder={0 0 0}]{hyperref}
+
+\usepackage[explicit]{titlesec}
+\titleformat{\section}
+  {\large\bfseries\sffamily\color{black}}
+  {\thesection}{0.65em}{#1}
+\titlespacing*{\section}{0pt}{13pt}{5pt}
+\setlength{\parskip}{4.5pt plus 1pt minus 1pt}
+\setlength{\parindent}{0pt}
+\linespread{1.06}
+\emergencystretch=2em
+\setcounter{secnumdepth}{0}
+
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.1em,itemsep=1pt,topsep=2pt,parsep=0pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}%
+  CSE 341: AI Usage Journal (D4, Part 1) \(\cdot\)
+  Student 220104004926 Yusuf Hamza Çelebi}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+\hypersetup{
+  pdftitle  = {AI Usage Journal (D4, Part 1)},
+  pdfauthor = {220104004926 Yusuf Hamza Çelebi},
+  pdfsubject= {CSE 341 Project Part 1},
+  pdfkeywords={AI, usage journal, ANS, DSL}
+}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\field}[2]{\textbf{#1.} #2\par}
+\newcommand{\prompt}[1]{%
+  \textbf{Prompt.}
+  \begin{quote}\small #1\end{quote}
+}
+
+\begin{document}
+
+\begin{center}
+  {\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+  \vspace{3pt}
+  {\huge\bfseries\sffamily AI Usage Journal\par}
+  \vspace{4pt}
+  {\large Deliverable 4 (D4), Part 1\par}
+  \vspace{6pt}
+  {\footnotesize\color{anscaption}
+    Student: 220104004926 Yusuf Hamza Çelebi \(\cdot\)
+    Spring 2026 \(\cdot\)
+    Gebze Technical University\par}
+\end{center}
+\vspace{8pt}
+
+\section{Entry 1 of 12}
+\field{Date}{2026-05-05}
+\field{Phase}{Design / Writing}
+\field{AI tool}{Claude Opus 4.7, Anthropic}
+\field{Goal}{Set up an AI workflow for the project journal without letting the AI write the graded reflection for me.}
+\prompt{``Act as a programming and language design assistant for my CSE 341 course project. For every prompt I give you, follow a two-step process: first answer my request, then draft an AI Usage Journal entry using the template. Fill objective data from our interaction and leave placeholders for the subjective evaluations I must write myself.''}
+\field{Response key part}{Claude agreed, but recommended that only objective fields be auto-filled: date, phase, tool, goal, prompt, and response summary. It said accepted/rejected decisions, errors caught, and reflection should remain in my own voice because those are what the handout and exam evaluate.}
+\field{Accepted}{I kept the workflow. It made the journal easier to maintain during the project and forced me to review every AI answer instead of copying it.}
+\field{Rejected / modified}{I rejected the idea that Claude should fill every field. The reflection and evaluation fields had to be written by me after checking the output.}
+\field{Errors caught}{Claude asked whether we had read Sebesta Chapters 1 to 5, which was slightly misaligned because D1 had already been drafted. It was not a harmful mistake, but it showed that the assistant did not know the actual project state yet.}
+\field{Reflection}{This setup was useful because it separated record keeping from judgment. AI can help archive what happened, but the important work is explaining why I trusted, changed, or rejected its output.}
+
+\section{Entry 2 of 12}
+\field{Date}{2026-05-05}
+\field{Phase}{Design / Implementation Planning}
+\field{AI tool}{Claude Opus 4.7, Anthropic}
+\field{Goal}{Give project context and ask for implementation risks before committing to a C lexer and parser.}
+\prompt{``Our domain will be chemical reactions. We are a pair. We submitted the pairing form. We want to implement it in C. We already worked out D1 and prepared a PDF, but I want to check the design diligently with my friend.''}
+\field{Response key part}{Claude said chemistry was a strong DSL domain because reactions, formula literals, units, and balance checks map naturally to programming-language design topics. It warned that C would increase implementation work, especially memory management and recursive-descent parser structure. It suggested thinking about arena allocation and warned that left recursion is fatal for hand-written recursive descent.}
+\field{Accepted}{I accepted the advice to keep the parser hand-written and to watch for left recursion. That matches our C implementation and the D1 grammar style.}
+\field{Rejected / modified}{The arena allocator idea was useful, but it was not implemented in the final D2. The current D2 uses normal \code{calloc}, \code{malloc}, \code{realloc}, \code{free}, and \code{ast\_free}.}
+\field{Errors caught}{The first response was generic because Claude had not actually seen the D1 PDF. I treated it as preliminary guidance, not a final review.}
+\field{Reflection}{This session was helpful mostly for risk identification. It reminded me that C makes the parser more transparent for the exam, but also less forgiving than Python or JavaScript.}
+
+\section{Entry 3 of 12}
+\field{Date}{2026-05-05}
+\field{Phase}{Design / Writing}
+\field{AI tool}{Claude Opus 4.7, Anthropic}
+\field{Goal}{Get a critical review of the D1 design specification before implementation drift became too large.}
+\prompt{``Here is the D1 PDF. Let's discuss it thoroughly. The code sample is deprecated; I will provide the new sample with element, compound, reaction declarations, \code{compute\_yield}, \code{molar\_mass}, two reactions, and an \code{if}/\code{elif}/\code{else} block.''}
+\field{Response key part}{Claude flagged concrete inconsistencies: logical operators appeared in the grammar but not in the lexical structure, the unit-token plan was unclear, the static-scoping example reused an already declared name, reaction-arrow notation appeared in prose but not in the grammar, and boolean literals were not defined. It also pointed out the need to use Sebesta's exact term \textit{implicit heap-dynamic}.}
+\field{Accepted}{I accepted the specific consistency fixes and the Sebesta terminology correction. Those are the kinds of details that are easy to miss and easy for an examiner to ask about.}
+\field{Rejected / modified}{Claude suggested replacing \code{kJ/mol} with an underscore-based unit name. We rejected that because ANS is supposed to preserve chemistry notation even when it makes parsing slightly harder.}
+\field{Errors caught}{Claude called the static-scoping example a bug in the spec. That was true for the example, but the scoping explanation itself was still correct. I had to separate a bad example from a bad concept.}
+\field{Reflection}{A line-by-line review of a concrete report was much more useful than general advice. The best AI feedback in this session was traceable to a grammar rule, a token rule, or a specific design paragraph.}
+
+\section{Entry 4 of 12}
+\field{Date}{2026-05-05}
+\field{Phase}{Lexer / Parser}
+\field{AI tool}{Claude Opus 4.7, Anthropic}
+\field{Goal}{Understand unit tokenization and the dangling-else issue in enough detail to defend the syntax.}
+\prompt{``I did not understand this solution. Can you explain it much more detailed? What is dangling else error?''}
+\field{Response key part}{Claude explained that a lexer should not always decide whether a word such as \code{mol} is a unit. It walked through cases where \code{mol} appears after a number as a unit and elsewhere as an identifier. For dangling else, it showed how an \code{else} can bind to two possible \code{if} statements unless the grammar removes the ambiguity.}
+\field{Accepted}{I accepted the parser-context idea for single-word units and the explanation that mandatory braces prevent dangling-else ambiguity.}
+\field{Rejected / modified}{For slash units such as \code{kJ/mol}, the final implementation uses longest-match scanning before the slash operator rather than only parser-level word promotion.}
+\field{Errors caught}{Claude's sketch was too abstract for the exact C parser order. In a recursive-descent parser, token consumption order matters, so the implementation had to be checked against actual lookahead behavior.}
+\field{Reflection}{The useful part was the concrete case analysis. Tracing \code{5.0 mol} and \code{kJ/mol} through the lexer/parser clarified why the syntax has to be described carefully in D1.}
+
+\section{Entry 5 of 12}
+\field{Date}{2026-05-05}
+\field{Phase}{Design}
+\field{AI tool}{Claude Opus 4.7, Anthropic}
+\field{Goal}{Review a proposed \code{compute\_yield} design and avoid baking a chemistry mistake into the sample program.}
+\prompt{``How about implementing \code{compute\_yield(reaction r, compound c)} by reading \code{r.products}, \code{r.reactants}, \code{r.mol}, and computing product moles from \code{reactants[c]} and \code{products[c]}?''}
+\field{Response key part}{Claude separated two ideas. Typed parameters were a good design improvement, but storing \code{r.mol} inside a reaction was questionable because a reaction equation does not itself contain a starting amount. It also noticed that using the same compound key for reactants and products is chemically wrong when the limiting reactant and desired product are different.}
+\field{Accepted}{I accepted typed parameters and the warning that starting amount should be supplied by the caller, not stored inside a reaction declaration.}
+\field{Rejected / modified}{Claude suggested a larger mixture construct for originality. We rejected it for Part 1 because it would add a new construct too late and risk D1/D2 inconsistency.}
+\field{Errors caught}{The mixture suggestion was driven partly by rubric strategy, not by implementation readiness. I caught that this would hurt consistency more than it would help originality.}
+\field{Reflection}{This session showed the value of domain review. A parser can accept \code{reactants[c]} and \code{products[c]}, but chemistry still determines whether the program makes sense.}
+
+\section{Entry 6 of 12, Experiment E1}
+\field{Date}{2026-05-07}
+\field{Phase}{Parser}
+\field{AI tool}{Claude Code, Claude Sonnet CLI}
+\field{Goal}{Run the required E1 experiment: ask AI to generate an EBNF grammar from a short description, then compare it with our grammar.}
+\prompt{``I am designing a domain-specific programming language named ANS for chemistry. It has C-like statements with semicolons and braces. It supports \code{let}, \code{function}, \code{return}, \code{for in}, \code{if}, \code{elif}, \code{else}, and \code{print}. It also has \code{element}, \code{compound}, and \code{reaction} declarations. Compounds use flat formula literals like \code{H2O}; reactions have reactants, products, \code{check = balanced}, and energy values such as \code{exothermic 890.3 kJ/mol}. Expressions support arithmetic, comparison, calls, member access, and index access. Generate a complete EBNF grammar for this language.''}
+\field{Response key part}{Claude generated a normal hierarchical grammar with program, declaration, statement, expression, and formula rules. It used precedence levels for expressions and included chemistry declarations. It also filled gaps with generic language features that were not in our implementation.}
+\field{Accepted}{I kept the high-level grammar organization and the precedence hierarchy because those matched the recursive-descent parser style.}
+\field{Rejected / modified}{I rejected invented features and places where it overgeneralized. The final ANS grammar had to match our actual D1/D2 subset, including flat formulas and explicit \code{*} for reaction coefficients.}
+\field{Errors caught}{The AI output was not precise enough from one paragraph. It treated missing details as permission to invent common language constructs. I detected that by comparing its grammar with the D3 examples and the current parser.}
+\field{Reflection}{E1 demonstrated exactly why the assignment requires this experiment. AI can produce a plausible grammar quickly, but a plausible grammar is not the same as our language.}
+
+\section{Entry 7 of 12}
+\field{Date}{2026-05-07}
+\field{Phase}{Parser / Writing}
+\field{AI tool}{Claude Code, Claude Sonnet CLI}
+\field{Goal}{Rewrite the ANS grammar in Sebesta-style EBNF and check it against the updated sample code.}
+\prompt{``Can you rewrite the EBNF with the Sebesta style? I made changes to the sample code; scrutinize it and rewrite the EBNF again.''}
+\field{Response key part}{Claude rewrote the grammar style and then compared the sample program against the grammar. It found mismatches: an old \code{import std} line had no grammar rule, comments had shifted from \code{\#} to \code{//}, typed parameters were used in code but not in the old grammar, and \code{if}/\code{elif} conditions were parenthesized in the sample.}
+\field{Accepted}{I accepted the mismatch list and used it to align the grammar with the sample. Typed parameters and parenthesized conditions became explicit design decisions.}
+\field{Rejected / modified}{The proposed import rule was discarded. We removed import from the language instead of creating a small module system for Part 1.}
+\field{Errors caught}{Claude's first pass focused on notation before checking behavior. The useful errors appeared only after it compared grammar and sample code together.}
+\field{Reflection}{This changed how I used AI for grammar work. I stopped asking only for a pretty grammar and started asking for consistency checks against actual programs.}
+
+\section{Entry 8 of 12}
+\field{Date}{2026-05-07}
+\field{Phase}{Implementation}
+\field{AI tool}{Claude Code, Claude Sonnet CLI}
+\field{Goal}{Build the D2 lexer and parser in C according to the ANS lexical structure and EBNF.}
+\prompt{``I want you to build a lexer and parser according to our EBNF and ANS lexical structure. Follow best practices for C project file structures and language design projects in C. Use header files and Makefiles. Keep it professional.''}
+\field{Response key part}{Claude produced a modular C project with headers for lexer, parser, AST, and errors, plus source files and a Makefile. The parser followed the recursive-descent structure with one function per grammar level, and the CLI supported an AST dump flag.}
+\field{Accepted}{The modular project structure and recursive-descent approach were accepted. They match the course topics and make the code explainable in the exam.}
+\field{Rejected / modified}{The first directory placement confused D2 and D3 roles, so the implementation was moved under D2. Some generated details also needed adjustment to match the actual EBNF and test programs.}
+\field{Errors caught}{One omission was that a top-level \code{for} case was not handled consistently. That exposed a design question: either the grammar should allow it or the parser should reject it.}
+\field{Reflection}{AI was strong at scaffolding a C parser, but the grammar-to-code match still needed manual verification. The architecture is only good if every parser branch corresponds to the language we actually submit.}
+
+\section{Entry 9 of 12}
+\field{Date}{2026-05-07}
+\field{Phase}{Testing}
+\field{AI tool}{Claude Code, Claude Sonnet CLI}
+\field{Goal}{Prepare D3 test evidence with valid programs and malformed programs using real parser output.}
+\prompt{``Here are the D3 requirements from the handout. Create the Part 1 test material: three non-trivial valid programs and five malformed programs, and show the real parser messages.''}
+\field{Response key part}{Claude helped outline three valid programs and five malformed programs. The useful part was the insistence on running the files through the actual binary and recording real diagnostics with file, line, and column numbers.}
+\field{Accepted}{I accepted the method: test the programs with D2 and record actual output, not imagined output. That is what the D3 report now does.}
+\field{Rejected / modified}{At that point the written D3 PDF was not finished, so the output was only raw material. The final report still had to be assembled and checked separately.}
+\field{Errors caught}{The session hit a tool/usage limit before completing the report. That was an AI workflow failure: the task should have been split into smaller checkpoints.}
+\field{Reflection}{This session reinforced that test reports are only credible when they are reproducible. If D3 says a program exits 0, the grader can run the same command.}
+
+\section{Entry 10 of 12}
+\field{Date}{2026-05-08}
+\field{Phase}{Design / Parser}
+\field{AI tool}{Claude Sonnet 4.6}
+\field{Goal}{Check the EBNF for left recursion, ambiguity, and mismatches with the sample program.}
+\prompt{``Can you see any left recursion or ambiguity or error in the EBNF? Is there any problem? I checked myself but could not see anything.''}
+\field{Response key part}{Claude found three mismatches between the sample and grammar: stale \code{import std}, comment syntax mismatch, and typed parameters in code while the old grammar allowed only bare identifiers. It also noted an LL(1) conflict between assignment statements and expression statements.}
+\field{Accepted}{I accepted the real mismatches and corrected the design direction. The typed-parameter issue was especially important because it affects function declarations everywhere.}
+\field{Rejected / modified}{I did not label the LL(1) conflict as formal ambiguity. Since assignment is not an expression in ANS, the grammar can still be unambiguous even if the parser needs lookahead or a parsing strategy.}
+\field{Errors caught}{The AI used ``ambiguity'' too loosely. I had to distinguish formal grammar ambiguity from an LL(1) parsing conflict.}
+\field{Reflection}{This is the kind of distinction that matters in a programming-languages course. The AI identified the problem, but I had to name it correctly.}
+
+\section{Entry 11 of 12}
+\field{Date}{2026-05-08}
+\field{Phase}{Build / Parser}
+\field{AI tool}{Claude Code, Claude Sonnet CLI}
+\field{Goal}{Understand why \code{make} said there was nothing to build and verify the parser with an AST dump.}
+\prompt{``I cannot run my parser and lexer. When I write make to the terminal I get: make: Nothing to be done for all. Then I ran \code{./ans -{}-dump-ast tests/valid/compounds.ans}.''}
+\field{Response key part}{Claude explained that \code{make} uses file timestamps, so ``nothing to be done'' can mean the binary is already newer than the source files. It recommended \code{make clean} followed by \code{make} when a full rebuild is desired, then checked the AST dump output.}
+\field{Accepted}{I accepted the build explanation and used \code{make clean} when I wanted a full rebuild. The AST dump confirmed that lexer, parser, and AST printer were connected end to end.}
+\field{Rejected / modified}{Claude suggested using \code{touch} on source files as another way to force a rebuild. I rejected that because changing timestamps just to influence \code{make} can hide the real build state.}
+\field{Errors caught}{The claim that one AST dump proved parser correctness was too strong. The AST dump was good evidence, but it does not prove every grammar path and error recovery case.}
+\field{Reflection}{This session taught a practical C build lesson. It also reminded me not to treat one successful AST dump as complete proof.}
+
+\section{Entry 12 of 12}
+\field{Date}{2026-05-08}
+\field{Phase}{Implementation Review}
+\field{AI tool}{Claude Code, Claude Sonnet CLI}
+\field{Goal}{Understand the role of the C header files in the ANS implementation.}
+\prompt{``What do the source files in include do?''}
+\field{Response key part}{Claude explained that \code{include/} contains module interfaces: token and lexer declarations in \code{lexer.h}, parser state and \code{parse\_program} in \code{parser.h}, AST node types and functions in \code{ast.h}, and error-reporting declarations in \code{error.h}.}
+\field{Accepted}{I accepted the module-interface explanation. It matches the actual project structure and gives a clean way to explain D2 architecture in the written exam.}
+\field{Rejected / modified}{No code was accepted from this session. I used it as an explanation session and checked the claims by opening the header files.}
+\field{Errors caught}{Claude described \code{g\_filename} and \code{g\_had\_error} as global variables in the header. More precisely, headers should contain \code{extern} declarations, while storage belongs in the corresponding \code{.c} file.}
+\field{Reflection}{This helped connect C architecture to the rubric's code-quality dimension. The header/source split is not just style; it makes the lexer, parser, AST, and error modules easier to reason about separately.}
+
+\end{document}
