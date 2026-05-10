@@ -1,0 +1,6 @@
+reaction bad {
+    reactants = H2,
+    products  = H2,
+    check     = balanced,
+    energy    = exothermic 1.0
+};

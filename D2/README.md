@@ -85,8 +85,8 @@ D2/
 │   ├── ast.c       node constructors + tree pretty-printer
 │   └── error.c     error formatting
 └── tests/
-    ├── valid/      8 programs — must all be accepted
-    └── invalid/    4 programs — must all be rejected
+    ├── valid/      9 programs — must all be accepted
+    └── invalid/    11 programs — must all be rejected
 ```
 
 ---

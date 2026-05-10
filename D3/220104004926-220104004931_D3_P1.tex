@@ -176,8 +176,8 @@ This report documents the Part 1 parser tests for ANS. The parser under test is 
 \rowcolor{ansblue}
 \textcolor{white}{\textbf{Evidence item}} & \textcolor{white}{\textbf{D3 coverage}} \\
 \midrule
-Valid programs & Three non-trivial ANS programs in \code{D3/programs/}; all accepted by \code{D2/ans}. \\
-Malformed programs & Five negative parser tests in \code{D3/malformed/}; all rejected with line-numbered diagnostics. \\
+Valid programs & Three non-trivial ANS programs in \code{D3/programs/}; the same sources are included in the shared submission zip and are all accepted by \code{D2/ans}. \\
+Malformed programs & Five negative parser tests in \code{D3/malformed/}; the same sources are included in the shared submission zip and are all rejected with line-numbered diagnostics. \\
 Domain coverage & Elements, compounds, reactions, formula literals, energy quantities, typed functions, control flow, lists, calls, member access, and index access. \\
 \bottomrule
 \end{tabularx}
@@ -187,7 +187,7 @@ Domain coverage & Elements, compounds, reactions, formula literals, energy quant
 \section{Three Valid Programs}
 \sectionrule
 
-The full valid source files are submitted in \code{D3/programs/}. The parser accepts all three programs silently, which is the expected success behavior for \code{D2/ans <file>}.
+The full valid source files are in \code{D3/programs/} and are included in the shared submission zip together with the implementation. The parser accepts all three programs silently, which is the expected success behavior for \code{D2/ans <file>}.
 
 \begin{table}[h]
 \centering
@@ -229,7 +229,7 @@ Together, these examples cover the required DSL surface: primitive literals (\co
 \section{Five Malformed Programs}
 \sectionrule
 
-The full malformed source files are submitted in \code{D3/malformed/}. Each malformed file is intentionally small so the reported line number points directly to the syntax or lexical problem.
+The full malformed source files are in \code{D3/malformed/} and are included in the shared submission zip together with the implementation. Each malformed file is intentionally small so the reported line number points directly to the syntax or lexical problem.
 
 \begin{table}[h]
 \centering

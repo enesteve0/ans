@@ -241,6 +241,7 @@ ambiguous-looking cases are separated into different non-terminals.
                        | <augmented_assignment_statement> ";"
                        | <print_statement> ";"
                        | <expression_statement> ";"
+                       | <for_statement> [ ";" ]
                        | <if_statement>
 
 <block> -> "{" { <statement> } "}"

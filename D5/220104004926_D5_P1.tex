@@ -68,14 +68,14 @@
 
 \section{What Is Working}
 
-The lexer and parser seem to be working. They passed the current tests, but we still need to be careful because more cases can appear later.
+The lexer and parser now handle the Part 1 subset of ANS in a way I can explain. The scanner separates lowercase identifiers from uppercase formula literals, recognises slash units such as \code{kJ/mol} before treating \code{/} as division, and reports lexical errors with line and column information. The recursive-descent parser accepts the D3 valid programs and can print an AST, so we can compare the implementation against the EBNF instead of only checking exit codes. The negative tests also show useful recovery: one malformed file may produce more than one diagnostic, but the first message still points to the actual mistake.
 
 \section{What Is Hard}
 
-Determining whether the lexical structure is consistent with the EBNF, and implementing that exact lexical structure into the lexer and parser, was difficult. C is one of the main system programming languages, so we decided to implement the lexer and parser in C.
+The hardest part was keeping the lexical structure, EBNF, examples, and C code consistent with each other. Small choices have large effects. For example, \code{H2O} must be a formula literal, but \code{water} must be an identifier; \code{890.3 kJ/mol} should be a quantity, but \code{/} must still work as an arithmetic operator. Implementing this in C also made memory ownership and parser recovery explicit. That is good for learning and for the written exam, but it means every design change must be checked in several places: token definitions, parser functions, AST output, test programs, and the written report.
 
 \section{Plan For Part 2}
 
-We are planning to fix the output statement. We first decided to implement output as a reserved keyword. But we think the \code{print} keyword is kind of irrelevant to the overall syntax of ANS. We will change \code{print} to a function-style construct like \code{mol()}.
+For Part 2, I want to avoid adding features until the semantic foundation is clear. The first priority is a symbol table with static scoping, because D1 claims that names resolve lexically. After that, we need a type checker that matches the declared type rules and an interpreter that executes the three D3 programs with real output. I also want to reconsider \code{print}: in Part 1 it is a keyword, but a function-style built-in would fit better with helpers such as \code{mol()} and \code{molar\_mass()}. If we make that change, D1, D2, and D3 must be updated together so the implementation does not drift from the specification.
 
 \end{document}

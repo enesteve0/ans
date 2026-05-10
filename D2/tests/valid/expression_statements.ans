@@ -1,0 +1,10 @@
+// Expression statements preserve normal precedence at top level and in blocks.
+let x = 0;
+
+1 + 2 * 3;
+(1 + 2) * 3;
+
+function expression_probe() {
+    1 + 2 * 3;
+    (1 + 2) * 3;
+};

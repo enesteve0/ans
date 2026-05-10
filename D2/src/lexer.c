@@ -95,8 +95,21 @@ static Token scan_string(Lexer *l) {
 static Token scan_char(Lexer *l) {
     int start_line = l->line, start_col = l->col;
     const char *start = l->src + l->pos - 1;
-    if (peek_c(l) == '\\') advance_c(l);
-    if (peek_c(l) && peek_c(l) != '\'') advance_c(l);
+    if (peek_c(l) == '\'') {
+        advance_c(l);
+        error_at(start_line, start_col, "empty character literal");
+        return make_tok(TOK_ERROR, start, (int)(l->src + l->pos - start), start_line, start_col);
+    }
+    if (peek_c(l) == '\\') {
+        advance_c(l);
+        if (!peek_c(l) || peek_c(l) == '\n') {
+            error_at(start_line, start_col, "unterminated character literal");
+            return make_tok(TOK_ERROR, start, (int)(l->src + l->pos - start), start_line, start_col);
+        }
+        advance_c(l);
+    } else if (peek_c(l) && peek_c(l) != '\n' && peek_c(l) != '\'') {
+        advance_c(l);
+    }
     if (peek_c(l) != '\'') {
         error_at(start_line, start_col, "unterminated character literal");
         return make_tok(TOK_ERROR, start, 1, start_line, start_col);
@@ -117,6 +130,11 @@ static Token scan_number(Lexer *l, const char *start, int start_line, int start_
     if (peek_c(l) == 'e' || peek_c(l) == 'E') {
         advance_c(l);
         if (peek_c(l) == '+' || peek_c(l) == '-') advance_c(l);
+        if (!isdigit((unsigned char)peek_c(l))) {
+            error_at(start_line, start_col, "malformed exponent in number literal");
+            return make_tok(TOK_ERROR, start, (int)(l->src + l->pos - start),
+                            start_line, start_col);
+        }
         while (isdigit((unsigned char)peek_c(l))) advance_c(l);
     }
     int len = (int)(l->src + l->pos - start);

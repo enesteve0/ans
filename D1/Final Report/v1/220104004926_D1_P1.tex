@@ -242,10 +242,10 @@ molar_mass(water);
 compute_yield(combustion, CH4);
 
 // if statements
-if (compute_yield(combustion, 5.0 mol, CH4) > 0) {
+if (compute_yield(combustion, CH4) > 0) {
     print "The yield of CH4 is positive, so combustion is possible.";
 }
-elif (compute_yield(combustion, 5.0 mol, CH4) == 0) {
+elif (compute_yield(combustion, CH4) == 0) {
     print "The yield of CH4 is zero, so combustion is not possible.";
 }
 else {
@@ -259,7 +259,7 @@ Following Sebesta's Chapter 1 evaluation framework --- \textbf{readability, writ
 
 \textbf{Readability} is prioritised because the syntax mirrors chemistry vocabulary directly (\code{element}, \code{compound}, \code{reaction}, \code{reactants}, \code{products}, \code{balanced}) over a familiar C-like skeleton (\code{let}, braces, semicolons, \code{if}/\code{elif}/\code{else}), so the meaning of a program can be inferred from its surface form without consulting a manual. Typed function parameters (\code{compound c}, \code{reaction r}) further document intent at the declaration site.
 
-\textbf{Writability} is prioritised because common domain tasks --- declaring an element, writing a balanced equation as \code{CH4 + 2*O2}, or querying \code{molar\_mass(water)} --- are first-class constructs rather than user-coded library routines; the required \code{import std} line gives access to the full standard chemistry library in one token.
+\textbf{Writability} is prioritised because common domain tasks --- declaring an element, writing a balanced equation as \code{CH4 + 2*O2}, or querying \code{molar\_mass(water)} --- are first-class constructs rather than user-coded library routines. Common helpers such as \code{molar\_mass} and \code{mol} are planned as built-ins or ordinary functions, not as a separate import system in Part 1.
 
 \textbf{Reliability} is prioritised through compile-time validation: the lexer recognises formula literals (\code{H2O}, \code{CH4}) and unit literals (\code{mol}, \code{kJ/mol}) as distinct token categories, the semantic checker verifies that every element symbol exists and that every reaction with \code{check = balanced} has equal atom counts on both sides before any value is computed, and units are tracked rather than silently discarded.
 
@@ -330,6 +330,7 @@ The grammar below is written in Sebesta-style EBNF (\S3.1--3.2). The grammar is 
                        | <augmented_assignment_statement> ";"
                        | <print_statement> ";"
                        | <expression_statement> ";"
+                       | <for_statement> [ ";" ]
                        | <if_statement>
 
 (* ============================================================

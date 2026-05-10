@@ -272,9 +272,34 @@ static AstNode *parse_expression(Parser *p) {
     return parse_comparison(p);
 }
 
+static int is_assignable_expr(const AstNode *n) {
+    if (!n) return 0;
+    if (n->kind == ND_IDENT) return 1;
+    if ((n->kind == ND_MEMBER || n->kind == ND_INDEX) && n->n_children > 0) {
+        return is_assignable_expr(n->children[0]);
+    }
+    return 0;
+}
+
 /* ================================================================
    §9  Reaction sub-grammar
    ================================================================ */
+
+static AstNode *parse_species_ref(Parser *p) {
+    Token sp = p->current;
+    if (check(p, TOK_FORMULA) || check(p, TOK_IDENT)) {
+        advance(p);
+        AstNode *node = ast_new(sp.type == TOK_FORMULA ? ND_FORMULA : ND_IDENT, sp.line);
+        ast_set_text(node, sp.start, sp.length);
+        return node;
+    }
+
+    error_at(sp.line, sp.col, "expected species reference");
+    advance(p);
+    AstNode *err = ast_new(ND_IDENT, sp.line);
+    ast_set_text(err, "?", 1);
+    return err;
+}
 
 /* <reaction_term> → <species_ref> | <coefficient> "*" <species_ref> */
 static AstNode *parse_reaction_term(Parser *p) {
@@ -289,27 +314,17 @@ static AstNode *parse_reaction_term(Parser *p) {
         ast_set_text(c, coeff.start, coeff.length);
 
         if (match(p, TOK_STAR)) {
-            /* species follows */
-            AstNode *sp = ast_new(p->current.type == TOK_FORMULA ? ND_FORMULA : ND_IDENT,
-                                  p->current.line);
-            ast_set_text(sp, p->current.start, p->current.length);
-            advance(p);
+            AstNode *sp = parse_species_ref(p);
             ast_add_child(term, c);
             ast_add_child(term, sp);
         } else {
-            /* bare number — treat as coefficient 1 with species = that number? */
-            /* Actually this shouldn't happen per grammar; just return number */
+            error_at(coeff.line, coeff.col, "expected '*' after reaction coefficient");
             ast_add_child(term, c);
         }
         return term;
     }
 
-    /* bare species_ref */
-    AstNode *sp = ast_new(check(p, TOK_FORMULA) ? ND_FORMULA : ND_IDENT,
-                          p->current.line);
-    ast_set_text(sp, p->current.start, p->current.length);
-    advance(p);
-    ast_add_child(term, sp);
+    ast_add_child(term, parse_species_ref(p));
     return term;
 }
 
@@ -376,6 +391,7 @@ static AstNode *parse_reaction_field(Parser *p) {
             ast_add_child(q, num);
             ast_add_child(energy, q);
         } else {
+            error_at(num_tok.line, num_tok.col, "expected unit after energy value");
             ast_add_child(energy, num);
         }
         ast_add_child(field, energy);
@@ -648,6 +664,41 @@ static AstNode *parse_block(Parser *p) {
     return block;
 }
 
+static AstNode *parse_expr_or_assignment_statement(Parser *p) {
+    AstNode *lhs = parse_expression(p);
+
+    if (check(p, TOK_EQ)) {
+        Token op = p->current; advance(p);
+        if (!is_assignable_expr(lhs)) {
+            error_at(op.line, op.col, "invalid assignment target");
+        }
+        AstNode *asgn = ast_new(ND_ASSIGN, op.line);
+        ast_add_child(asgn, lhs);
+        ast_add_child(asgn, parse_expression(p));
+        expect(p, TOK_SEMICOLON);
+        return asgn;
+    }
+
+    if (check(p, TOK_PLUS_EQ)  || check(p, TOK_MINUS_EQ) ||
+        check(p, TOK_STAR_EQ)  || check(p, TOK_SLASH_EQ)) {
+        Token op = p->current; advance(p);
+        if (!is_assignable_expr(lhs)) {
+            error_at(op.line, op.col, "invalid assignment target");
+        }
+        AstNode *aug = ast_new(ND_AUG_ASSIGN, op.line);
+        ast_set_text(aug, op.start, op.length);
+        ast_add_child(aug, lhs);
+        ast_add_child(aug, parse_expression(p));
+        expect(p, TOK_SEMICOLON);
+        return aug;
+    }
+
+    AstNode *stmt = ast_new(ND_EXPR_STMT, lhs->line);
+    ast_add_child(stmt, lhs);
+    expect(p, TOK_SEMICOLON);
+    return stmt;
+}
+
 static AstNode *parse_statement(Parser *p) {
     /* variable declaration */
     if (check(p, TOK_LET)) {
@@ -686,73 +737,7 @@ static AstNode *parse_statement(Parser *p) {
     /* if */
     if (check(p, TOK_IF))  return parse_if_statement(p);
 
-    /* assignment or expression statement
-       We parse an expression, then check for assignment operators. */
-    {
-        AstNode *lhs = parse_postfix(p);
-
-        if (check(p, TOK_EQ)) {
-            Token op = p->current; advance(p);
-            AstNode *asgn = ast_new(ND_ASSIGN, op.line);
-            ast_add_child(asgn, lhs);
-            ast_add_child(asgn, parse_expression(p));
-            expect(p, TOK_SEMICOLON);
-            return asgn;
-        }
-
-        if (check(p, TOK_PLUS_EQ)  || check(p, TOK_MINUS_EQ) ||
-            check(p, TOK_STAR_EQ)  || check(p, TOK_SLASH_EQ)) {
-            Token op = p->current; advance(p);
-            AstNode *aug = ast_new(ND_AUG_ASSIGN, op.line);
-            ast_set_text(aug, op.start, op.length);
-            ast_add_child(aug, lhs);
-            ast_add_child(aug, parse_expression(p));
-            expect(p, TOK_SEMICOLON);
-            return aug;
-        }
-
-        /* finish as comparison (lhs may be just the start of a longer expr) */
-        /* We already consumed postfix — wrap into comparison from there */
-        /* Handle binary comparisons / additive on top of lhs */
-        AstNode *expr = lhs;
-
-        /* additive continuation */
-        while (check(p, TOK_PLUS) || check(p, TOK_MINUS)) {
-            Token op = p->current; advance(p);
-            AstNode *bin = ast_new(ND_BINARY, op.line);
-            ast_set_text(bin, op.start, op.length);
-            ast_add_child(bin, expr);
-            ast_add_child(bin, parse_unary(p));
-            expr = bin;
-        }
-        /* multiplicative was already consumed inside postfix/unary —
-           but we entered via parse_postfix, not parse_multiplicative.
-           Handle * and / continuation here. */
-        while (check(p, TOK_STAR) || check(p, TOK_SLASH)) {
-            Token op = p->current; advance(p);
-            AstNode *bin = ast_new(ND_BINARY, op.line);
-            ast_set_text(bin, op.start, op.length);
-            ast_add_child(bin, expr);
-            ast_add_child(bin, parse_unary(p));
-            expr = bin;
-        }
-        /* comparison */
-        if (check(p, TOK_EQ_EQ) || check(p, TOK_BANG_EQ) ||
-            check(p, TOK_LT_EQ) || check(p, TOK_GT_EQ)   ||
-            check(p, TOK_LT)    || check(p, TOK_GT)) {
-            Token op = p->current; advance(p);
-            AstNode *cmp = ast_new(ND_BINARY, op.line);
-            ast_set_text(cmp, op.start, op.length);
-            ast_add_child(cmp, expr);
-            ast_add_child(cmp, parse_additive(p));
-            expr = cmp;
-        }
-
-        AstNode *stmt = ast_new(ND_EXPR_STMT, expr->line);
-        ast_add_child(stmt, expr);
-        expect(p, TOK_SEMICOLON);
-        return stmt;
-    }
+    return parse_expr_or_assignment_statement(p);
 }
 
 /* ================================================================
@@ -820,64 +805,7 @@ static AstNode *parse_top_level(Parser *p) {
     /* if statement — no trailing semicolon */
     if (check(p, TOK_IF)) return parse_if_statement(p);
 
-    /* expression or assignment statement */
-    {
-        AstNode *lhs = parse_postfix(p);
-
-        if (check(p, TOK_EQ)) {
-            Token op = p->current; advance(p);
-            AstNode *asgn = ast_new(ND_ASSIGN, op.line);
-            ast_add_child(asgn, lhs);
-            ast_add_child(asgn, parse_expression(p));
-            expect(p, TOK_SEMICOLON);
-            return asgn;
-        }
-
-        if (check(p, TOK_PLUS_EQ)  || check(p, TOK_MINUS_EQ) ||
-            check(p, TOK_STAR_EQ)  || check(p, TOK_SLASH_EQ)) {
-            Token op = p->current; advance(p);
-            AstNode *aug = ast_new(ND_AUG_ASSIGN, op.line);
-            ast_set_text(aug, op.start, op.length);
-            ast_add_child(aug, lhs);
-            ast_add_child(aug, parse_expression(p));
-            expect(p, TOK_SEMICOLON);
-            return aug;
-        }
-
-        /* expression statement — finish off higher-precedence levels */
-        AstNode *expr = lhs;
-        while (check(p, TOK_STAR) || check(p, TOK_SLASH)) {
-            Token op = p->current; advance(p);
-            AstNode *bin = ast_new(ND_BINARY, op.line);
-            ast_set_text(bin, op.start, op.length);
-            ast_add_child(bin, expr);
-            ast_add_child(bin, parse_unary(p));
-            expr = bin;
-        }
-        while (check(p, TOK_PLUS) || check(p, TOK_MINUS)) {
-            Token op = p->current; advance(p);
-            AstNode *bin = ast_new(ND_BINARY, op.line);
-            ast_set_text(bin, op.start, op.length);
-            ast_add_child(bin, expr);
-            ast_add_child(bin, parse_unary(p));
-            expr = bin;
-        }
-        if (check(p, TOK_EQ_EQ) || check(p, TOK_BANG_EQ) ||
-            check(p, TOK_LT_EQ) || check(p, TOK_GT_EQ)   ||
-            check(p, TOK_LT)    || check(p, TOK_GT)) {
-            Token op = p->current; advance(p);
-            AstNode *cmp = ast_new(ND_BINARY, op.line);
-            ast_set_text(cmp, op.start, op.length);
-            ast_add_child(cmp, expr);
-            ast_add_child(cmp, parse_additive(p));
-            expr = cmp;
-        }
-
-        AstNode *stmt = ast_new(ND_EXPR_STMT, expr->line);
-        ast_add_child(stmt, expr);
-        expect(p, TOK_SEMICOLON);
-        return stmt;
-    }
+    return parse_expr_or_assignment_statement(p);
 }
 
 /* ================================================================
