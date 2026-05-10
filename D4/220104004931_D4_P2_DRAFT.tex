@@ -1,0 +1,83 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{xcolor}
+\definecolor{anscaption}{HTML}{6B7280}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\code}[1]{\texttt{#1}}
+\begin{document}
+\begin{center}
+{\huge\bfseries AI Usage Journal, Part 2 Draft\par}
+{\large Student: 220104004931 Enes Özkan\par}
+{\footnotesize\color{anscaption}This draft is honest but not final: Experiment E2 still needs a real separate AI interaction.}
+\end{center}
+
+\section*{Entry 13 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Planning.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Understand the remaining Part 2 deliverables from the handout and current repository.
+\textbf{Prompt.} ``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly... now we gotta work on Part 2.''
+\textbf{Accepted.} I accepted that D2 must add both a checker and interpreter, not only runtime evaluation.
+\textbf{Rejected / modified.} I did not accept changing \code{print} to a built-in call because it would increase inconsistency risk.
+\textbf{Errors caught.} The Part 2 plan had to account for D4 being individual, not shared.
+\textbf{Reflection.} The first useful step was comparing the handout to the actual Part 1 files.
+
+\section*{Entry 14 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Interpreter.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Implement execution while preserving the parser.
+\textbf{Prompt.} ``Implement the plan.''
+\textbf{Accepted.} I accepted the runtime value model with element, compound, formula, reaction, reaction side, quantity, list, and function values.
+\textbf{Rejected / modified.} I rejected treating reaction sides as plain lists, because indexing by compound is a domain-specific operation.
+\textbf{Errors caught.} The first Program 2 execution failed because the sample program had a domain error, not because the parser was wrong.
+\textbf{Reflection.} This was a good example of the interpreter improving the language design.
+
+\section*{Entry 15 of 18, Experiment E3}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Type checker.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Ask AI to implement the type checker portion and test it.
+\textbf{Prompt.} ``Implement the plan'' where the plan required strong typing, function argument checks, formula validation, and checked reaction validation.
+\textbf{Accepted.} I accepted declaration collection followed by function-body checking and top-level checking.
+\textbf{Rejected / modified.} I changed the list rule from permissive mixed lists to homogeneous lists to match the final spec.
+\textbf{Errors caught.} A failed print expression originally still printed \code{null}; runtime error handling was corrected.
+\textbf{Reflection.} Type-checker code can look plausible but still be wrong at the boundary between checker and interpreter.
+
+\section*{Entry 16 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Testing.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Verify required positive and negative behavior.
+\textbf{Prompt.} ``Implement the plan'' including acceptance tests.
+\textbf{Accepted.} I accepted the Makefile split between parser regression, Part 2 examples, type errors, and runtime errors.
+\textbf{Rejected / modified.} I did not use imagined output in D3; I used real command output.
+\textbf{Errors caught.} The line number for a runtime error changed after checking the actual file.
+\textbf{Reflection.} The test suite became the contract between D1, D2, and D3.
+
+\section*{Entry 17 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Writing.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Update reports after code was working.
+\textbf{Prompt.} ``Implement the plan.''
+\textbf{Accepted.} I accepted documenting operational semantics for formula loops and checked reactions because those are the most ANS-specific constructs.
+\textbf{Rejected / modified.} I did not describe ANS as having full unit algebra.
+\textbf{Errors caught.} The D1 type system needed to match implementation choices, especially no broad implicit coercion.
+\textbf{Reflection.} The writing is strongest when it explains decisions that appear directly in code.
+
+\section*{Entry 18 of 18 - TODO Experiment E2}
+\textbf{Date.} TODO real date between 2026-05-09 and 2026-05-22.
+\textbf{Phase.} Type system.
+\textbf{AI tool.} TODO.
+\textbf{Required prompt.} Ask an AI to explain name equivalence versus structural equivalence for ANS record/domain types, then compare the answer against Sebesta section 6.14 and the final D1 rule.
+\textbf{Status.} Not completed in this session. Do not submit this draft as final until this entry is replaced by a real interaction and reflection.
+
+\end{document}

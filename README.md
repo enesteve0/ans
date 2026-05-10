@@ -33,7 +33,7 @@ reaction combustion {
 
 // Stoichiometric queries
 let mass = molar_mass(water);
-let yield_amt = compute_yield(combustion, 5.0 mol, CH4);
+let yield_amt = compute_yield(combustion, methane, co2);
 
 if (yield_amt > 0) {
     print "The yield of CH4 is positive, so combustion is possible.";
@@ -42,7 +42,7 @@ if (yield_amt > 0) {
 
 ## Build & Execution
 
-The current implementation (found in the `D2/` directory) includes a hand-written C lexer and a recursive-descent parser.
+The current implementation (found in the `D2/` directory) includes a hand-written C lexer, recursive-descent parser, type checker, and interpreter.
 
 To build the lexer and parser, you need a C11 compiler (`cc`). No external dependencies are required.
 
@@ -52,10 +52,12 @@ make          # Optimised build
 make debug    # Build with debug flags (-g -DDEBUG)
 ```
 
-To run the parser on an ANS file:
+To run ANS on a source file:
 
 ```bash
-./ans <file.ans>                  # Parse the file (exit 0 on success, 1 on error)
+./ans <file.ans>                  # Parse, type check, and execute
+./ans --check <file.ans>          # Parse and type check only
+./ans --parse-only <file.ans>     # Parser-only regression mode
 ./ans --dump-ast <file.ans>       # Parse and print the Abstract Syntax Tree (AST)
 ```
 

@@ -1,0 +1,83 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{xcolor}
+\definecolor{anscaption}{HTML}{6B7280}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcommand{\code}[1]{\texttt{#1}}
+\begin{document}
+\begin{center}
+{\huge\bfseries AI Usage Journal, Part 2 Draft\par}
+{\large Student: 220104004926 Yusuf Hamza Çelebi\par}
+{\footnotesize\color{anscaption}This draft is honest but not final: Experiment E2 still needs a real separate AI interaction.}
+\end{center}
+
+\section*{Entry 13 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Planning.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Turn the Part 2 handout requirements into an implementation plan.
+\textbf{Prompt.} ``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly... we have finished part 1... now we gotta work on Part 2.''
+\textbf{Accepted.} I accepted the decision to keep \code{print expr;} because changing output syntax would cause D1/D2/D3 drift.
+\textbf{Rejected / modified.} I rejected making future journal entries in advance.
+\textbf{Errors caught.} The plan initially treated D4 as completable, but the handout requires real dated AI sessions.
+\textbf{Reflection.} The useful part was grounding the work in the actual handout and repo instead of guessing.
+
+\section*{Entry 14 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Type checker / Interpreter.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Implement Part 2 in the existing C codebase.
+\textbf{Prompt.} ``Implement the plan.''
+\textbf{Accepted.} I accepted the separated CLI modes: default run, \code{--check}, \code{--parse-only}, and \code{--dump-ast}.
+\textbf{Rejected / modified.} I did not accept a parser rewrite. The existing AST was sufficient.
+\textbf{Errors caught.} Execution exposed a chemistry bug in \code{compute\_yield}: it looked for methane in the products side.
+\textbf{Reflection.} Running the interpreter made design mistakes visible in a way parser tests could not.
+
+\section*{Entry 15 of 18, Experiment E3}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Type checker.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Ask AI to implement the type checker and validate it on known tests.
+\textbf{Prompt.} ``Implement the plan'' with the Part 2 plan requiring a checker for strong typing, formula validation, checked reactions, and function argument types.
+\textbf{Accepted.} I accepted the checker structure: collect declarations, infer/check function bodies, then check top-level statements.
+\textbf{Rejected / modified.} Mixed list literals were first allowed as \code{list<any>}; I changed that to reject heterogeneous lists for stronger consistency with D1.
+\textbf{Errors caught.} The runtime first printed \code{null} after a failed print expression. That was fixed by stopping \code{print} after expression evaluation fails.
+\textbf{Reflection.} E3 showed that AI-generated implementation still needs targeted tests. The bugs appeared only when running negative cases.
+
+\section*{Entry 16 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Testing.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Build Part 2 tests for successful execution and required errors.
+\textbf{Prompt.} ``Implement the plan'' including the test plan.
+\textbf{Accepted.} I accepted tests for type error, unbalanced reaction, division by zero, out-of-range index, and missing compound in a reaction side.
+\textbf{Rejected / modified.} I did not treat old Part 1 parser examples as executable programs; they remain parser regression tests.
+\textbf{Errors caught.} Top-level \code{if} statements cannot be followed by \code{;}; the D3 programs were corrected.
+\textbf{Reflection.} Separating parser regression from execution tests prevented legacy parse-only examples from distorting the final language.
+
+\section*{Entry 17 of 18}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Writing.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Update D1/D3/D5/D6 around the actual implementation.
+\textbf{Prompt.} ``Implement the plan.''
+\textbf{Accepted.} I accepted using actual interpreter output in D3 instead of expected output written by hand.
+\textbf{Rejected / modified.} I avoided claiming full dimensional-analysis support because the implementation only tracks the units needed by the examples.
+\textbf{Errors caught.} A report line number for the reaction-side runtime error had to be checked against the real command output.
+\textbf{Reflection.} The reports are more defensible when every claim maps to a command that can be rerun.
+
+\section*{Entry 18 of 18 - TODO Experiment E2}
+\textbf{Date.} TODO real date between 2026-05-09 and 2026-05-22.
+\textbf{Phase.} Type system.
+\textbf{AI tool.} TODO.
+\textbf{Required prompt.} Ask an AI to explain name equivalence versus structural equivalence for ANS record/domain types, then compare the answer against Sebesta section 6.14 and the final D1 rule.
+\textbf{Status.} Not completed in this session. Do not submit this draft as final until this entry is replaced by a real interaction and reflection.
+
+\end{document}

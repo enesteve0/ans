@@ -1,0 +1,13 @@
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound hydrogen { formula = H2, name = "Hydrogen" };
+compound oxygen   { formula = O2, name = "Oxygen" };
+compound water    { formula = H2O, name = "Water" };
+
+reaction bad_synthesis {
+    reactants = H2 + O2,
+    products  = H2O,
+    check     = balanced,
+    energy    = exothermic 100.0 kJ/mol
+};

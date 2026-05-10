@@ -66,5 +66,30 @@ for (let c in compounds) {
 let sym_h = 'H';
 let label = "Survey complete";
 
-total_reactant_mass(combustion);
+if (heavy_count == 2) {
+    print "Two heavy compounds.";
+}
+else {
+    print "Unexpected heavy compound count.";
+}
+
+if (light_count == 5) {
+    print "Five light compounds.";
+}
+else {
+    print "Unexpected light compound count.";
+}
+
+let combustion_mass = total_reactant_mass(combustion);
+if (combustion_mass > 40.0) {
+    print "Combustion reactants are heavy.";
+}
+else {
+    print "Combustion reactants are light.";
+}
+
+if (sym_h == 'H') {
+    print label;
+}
+
 total_reactant_mass(haber_bosch);

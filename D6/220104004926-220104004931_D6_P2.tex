@@ -1,0 +1,79 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% Project D6 (Part 2): Contribution Report for ANS
+% Students: 220104004926 Yusuf Hamza Çelebi, 220104004931 Enes Özkan
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=1.55cm]{geometry}
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscodebg}{HTML}{F9FAFB}
+\definecolor{anscaption}{HTML}{6B7280}
+\usepackage[colorlinks=true,linkcolor=ansblue,urlcolor=ansblue,pdfborder={0 0 0}]{hyperref}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.06}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+\begin{center}
+{\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+{\Large\bfseries\sffamily ANS: Alchemist's Notation Script\par}
+{\normalsize Contribution Report (D6), Part 2\par}
+{\footnotesize\color{anscaption}Students: 220104004926 Yusuf Hamza Çelebi \& 220104004931 Enes Özkan}
+\end{center}
+
+\textbf{Partner key.} H = 220104004926 Yusuf Hamza Çelebi. E = 220104004931 Enes Özkan. The reviewer is the other partner for every row.
+
+\small
+\rowcolors{2}{anscodebg}{white}
+\begin{tabularx}{\textwidth}{@{}L{1.1cm}Y L{2.0cm}L{2.0cm}@{}}
+\toprule
+\rowcolor{ansblue}
+\textcolor{white}{Part} & \textcolor{white}{Item} & \textcolor{white}{Owner} & \textcolor{white}{Reviewer} \\
+\midrule
+D1 & 4.1-4.3 revised overview, lexical structure, grammar & H & E \\
+D1 & 4.4 semantics and 4.5 type system & E & H \\
+D1 & 4.6 revised scope/lifetime and 4.7 expressions & H & E \\
+D1 & 4.8 design rationale and final consistency review & E & H \\
+\midrule
+D2 & CLI modes, README, Makefile, parser regression preservation & H & E \\
+D2 & Type checker, symbol tables, function signatures & E & H \\
+D2 & Interpreter, runtime values, static environment, calls & E & H \\
+D2 & Chemistry helpers: formulas, compounds, reactions, balance checks & H & E \\
+D2 & Runtime diagnostics and Part 2 negative tests & E & H \\
+\midrule
+D3 & \code{molar\_mass\_demo.ans} and output discussion & H & E \\
+D3 & \code{combustion\_analysis.ans} and chemistry correction & H & E \\
+D3 & \code{multi\_reaction\_survey.ans} and execution evidence & E & H \\
+D3 & Type-error and runtime-error evidence & E & H \\
+\midrule
+D4 & Hamza individual AI journal continuation & H & E \\
+D4 & Enes individual AI journal continuation & E & H \\
+D5 & Hamza individual retrospective and rubric self-assessment & H & E \\
+D5 & Enes individual retrospective and rubric self-assessment & E & H \\
+\bottomrule
+\end{tabularx}
+\normalsize
+
+\vspace{5pt}
+\textbf{Workload statement.} We confirm that the full-project workload remains evenly split. Both partners worked on design, implementation, testing, and writing, with primary ownership divided by component and review performed by the other partner. Each partner's contribution is at least 40 percent of the total work.
+
+\vspace{8pt}
+\begin{tabularx}{\textwidth}{@{}X X@{}}
+\textbf{Typed signature:} 220104004926 Yusuf Hamza Çelebi &
+\textbf{Typed signature:} 220104004931 Enes Özkan \\
+\end{tabularx}
+
+\end{document}
