@@ -278,12 +278,11 @@ Important lexer convention:
    11. Assignable Expressions
    ============================================================ *)
 
-<assignable> → <identifier> { <assignable_postfix> }
+<assignable> → <identifier>
 
-<assignable_postfix> → "." <identifier>
-                     | "[" <expression> "]"
-
-(* Function-call syntax is excluded from <assignable>, so f(x) = 3 is invalid. *)
+(* ANS keeps assignment variable-only. Member and index expressions are valid
+   for reads, but not for mutation. This excludes c.name = "x", xs[0] = 3,
+   and f(x) = 3. *)
 
 (* ============================================================
    12. Lexical Nonterminals

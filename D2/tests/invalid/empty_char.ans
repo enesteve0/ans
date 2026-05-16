@@ -1,0 +1,2 @@
+// Character literals must contain exactly one character
+print '';

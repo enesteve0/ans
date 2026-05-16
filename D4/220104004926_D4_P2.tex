@@ -19,7 +19,7 @@
 {\footnotesize\color{anscaption}CSE 341 Project D4, Part 2}
 \end{center}
 
-\section*{Entry 13 of 18}
+\section*{Entry 13 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Planning.
 \textbf{AI tool.} Codex / GPT-5.
@@ -31,7 +31,7 @@
 \textbf{Errors caught.} The plan initially treated D4 as completable, but the handout requires real dated AI sessions.
 \textbf{Reflection.} The useful part was grounding the work in the actual handout and repo instead of guessing.
 
-\section*{Entry 14 of 18}
+\section*{Entry 14 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Type checker / Interpreter.
 \textbf{AI tool.} Codex / GPT-5.
@@ -43,7 +43,7 @@
 \textbf{Errors caught.} Execution exposed a chemistry bug in \code{compute\_yield}: it looked for methane in the products side.
 \textbf{Reflection.} Running the interpreter made design mistakes visible in a way parser tests could not.
 
-\section*{Entry 15 of 18, Experiment E3}
+\section*{Entry 15 of 19, Experiment E3}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Type checker.
 \textbf{AI tool.} Codex / GPT-5.
@@ -55,7 +55,7 @@
 \textbf{Errors caught.} The runtime first printed \code{null} after a failed print expression. That was fixed by stopping \code{print} after expression evaluation fails.
 \textbf{Reflection.} E3 showed that AI-generated implementation still needs targeted tests. The bugs appeared only when running negative cases.
 
-\section*{Entry 16 of 18}
+\section*{Entry 16 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Testing.
 \textbf{AI tool.} Codex / GPT-5.
@@ -67,7 +67,7 @@
 \textbf{Errors caught.} Top-level \code{if} statements cannot be followed by \code{;}; the D3 programs were corrected.
 \textbf{Reflection.} Separating parser regression from execution tests prevented legacy parse-only examples from distorting the final language.
 
-\section*{Entry 17 of 18}
+\section*{Entry 17 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Writing.
 \textbf{AI tool.} Codex / GPT-5.
@@ -79,7 +79,7 @@
 \textbf{Errors caught.} A report line number for the reaction-side runtime error had to be checked against the real command output.
 \textbf{Reflection.} The reports are more defensible when every claim maps to a command that can be rerun.
 
-\section*{Entry 18 of 18, Experiment E2}
+\section*{Entry 18 of 19, Experiment E2}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Type system.
 \textbf{AI tool.} Codex / GPT-5.
@@ -90,5 +90,17 @@
 \textbf{Rejected / modified.} I rejected the overly broad idea that one rule must cover every type. The final ANS design uses name equivalence for chemistry domain records and structural matching for homogeneous lists.
 \textbf{Errors caught.} A shallow AI answer could say ``records with the same fields are equivalent,'' but that would not match ANS. Under ANS, \code{compound} and \code{formula} are intentionally different even though the runtime representation contains related atom-count data.
 \textbf{Reflection.} E2 made the type-equivalence choice easier to defend. The important point is not the C struct layout; it is the language-level meaning of chemistry values.
+
+\section*{Entry 19 of 19}
+\textbf{Date.} 2026-05-16.
+\textbf{Phase.} Final audit and packaging.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Check whether Part 1 and Part 2 were truly complete and then repair the remaining inconsistencies.
+\textbf{Prompt.} ``check if the Part 1 and 2 of the project is done fully and done accordingly and properly and there is nothing else to do, check every single file deeply and with as much detail as possible'' followed by ``Implement the plan.''
+\textbf{Response key part.} Codex found that the main examples worked, but the submission was not yet fully consistent: the Part 2 zip was not self-contained for its own tests, assignment targets were broader in D1 than in the runtime, required declaration fields were not fully enforced, and some malformed literals were accepted.
+\textbf{Accepted.} I accepted the conservative fix: keep assignment variable-only, enforce exact declaration fields, harden malformed literal handling, and rebuild complete Part 1 and Part 2 upload sets.
+\textbf{Rejected / modified.} I rejected implementing member or index mutation because it would add more semantics than the project examples need and would make chemistry records less reliable.
+\textbf{Errors caught.} The important error was assuming that a passing current-tree test meant the submitted zip was also self-contained. Verifying from an extracted archive exposed that packaging problem.
+\textbf{Reflection.} This final pass improved the project because it checked the actual artifacts, not only the source tree. It also made the written design and implementation agree more tightly.
 
 \end{document}

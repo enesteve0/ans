@@ -19,7 +19,7 @@
 {\footnotesize\color{anscaption}CSE 341 Project D4, Part 2}
 \end{center}
 
-\section*{Entry 13 of 18}
+\section*{Entry 13 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Planning.
 \textbf{AI tool.} Codex / GPT-5.
@@ -31,7 +31,7 @@
 \textbf{Errors caught.} The Part 2 plan had to account for D4 being individual, not shared.
 \textbf{Reflection.} The first useful step was comparing the handout to the actual Part 1 files.
 
-\section*{Entry 14 of 18}
+\section*{Entry 14 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Interpreter.
 \textbf{AI tool.} Codex / GPT-5.
@@ -43,7 +43,7 @@
 \textbf{Errors caught.} The first Program 2 execution failed because the sample program had a domain error, not because the parser was wrong.
 \textbf{Reflection.} This was a good example of the interpreter improving the language design.
 
-\section*{Entry 15 of 18, Experiment E3}
+\section*{Entry 15 of 19, Experiment E3}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Type checker.
 \textbf{AI tool.} Codex / GPT-5.
@@ -55,7 +55,7 @@
 \textbf{Errors caught.} A failed print expression originally still printed \code{null}; runtime error handling was corrected.
 \textbf{Reflection.} Type-checker code can look plausible but still be wrong at the boundary between checker and interpreter.
 
-\section*{Entry 16 of 18}
+\section*{Entry 16 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Testing.
 \textbf{AI tool.} Codex / GPT-5.
@@ -67,7 +67,7 @@
 \textbf{Errors caught.} The line number for a runtime error changed after checking the actual file.
 \textbf{Reflection.} The test suite became the contract between D1, D2, and D3.
 
-\section*{Entry 17 of 18}
+\section*{Entry 17 of 19}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Writing.
 \textbf{AI tool.} Codex / GPT-5.
@@ -79,7 +79,7 @@
 \textbf{Errors caught.} The D1 type system needed to match implementation choices, especially no broad implicit coercion.
 \textbf{Reflection.} The writing is strongest when it explains decisions that appear directly in code.
 
-\section*{Entry 18 of 18, Experiment E2}
+\section*{Entry 18 of 19, Experiment E2}
 \textbf{Date.} 2026-05-10.
 \textbf{Phase.} Type system.
 \textbf{AI tool.} Codex / GPT-5.
@@ -90,5 +90,17 @@
 \textbf{Rejected / modified.} I rejected treating every map-like runtime object as structurally interchangeable. That would weaken the type checker and make chemistry mistakes easier.
 \textbf{Errors caught.} The AI explanation needed one correction: ANS does not use name equivalence for every structured value. Lists are compatible by element type, while chemistry records use name equivalence.
 \textbf{Reflection.} This experiment clarified that type equivalence is a design decision, not just an implementation detail. The exam answer should focus on the language-level type rule.
+
+\section*{Entry 19 of 19}
+\textbf{Date.} 2026-05-16.
+\textbf{Phase.} Final audit and packaging.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Verify both project parts deeply and fix anything that still blocked a complete submission.
+\textbf{Prompt.} ``check if the Part 1 and 2 of the project is done fully and done accordingly and properly and there is nothing else to do, check every single file deeply and with as much detail as possible'' followed by ``Implement the plan.''
+\textbf{Response key part.} Codex checked the handout, source, reports, tests, PDFs, and archives. It found that the visible Part 2 examples worked, but the final package still needed tighter language consistency, stronger negative tests, and self-contained D2 archives.
+\textbf{Accepted.} I accepted documenting assignment as variable-only, rejecting malformed exponents and empty chars, enforcing required declaration fields, and rebuilding final upload folders for both parts.
+\textbf{Rejected / modified.} I did not expand the language to support mutation through member or index expressions. That was unnecessary for ANS and would make the checker/runtime more complicated.
+\textbf{Errors caught.} The audit caught a mismatch between D1's assignable grammar and D2's runtime behavior. It also caught a weak Makefile test target that could print a failure without returning a failing exit status.
+\textbf{Reflection.} The useful lesson is that final readiness means testing the exact upload artifacts. A repo can look clean while the zip a grader receives is still incomplete.
 
 \end{document}

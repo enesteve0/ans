@@ -20,6 +20,7 @@
 \titlespacing*{\subsection}{0pt}{6pt}{2pt}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt}
+\emergencystretch=2em
 \linespread{1.04}
 \setcounter{secnumdepth}{0}
 \usepackage{array}
@@ -120,18 +121,18 @@ Using Sebesta's Chapter 1 criteria, ANS prioritizes readability, writability, an
 ANS has identifiers, literals, hard keywords, contextual chemistry words, operators, separators, comments, and whitespace. Identifiers match \code{[a-z\_][A-Za-z0-9\_]*}; formula literals match uppercase chemical notation such as \code{H}, \code{O2}, and \code{CH4}. This case split keeps \code{water} and \code{H2O} separate without needing a stateful lexer.
 
 {\footnotesize
-\begin{tabularx}{\linewidth}{@{}p{2.8cm}p{4.0cm}Y@{}}
+\begin{tabularx}{\linewidth}{@{}p{3.1cm}p{3.5cm}Y@{}}
 \toprule
 Category & Examples & Rule \\
 \midrule
 Identifiers & \code{water}, \code{mass} & lowercase or underscore start \\
 Numbers & \code{20}, \code{1.008}, \code{6.02e23} & integer, decimal, or scientific notation \\
-Strings/chars & \code{"Water"}, \code{'H'} & quoted literals with simple escapes \\
+Strings/chars & \code{"Water"}, \code{'H'} & quoted strings and exactly one-character char literals \\
 Formula literals & \code{H}, \code{H2O}, \code{CH4} & repeated element-symbol groups \\
 Unit literals & \code{g/mol}, \code{kg/mol}, \code{kJ/mol} & longest match before slash division \\
 Single-word units & \code{mol}, \code{g}, \code{kg}, \code{kJ} & identifiers promoted by parser after a number \\
 Keywords & \code{let}, \code{function}, \code{return}, \code{for}, \code{if}, \code{print} & hard reserved words \\
-Operators/separators & \code{+ - * / == != <= >= += = \{ \} ( ) [ ] , ; .} & maximal munch \\
+Operators/separators & \code{+ - * / == != <= >= += = ...} & maximal munch \\
 Comments & \code{// comment} & skipped to newline \\
 \bottomrule
 \end{tabularx}}
@@ -172,12 +173,15 @@ Comments & \code{// comment} & skipped to newline \\
 <else_clause> -> "else" <block>
 
 <element_declaration> -> "element" <formula_literal> "{" <element_field_list> "}"
+<element_field_list> -> <element_field> { "," <element_field> } [ "," ]
 <element_field> -> "atomic_mass" "=" <number_literal> | "valence" "=" <number_literal>
                  | "symbol" "=" <string_literal>
 <compound_declaration> -> "compound" <identifier> "{" <compound_field_list> "}"
+<compound_field_list> -> <compound_field> { "," <compound_field> } [ "," ]
 <compound_field> -> "formula" "=" <formula_literal> | "name" "=" <string_literal>
 
 <reaction_declaration> -> "reaction" <identifier> "{" <reaction_field_list> "}"
+<reaction_field_list> -> <reaction_field> { "," <reaction_field> } [ "," ]
 <reaction_field> -> "reactants" "=" <reaction_expression>
                   | "products" "=" <reaction_expression>
                   | "check" "=" "balanced"
@@ -200,7 +204,7 @@ Comments & \code{// comment} & skipped to newline \\
 <quantity_literal> -> <number_literal> <unit>
 <unit> -> UNIT_LITERAL | "mol" | "g" | "kg" | "kJ"
 <list_literal> -> "[" [ <argument_list> ] "]"
-<assignable> -> <identifier> { "." <identifier> | "[" <expression> "]" }
+<assignable> -> <identifier>
 \end{lstlisting}
 
 Ambiguity is resolved in the grammar. Arithmetic precedence is encoded by expression levels, all binary operators are left-associative, and reaction expressions use a separate grammar so \code{2*O2} means coefficient times species rather than ordinary multiplication. Braced blocks remove the dangling-\code{else} problem.
@@ -218,7 +222,7 @@ ANS uses big-step operational semantics. Let \(\rho\) be the environment, \(S\) 
 \]
 The expression is evaluated once before iteration. This makes loops stable even if the body mutates unrelated variables.
 
-\textbf{Checked reaction declaration.} A reaction declaration first evaluates each side into a map from compounds to coefficients. Each compound expands to its formula atom counts. If \code{check = balanced}, the declaration succeeds only when every declared element has the same total count on both sides.
+\textbf{Checked reaction declaration.} A reaction declaration must provide \code{reactants}, \code{products}, \code{check}, and \code{energy} exactly once. The declaration first evaluates each side into a map from compounds to coefficients. Each compound expands to its formula atom counts. If \code{check = balanced}, the declaration succeeds only when every declared element has the same total count on both sides.
 \[
 \frac{\forall a.\ \sum_{c \in R} coeff_R(c)\cdot atoms(c,a)
       = \sum_{c \in P} coeff_P(c)\cdot atoms(c,a)}
@@ -251,7 +255,7 @@ ANS uses static scoping. Name lookup follows the source structure, not the call 
 \newpage
 \section{4.7 Expressions and Assignment}
 {\footnotesize
-\begin{tabularx}{\linewidth}{@{}p{3.0cm}p{4.6cm}Y@{}}
+\begin{tabularx}{\linewidth}{@{}p{3.5cm}p{3.7cm}Y@{}}
 \toprule
 Level & Operators/forms & Associativity \\
 \midrule
@@ -263,7 +267,7 @@ Comparison/equality & \code{< <= > >= == !=} & non-chaining in grammar \\
 \bottomrule
 \end{tabularx}}
 
-ANS currently has comparison operators but no \code{\&\&} or \code{||}, so there are no Boolean short-circuit operators to define. Operand and argument evaluation order is left to right and defined. Assignment is a statement, not an expression, so ANS has no assignment inside conditions or larger expressions.
+ANS currently has comparison operators but no \code{\&\&} or \code{||}, so there are no Boolean short-circuit operators to define. Operand and argument evaluation order is left to right and defined. Assignment is a statement, not an expression, so ANS has no assignment inside conditions or larger expressions. Assignment and augmented assignment target variable names only; member and index expressions are used for reading chemistry data, not mutation.
 
 \newpage
 \section{4.8 Design Rationale}
@@ -275,6 +279,6 @@ ANS currently has comparison operators but no \code{\&\&} or \code{||}, so there
 
 \textbf{Static scoping.} Static scoping makes code readable and supports compile-time checks. Dynamic scoping would make chemistry names depend on the call history, which is not acceptable for a reliability-first DSL. The trade-off is less flexibility for ad-hoc rebinding.
 
-\textbf{Assignment as a statement.} Keeping assignment out of expressions avoids C-style surprises in conditions. The trade-off is less compact code, but ANS values clear calculation steps over terse expression tricks.
+\textbf{Assignment as a variable-only statement.} Keeping assignment out of expressions avoids C-style surprises in conditions, and restricting assignment targets to variable names avoids partially mutable chemistry records. The trade-off is less compact code, but ANS values clear calculation steps over terse expression tricks.
 
 \end{document}

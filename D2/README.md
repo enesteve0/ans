@@ -52,6 +52,8 @@ tests/runtime_errors/division_by_zero.ans:1:1: error: division by zero
 - Strong type checking before execution for numbers, strings, chars, bools, elements, compounds, formulas, reactions, reaction sides, quantities, lists, and functions.
 - Formula literals are parsed into atom-count maps and checked against declared elements.
 - `check = balanced` reactions are validated before execution.
+- `element`, `compound`, and `reaction` declarations must contain each required field exactly once.
+- Assignment and augmented assignment are variable-only statements; member/index expressions are readable but not assignable.
 - Interpreter support for declarations, calls, `for`, `if`/`elif`/`else`, assignment, augmented assignment, `return`, and `print`.
 - Runtime errors for division by zero, list index out of range, and reaction-side lookup of a missing compound.
 

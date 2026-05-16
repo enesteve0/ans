@@ -133,6 +133,13 @@ $ D2/ans --check D2/tests/type_errors/unbalanced_reaction.ans
 D2/tests/type_errors/unbalanced_reaction.ans:8:1: error: reaction 'bad_synthesis' is not balanced for element O (2 vs 1)
 \end{lstlisting}
 
+The final checker also enforces required declaration fields exactly once, so incomplete reaction declarations are rejected during checking:
+\begin{lstlisting}[style=terminal]
+$ D2/ans --check D2/tests/type_errors/missing_required_field.ans
+D2/tests/type_errors/missing_required_field.ans:5:1: error: reaction 'incomplete' is missing check field
+D2/tests/type_errors/missing_required_field.ans:5:1: error: reaction 'incomplete' is missing energy field
+\end{lstlisting}
+
 \newpage
 \section{Runtime Error Evidence}
 Part 2 requires informative runtime errors. The suite contains tests for division by zero, list index out of range, and a domain-specific reaction-side lookup error:

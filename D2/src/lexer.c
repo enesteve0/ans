@@ -95,11 +95,30 @@ static Token scan_string(Lexer *l) {
 static Token scan_char(Lexer *l) {
     int start_line = l->line, start_col = l->col;
     const char *start = l->src + l->pos - 1;
-    if (peek_c(l) == '\\') advance_c(l);
-    if (peek_c(l) && peek_c(l) != '\'') advance_c(l);
+
+    if (peek_c(l) == '\'') {
+        error_at(start_line, start_col, "empty character literal");
+        advance_c(l);
+        return make_tok(TOK_ERROR, start, 2, start_line, start_col);
+    }
+
+    if (peek_c(l) == '\\') {
+        advance_c(l);
+        if (!peek_c(l) || peek_c(l) == '\n') {
+            error_at(start_line, start_col, "unterminated character literal");
+            return make_tok(TOK_ERROR, start, 1, start_line, start_col);
+        }
+        advance_c(l);
+    } else if (peek_c(l) && peek_c(l) != '\'' && peek_c(l) != '\n') {
+        advance_c(l);
+    }
+
     if (peek_c(l) != '\'') {
-        error_at(start_line, start_col, "unterminated character literal");
-        return make_tok(TOK_ERROR, start, 1, start_line, start_col);
+        while (peek_c(l) && peek_c(l) != '\'' && peek_c(l) != '\n') advance_c(l);
+        if (peek_c(l) == '\'') advance_c(l);
+        error_at(start_line, start_col, "character literal must contain exactly one character");
+        int err_len = (int)(l->src + l->pos - start);
+        return make_tok(TOK_ERROR, start, err_len, start_line, start_col);
     }
     advance_c(l);
     int len = (int)(l->src + l->pos - start);
@@ -117,6 +136,11 @@ static Token scan_number(Lexer *l, const char *start, int start_line, int start_
     if (peek_c(l) == 'e' || peek_c(l) == 'E') {
         advance_c(l);
         if (peek_c(l) == '+' || peek_c(l) == '-') advance_c(l);
+        if (!isdigit((unsigned char)peek_c(l))) {
+            int len = (int)(l->src + l->pos - start);
+            error_at(start_line, start_col, "malformed numeric exponent");
+            return make_tok(TOK_ERROR, start, len, start_line, start_col);
+        }
         while (isdigit((unsigned char)peek_c(l))) advance_c(l);
     }
     int len = (int)(l->src + l->pos - start);

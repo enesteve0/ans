@@ -32,7 +32,7 @@ If I started again, I would design the Part 2 type system before writing the par
 The hardest decision was how much chemistry to put in the language instead of user functions. We kept formula parsing, compound records, reaction sides, and \code{check = balanced} in the language because those features make ANS a real DSL. We scoped out a larger unit algebra system; quantities are recognized and \code{mol(x)} extracts numeric amounts, but the interpreter does not do full dimensional analysis. That is a reasonable limit for this project.
 
 \section*{Self-Assessment}
-\textbf{Correctness: B.} The three example programs execute, type errors are caught before execution, and required runtime errors are reported. Some edge cases such as complete unit algebra are intentionally limited.
+\textbf{Correctness: B.} The three example programs execute, malformed literals and invalid assignment targets are rejected, type errors are caught before execution, and required runtime errors are reported. Some edge cases such as complete unit algebra are intentionally limited.
 
 \textbf{Design Justification: B.} The final D1 ties major choices to Sebesta terms and names trade-offs, especially strong typing, static scoping, and assignment as a statement.
 
@@ -40,7 +40,7 @@ The hardest decision was how much chemistry to put in the language instead of us
 
 \textbf{Originality: A.} ANS is clearly chemistry-specific. Formula literals, checked reactions, and reaction-side indexing are not just generic scripting features with chemistry names.
 
-\textbf{Code Quality: B.} The lexer, parser, AST, semantic checker, and interpreter are separated. The runtime is larger than ideal, but it is still organized around clear modules and tests.
+\textbf{Code Quality: B.} The lexer, parser, AST, semantic checker, and interpreter are separated. The runtime is larger than ideal, but the final tests now fail loudly when an archive is incomplete or a negative case is accepted.
 
 \textbf{Exam Readiness: B.} I can explain the parser and the chemistry runtime decisions. I still need to rehearse the exact operational semantics and type-equivalence examples before the written exam.
 

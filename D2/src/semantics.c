@@ -41,6 +41,26 @@ static const AstNode *field_child(const AstNode *decl, const char *name) {
     return NULL;
 }
 
+static int field_count(const AstNode *decl, const char *name) {
+    int count = 0;
+    for (int i = 0; i < decl->n_children; i++) {
+        const AstNode *f = decl->children[i];
+        if (f->text && strcmp(f->text, name) == 0) count++;
+    }
+    return count;
+}
+
+static int require_field_once(const AstNode *decl, const char *kind, const char *field) {
+    int count = field_count(decl, field);
+    if (count == 1) return 1;
+    if (count == 0) {
+        error_at(decl->line, 1, "%s '%s' is missing %s field", kind, decl->text, field);
+    } else {
+        error_at(decl->line, 1, "%s '%s' has duplicate %s field", kind, decl->text, field);
+    }
+    return 0;
+}
+
 static const AstNode *function_block(const AstNode *fn) {
     if (!fn || fn->n_children == 0) return NULL;
     return fn->children[fn->n_children - 1];
@@ -459,6 +479,9 @@ static void collect_element(SemCtx *ctx, const AstNode *decl) {
     if (!parse_formula_text(decl->text, decl->line, &f) || f.count != 1 || f.items[0].count != 1) {
         error_at(decl->line, 1, "element name '%s' must be a single element symbol", decl->text);
     }
+    require_field_once(decl, "element", "atomic_mass");
+    require_field_once(decl, "element", "valence");
+    require_field_once(decl, "element", "symbol");
     if (ctx->n_elements == ctx->cap_elements) {
         int new_cap = ctx->cap_elements ? ctx->cap_elements * 2 : 8;
         ctx->elements = realloc(ctx->elements, (size_t)new_cap * sizeof(ElementInfo));
@@ -475,6 +498,8 @@ static void collect_compound(SemCtx *ctx, const AstNode *decl) {
     }
     const AstNode *formula = field_child(decl, "formula");
     const AstNode *name = field_child(decl, "name");
+    require_field_once(decl, "compound", "formula");
+    require_field_once(decl, "compound", "name");
     if (!formula || formula->kind != ND_FORMULA) {
         error_at(decl->line, 1, "compound '%s' is missing formula field", decl->text);
         return;
@@ -504,6 +529,10 @@ static void collect_reaction(SemCtx *ctx, const AstNode *decl) {
     }
     const AstNode *reactants = field_child(decl, "reactants");
     const AstNode *products = field_child(decl, "products");
+    require_field_once(decl, "reaction", "reactants");
+    require_field_once(decl, "reaction", "products");
+    require_field_once(decl, "reaction", "check");
+    require_field_once(decl, "reaction", "energy");
     if (!reactants || !products) {
         error_at(decl->line, 1, "reaction '%s' must have reactants and products", decl->text);
         return;
@@ -743,8 +772,10 @@ static Type check_expr(SemCtx *ctx, TypeScope *scope, const AstNode *expr) {
 }
 
 static Type check_assignable(SemCtx *ctx, TypeScope *scope, const AstNode *lhs) {
-    if (lhs->kind == ND_CALL) {
-        error_at(lhs->line, 1, "function call is not assignable");
+    if (lhs->kind != ND_IDENT) {
+        (void)ctx;
+        (void)scope;
+        error_at(lhs->line, 1, "assignment target must be a variable name");
         return ty(TY_ERROR);
     }
     return check_expr(ctx, scope, lhs);

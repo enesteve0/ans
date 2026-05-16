@@ -32,7 +32,7 @@ The largest lesson from Part 2 is that a language specification becomes real onl
 If I restarted, I would write the semantic checker earlier and use it to guide the example programs. The hardest design decision was strong typing for a DSL that still wants chemistry notation to feel natural. We rejected broad implicit coercion because it would make units and compounds too easy to mix up. We scoped out complete dimensional analysis and kept only the unit behavior needed by the examples.
 
 \section*{Self-Assessment}
-\textbf{Correctness: B.} The required examples run end to end, and the checker catches type and balance errors. Remaining limitations are mostly deliberate scope limits.
+\textbf{Correctness: B.} The required examples run end to end, and the checker catches type, balance, missing-field, malformed-literal, and invalid-assignment errors. Remaining limitations are mostly deliberate scope limits.
 
 \textbf{Design Justification: B.} The final specification explains why ANS chooses strong typing, static scoping, name equivalence for domain records, and statement assignment.
 
@@ -40,7 +40,7 @@ If I restarted, I would write the semantic checker earlier and use it to guide t
 
 \textbf{Originality: A.} The chemistry model is central to the language. Balanced reactions and formula traversal give the project a real domain-specific core.
 
-\textbf{Code Quality: B.} The implementation keeps lexer, parser, AST, checker, interpreter, and error handling separate. The semantic/runtime module is dense, but it is testable through CLI modes.
+\textbf{Code Quality: B.} The implementation keeps lexer, parser, AST, checker, interpreter, and error handling separate. The semantic/runtime module is dense, but it is testable through CLI modes and the final Makefile returns failure when a required test fails.
 
 \textbf{Exam Readiness: B.} I can explain the type checker and interpreter flow, but I should practice walking through static scoping and reaction-balance checking by hand before Exam 2.
 

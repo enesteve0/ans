@@ -1,3 +1,4 @@
+// Parser-only broad syntax sample; Part 2 execution uses D3/programs.
 // Declare elements
 element H {
     atomic_mass = 1.008,

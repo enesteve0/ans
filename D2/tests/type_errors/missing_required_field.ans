@@ -1,0 +1,8 @@
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+
+compound hydrogen { formula = H2, name = "Hydrogen" };
+
+reaction incomplete {
+    reactants = H2,
+    products  = H2
+};
