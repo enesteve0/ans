@@ -5,6 +5,7 @@
 #include "parser.h"
 #include "ast.h"
 #include "error.h"
+#include "semantics.h"
 
 static char *read_file(const char *path) {
     FILE *f = fopen(path, "rb");
@@ -21,15 +22,21 @@ static char *read_file(const char *path) {
 }
 
 int main(int argc, char **argv) {
-    int dump_ast  = 0;
+    int dump_ast   = 0;
+    int parse_only = 0;
+    int check_only = 0;
     const char *filepath = NULL;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--dump-ast") == 0) {
             dump_ast = 1;
+        } else if (strcmp(argv[i], "--parse-only") == 0) {
+            parse_only = 1;
+        } else if (strcmp(argv[i], "--check") == 0) {
+            check_only = 1;
         } else if (argv[i][0] == '-') {
             fprintf(stderr, "unknown option: %s\n", argv[i]);
-            fprintf(stderr, "usage: ans [--dump-ast] <file.ans>\n");
+            fprintf(stderr, "usage: ans [--dump-ast|--parse-only|--check] <file.ans>\n");
             return 1;
         } else {
             filepath = argv[i];
@@ -37,7 +44,7 @@ int main(int argc, char **argv) {
     }
 
     if (!filepath) {
-        fprintf(stderr, "usage: ans [--dump-ast] <file.ans>\n");
+        fprintf(stderr, "usage: ans [--dump-ast|--parse-only|--check] <file.ans>\n");
         return 1;
     }
 
@@ -51,7 +58,16 @@ int main(int argc, char **argv) {
 
     AstNode *tree = parse_program(&parser);
 
-    if (dump_ast) ast_print(tree, 0);
+    if (!g_had_error) {
+        if (dump_ast) {
+            ast_print(tree, 0);
+        } else if (!parse_only) {
+            int check_result = ans_check_program(tree);
+            if (!check_result && !check_only) {
+                ans_execute_program(tree);
+            }
+        }
+    }
 
     ast_free(tree);
     free(source);

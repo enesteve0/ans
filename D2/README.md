@@ -1,95 +1,87 @@
-# ANS - Lexer & Parser (D2, Part 1)
+# ANS - Full Interpreter (D2, Part 2)
 
-A hand-written C lexer and recursive-descent parser for the ANS (Alchemist's Notation Script) domain-specific language.
-
----
+A hand-written C11 implementation of ANS (Alchemist's Notation Script), a chemistry DSL for elements, compounds, reactions, formula traversal, and stoichiometric calculations.
 
 ## Build
 
-```
-make          # optimised build
+```sh
+make          # optimized build
 make debug    # add -g -DDEBUG
 ```
 
-Requires a C11 compiler (`cc`).  No external dependencies.
-
----
+Requires a C11 compiler (`cc`). No external dependencies.
 
 ## Run
 
-```
-./ans <file.ans>                  # parse; exit 0 on success, 1 on error
+```sh
+./ans <file.ans>                  # parse, type check, then execute
+./ans --check <file.ans>          # parse and type check only
+./ans --parse-only <file.ans>     # parser-only mode for Part 1 regression tests
 ./ans --dump-ast <file.ans>       # parse and print the AST
 ```
 
----
-
 ## Test
 
-```
+```sh
 make test
 ```
 
-Runs all programs in `tests/valid/` (each must exit 0) and all programs in `tests/invalid/` (each must exit 1).
+The test target runs:
 
----
+- parser regressions in `tests/valid/` and `tests/invalid/`
+- end-to-end execution for the three Part 2 programs in `../D3/programs/`
+- type-checker negative tests in `tests/type_errors/`
+- runtime-error tests in `tests/runtime_errors/`
 
-## Error format
+## Error Format
 
-```
+```text
 <file>:<line>:<col>: error: <message>
 ```
 
-Example:
+Examples:
 
-```
-tests/invalid/missing_semicolon.ans:8:1: error: expected ';' but got let
-```
-
-The parser uses panic-mode recovery (skips to the next `;`, `}`, or EOF) so multiple errors can be reported in a single run.
-
----
-
-## AST dump example
-
-```
-$ ./ans --dump-ast tests/valid/elements.ans
-Program
-├── ElementDecl [H]
-│   ├── ElementField [atomic_mass]
-│   │   └── Number [1.008]
-│   ├── ElementField [valence]
-│   │   └── Number [1]
-│   └── ElementField [symbol]
-│       └── String ["H"]
-...
+```text
+tests/type_errors/type_error_arg.ans:14:1: error: argument 1 of 'molar_mass' expects compound, got string
+tests/runtime_errors/division_by_zero.ans:1:1: error: division by zero
 ```
 
----
+## Implemented Part 2 Semantics
 
-## Project layout
+- Static lexical scoping with stack-dynamic function parameters and local variables.
+- Strong type checking before execution for numbers, strings, chars, bools, elements, compounds, formulas, reactions, reaction sides, quantities, lists, and functions.
+- Formula literals are parsed into atom-count maps and checked against declared elements.
+- `check = balanced` reactions are validated before execution.
+- `element`, `compound`, and `reaction` declarations must contain each required field exactly once.
+- Assignment and augmented assignment are variable-only statements; member/index expressions are readable but not assignable.
+- Interpreter support for declarations, calls, `for`, `if`/`elif`/`else`, assignment, augmented assignment, `return`, and `print`.
+- Runtime errors for division by zero, list index out of range, and reaction-side lookup of a missing compound.
 
-```
+## Project Layout
+
+```text
 D2/
 ├── Makefile
 ├── README.md
 ├── include/
-│   ├── lexer.h     token types, Token struct, Lexer API
-│   ├── parser.h    Parser struct, parse_program
-│   ├── ast.h       NodeKind enum, AstNode, ast_* API
-│   └── error.h     error_at / fatal_at
+│   ├── lexer.h
+│   ├── parser.h
+│   ├── ast.h
+│   ├── semantics.h
+│   └── error.h
 ├── src/
-│   ├── main.c      CLI entry point
-│   ├── lexer.c     maximal-munch scanner
-│   ├── parser.c    recursive-descent parser (one function per EBNF rule)
-│   ├── ast.c       node constructors + tree pretty-printer
-│   └── error.c     error formatting
+│   ├── main.c
+│   ├── lexer.c
+│   ├── parser.c
+│   ├── ast.c
+│   ├── semantics.c
+│   └── error.c
 └── tests/
-    ├── valid/      8 programs — must all be accepted
-    └── invalid/    4 programs — must all be rejected
+    ├── valid/
+    ├── invalid/
+    ├── type_errors/
+    └── runtime_errors/
 ```
-
----
 
 ## Authors
 

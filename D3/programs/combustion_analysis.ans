@@ -28,16 +28,16 @@ function molar_mass(compound c) {
     return mass;
 };
 
-function compute_yield(reaction r, compound c) {
+function compute_yield(reaction r, compound reactant, compound product) {
     let products  = r.products;
     let reactants = r.reactants;
-    let reactant_mol = 1.0 / mol(reactants[c]);
-    let product_mol  = reactant_mol * mol(products[c]);
+    let reactant_mol = 1.0 / mol(reactants[reactant]);
+    let product_mol  = reactant_mol * mol(products[product]);
     return product_mol;
 };
 
 function print_reaction_summary(reaction r, compound fuel, compound product) {
-    let yield_val = compute_yield(r, fuel);
+    let yield_val = compute_yield(r, fuel, product);
     let mass      = molar_mass(product);
     if (yield_val > 0.0) {
         print "Reaction produces output.";
@@ -48,5 +48,11 @@ function print_reaction_summary(reaction r, compound fuel, compound product) {
 };
 
 print_reaction_summary(combustion, methane, co2);
-compute_yield(combustion, CH4);
-molar_mass(water);
+
+let water_mass = molar_mass(water);
+if (water_mass > 18.0) {
+    print "Water molar mass is above 18.";
+}
+else {
+    print "Water molar mass is not above 18.";
+}

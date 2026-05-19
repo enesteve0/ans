@@ -1,0 +1,160 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% Project D3 (Part 2): Example Programs & Test Report for ANS
+% Students: 220104004926 & 220104004931
+% Compile with: tectonic 220104004926-220104004931_D3_P2.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[varqu,varl]{zi4}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.15cm]{geometry}
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscodebg}{HTML}{F9FAFB}
+\definecolor{anscaption}{HTML}{6B7280}
+\definecolor{anssuccess}{HTML}{047857}
+\definecolor{ansdanger}{HTML}{B91C1C}
+\usepackage[colorlinks=true,linkcolor=ansblue,urlcolor=ansblue,citecolor=ansblue,pdfborder={0 0 0}]{hyperref}
+\usepackage[explicit]{titlesec}
+\titleformat{\section}{\large\bfseries\sffamily}{\thesection}{0.65em}{#1}
+\titleformat{\subsection}{\normalsize\bfseries\sffamily}{\thesubsection}{0.65em}{#1}
+\titlespacing*{\section}{0pt}{12pt}{5pt}
+\titlespacing*{\subsection}{0pt}{8pt}{3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4.5pt}
+\setcounter{secnumdepth}{0}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+\usepackage{listings}
+\lstdefinestyle{terminal}{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{anscodebg},
+  frame=none,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  xleftmargin=5pt,
+  xrightmargin=5pt,
+  aboveskip=5pt,
+  belowskip=5pt
+}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}CSE 341: ANS Test Report (D3, Part 2) \(\cdot\) Students 220104004926 \& 220104004931}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+\begin{document}
+\begin{center}
+  {\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+  \vspace{3pt}
+  {\huge\bfseries\sffamily ANS: Alchemist's Notation Script\par}
+  \vspace{4pt}
+  {\large Example Programs \& Test Report (D3), Part 2\par}
+  \vspace{5pt}
+  {\footnotesize\color{anscaption}Students: 220104004926 \& 220104004931 \(\cdot\) Spring 2026 \(\cdot\) Gebze Technical University\par}
+\end{center}
+
+\section{Interpreter Under Test}
+This report updates the Part 1 parser report with Part 2 execution evidence. The implementation under test is \code{D2/ans}. The command \code{D2/ans --check <file>} parses and type-checks without execution; \code{D2/ans <file>} parses, type-checks, and executes.
+
+\begin{lstlisting}[style=terminal]
+$ cd D2
+$ make test
+parser valid tests: PASS
+parser invalid tests: PASS
+part 2 examples: PASS
+type errors: PASS
+runtime errors: PASS
+\end{lstlisting}
+
+\section{Executed Programs}
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{4.1cm}Y p{1.9cm}@{}}
+\toprule
+Program & Main features exercised & Result \\
+\midrule
+\file{molar\_mass\_demo.ans} & Element and compound declarations, typed \code{compound} parameters, formula iteration, member/index access, function calls, list traversal, and \code{if}/\code{elif}/\code{else}. & \textcolor{anssuccess}{PASS} \\
+\file{combustion\_analysis.ans} & Balanced reaction checking, reaction-side indexing, typed \code{reaction}/\code{compound} parameters, and string output. & \textcolor{anssuccess}{PASS} \\
+\file{multi\_reaction\_survey.ans} & Multiple reactions, list counters, reaction-side iteration, character comparison, string variables, and repeated function calls. & \textcolor{anssuccess}{PASS} \\
+\bottomrule
+\end{tabularx}}
+
+\subsection{Program 1 Output}
+\begin{lstlisting}[style=terminal]
+$ D2/ans D3/programs/molar_mass_demo.ans
+Light molecule.
+Light molecule.
+Medium molecule.
+Light molecule.
+\end{lstlisting}
+This program demonstrates formula traversal. The loop variable in \code{for (let element in formula)} is an element object, and \code{formula[element]} gives the atom count for that element. The output classifies water, methane, carbon dioxide, and ammonia by computed molar mass.
+
+\subsection{Program 2 Output}
+\begin{lstlisting}[style=terminal]
+$ D2/ans D3/programs/combustion_analysis.ans
+Reaction produces output.
+Water molar mass is above 18.
+\end{lstlisting}
+This program demonstrates checked reaction declarations and reaction-side indexing. The reaction \code{CH4 + 2*O2 -> CO2 + 2*H2O} passes the balanced-reaction checker before execution. The yield helper distinguishes the reactant compound from the product compound, which avoids the Part 1 design mistake of looking up methane in the products side.
+
+\subsection{Program 3 Output}
+\begin{lstlisting}[style=terminal]
+$ D2/ans D3/programs/multi_reaction_survey.ans
+Two heavy compounds.
+Five light compounds.
+Combustion reactants are heavy.
+Survey complete
+\end{lstlisting}
+This program demonstrates a larger end-to-end run: two reactions are declared, a list of compounds is classified, counters are updated with augmented assignment, and a reaction-side loop computes total reactant mass. The final \code{sym\_h == 'H'} branch also exercises character literals and equality.
+
+\newpage
+\section{Type Checker Evidence}
+The required pre-execution type error is in \file{D2/tests/type\_errors/type\_error\_arg.ans}. It calls a function expecting a \code{compound} with a \code{string}.
+
+\begin{lstlisting}[style=terminal]
+$ D2/ans --check D2/tests/type_errors/type_error_arg.ans
+D2/tests/type_errors/type_error_arg.ans:15:1: error: argument 1 of 'molar_mass' expects compound, got string
+\end{lstlisting}
+
+The checker also rejects unbalanced checked reactions before execution:
+\begin{lstlisting}[style=terminal]
+$ D2/ans --check D2/tests/type_errors/unbalanced_reaction.ans
+D2/tests/type_errors/unbalanced_reaction.ans:8:1: error: reaction 'bad_synthesis' is not balanced for element O (2 vs 1)
+\end{lstlisting}
+
+The final checker also enforces required declaration fields exactly once, so incomplete reaction declarations are rejected during checking:
+\begin{lstlisting}[style=terminal]
+$ D2/ans --check D2/tests/type_errors/missing_required_field.ans
+D2/tests/type_errors/missing_required_field.ans:5:1: error: reaction 'incomplete' is missing check field
+D2/tests/type_errors/missing_required_field.ans:5:1: error: reaction 'incomplete' is missing energy field
+\end{lstlisting}
+
+\newpage
+\section{Runtime Error Evidence}
+Part 2 requires informative runtime errors. The suite contains tests for division by zero, list index out of range, and a domain-specific reaction-side lookup error:
+\begin{lstlisting}[style=terminal]
+$ D2/ans D2/tests/runtime_errors/division_by_zero.ans
+D2/tests/runtime_errors/division_by_zero.ans:1:1: error: division by zero
+
+$ D2/ans D2/tests/runtime_errors/index_out_of_range.ans
+D2/tests/runtime_errors/index_out_of_range.ans:2:1: error: list index out of range
+
+$ D2/ans D2/tests/runtime_errors/reaction_missing_compound.ans
+D2/tests/runtime_errors/reaction_missing_compound.ans:18:1: error: reaction side does not contain requested compound
+\end{lstlisting}
+
+\section{Conclusion}
+The three Part 1 example programs now execute end to end under the Part 2 interpreter. The type checker catches incompatible function arguments and unbalanced checked reactions before execution, and the interpreter reports the required runtime errors with file and line information.
+
+\end{document}

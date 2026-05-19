@@ -1,0 +1,2 @@
+// Exponent marker must be followed by at least one digit
+let x = 1e;

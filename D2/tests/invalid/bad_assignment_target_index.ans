@@ -1,0 +1,3 @@
+// ANS Part 2 keeps assignment variable-only
+let xs = [1, 2];
+xs[0] = 9;

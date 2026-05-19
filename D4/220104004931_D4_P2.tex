@@ -1,0 +1,106 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{xcolor}
+\definecolor{anscaption}{HTML}{6B7280}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\emergencystretch=2em
+\newcommand{\code}[1]{\texttt{#1}}
+\begin{document}
+\begin{center}
+{\huge\bfseries AI Usage Journal, Part 2\par}
+{\large Student: 220104004931 Enes Özkan\par}
+{\footnotesize\color{anscaption}CSE 341 Project D4, Part 2}
+\end{center}
+
+\section*{Entry 13 of 19}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Planning.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Understand the remaining Part 2 deliverables from the handout and current repository.
+\textbf{Prompt.} ``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly... now we gotta work on Part 2.''
+\textbf{Response key part.} Codex compared the handout requirements with our submitted Part 1 files and identified the missing Part 2 pieces.
+\textbf{Accepted.} I accepted that D2 must add both a checker and interpreter, not only runtime evaluation.
+\textbf{Rejected / modified.} I did not accept changing \code{print} to a built-in call because it would increase inconsistency risk.
+\textbf{Errors caught.} The Part 2 plan had to account for D4 being individual, not shared.
+\textbf{Reflection.} The first useful step was comparing the handout to the actual Part 1 files.
+
+\section*{Entry 14 of 19}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Interpreter.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Implement execution while preserving the parser.
+\textbf{Prompt.} ``Implement the plan.''
+\textbf{Response key part.} Codex kept the existing lexer/parser and added runtime support for elements, compounds, formulas, reactions, reaction sides, quantities, lists, and functions.
+\textbf{Accepted.} I accepted the runtime value model with element, compound, formula, reaction, reaction side, quantity, list, and function values.
+\textbf{Rejected / modified.} I rejected treating reaction sides as plain lists, because indexing by compound is a domain-specific operation.
+\textbf{Errors caught.} The first Program 2 execution failed because the sample program had a domain error, not because the parser was wrong.
+\textbf{Reflection.} This was a good example of the interpreter improving the language design.
+
+\section*{Entry 15 of 19, Experiment E3}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Type checker.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Ask AI to implement the type checker portion and test it.
+\textbf{Prompt.} ``Implement the plan'' where the plan required strong typing, function argument checks, formula validation, and checked reaction validation.
+\textbf{Response key part.} Codex implemented static checks for declarations, expressions, function calls, homogeneous lists, formula symbols, and balanced reactions.
+\textbf{Accepted.} I accepted declaration collection followed by function-body checking and top-level checking.
+\textbf{Rejected / modified.} I changed the list rule from permissive mixed lists to homogeneous lists to match the final spec.
+\textbf{Errors caught.} A failed print expression originally still printed \code{null}; runtime error handling was corrected.
+\textbf{Reflection.} Type-checker code can look plausible but still be wrong at the boundary between checker and interpreter.
+
+\section*{Entry 16 of 19}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Testing.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Verify required positive and negative behavior.
+\textbf{Prompt.} ``Implement the plan'' including acceptance tests.
+\textbf{Response key part.} Codex extended \code{make test} so it verifies parser tests, D3 execution, pre-execution type errors, and runtime errors.
+\textbf{Accepted.} I accepted the Makefile split between parser regression, Part 2 examples, type errors, and runtime errors.
+\textbf{Rejected / modified.} I did not use imagined output in D3; I used real command output.
+\textbf{Errors caught.} The line number for a runtime error changed after checking the actual file.
+\textbf{Reflection.} The test suite became the contract between D1, D2, and D3.
+
+\section*{Entry 17 of 19}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Writing.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Update reports after code was working.
+\textbf{Prompt.} ``Implement the plan.''
+\textbf{Response key part.} Codex wrote the Part 2 reports around the implemented checker/interpreter instead of around imagined behavior.
+\textbf{Accepted.} I accepted documenting operational semantics for formula loops and checked reactions because those are the most ANS-specific constructs.
+\textbf{Rejected / modified.} I did not describe ANS as having full unit algebra.
+\textbf{Errors caught.} The D1 type system needed to match implementation choices, especially no broad implicit coercion.
+\textbf{Reflection.} The writing is strongest when it explains decisions that appear directly in code.
+
+\section*{Entry 18 of 19, Experiment E2}
+\textbf{Date.} 2026-05-10.
+\textbf{Phase.} Type system.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Complete E2 by asking AI to explain name equivalence versus structural equivalence for ANS domain types.
+\textbf{Prompt.} ``Implement the plan.'' The active plan required completing E2: ask AI to explain name equivalence versus structural equivalence for ANS record/domain types, compare it with Sebesta \S6.14, and align it with the final D1 type-equivalence rule.
+\textbf{Response key part.} Codex explained that name equivalence compares declared type names, while structural equivalence compares type structure. It said that ANS should use name equivalence for chemistry domain records because \code{compound}, \code{formula}, and \code{reaction\_side} carry different meanings even when implemented with similar maps. It also separated this from \code{list<T>}, where the element type determines compatibility.
+\textbf{Accepted.} I accepted the explanation that domain meaning should control equivalence for ANS records. This supports the final D1 decision.
+\textbf{Rejected / modified.} I rejected treating every map-like runtime object as structurally interchangeable. That would weaken the type checker and make chemistry mistakes easier.
+\textbf{Errors caught.} The AI explanation needed one correction: ANS does not use name equivalence for every structured value. Lists are compatible by element type, while chemistry records use name equivalence.
+\textbf{Reflection.} This experiment clarified that type equivalence is a design decision, not just an implementation detail. The exam answer should focus on the language-level type rule.
+
+\section*{Entry 19 of 19}
+\textbf{Date.} 2026-05-16.
+\textbf{Phase.} Final audit and packaging.
+\textbf{AI tool.} Codex / GPT-5.
+\textbf{Goal.} Verify both project parts deeply and fix anything that still blocked a complete submission.
+\textbf{Prompt.} ``check if the Part 1 and 2 of the project is done fully and done accordingly and properly and there is nothing else to do, check every single file deeply and with as much detail as possible'' followed by ``Implement the plan.''
+\textbf{Response key part.} Codex checked the handout, source, reports, tests, PDFs, and archives. It found that the visible Part 2 examples worked, but the final package still needed tighter language consistency, stronger negative tests, and self-contained D2 archives.
+\textbf{Accepted.} I accepted documenting assignment as variable-only, rejecting malformed exponents and empty chars, enforcing required declaration fields, and rebuilding final upload folders for both parts.
+\textbf{Rejected / modified.} I did not expand the language to support mutation through member or index expressions. That was unnecessary for ANS and would make the checker/runtime more complicated.
+\textbf{Errors caught.} The audit caught a mismatch between D1's assignable grammar and D2's runtime behavior. It also caught a weak Makefile test target that could print a failure without returning a failing exit status.
+\textbf{Reflection.} The useful lesson is that final readiness means testing the exact upload artifacts. A repo can look clean while the zip a grader receives is still incomplete.
+
+\end{document}
