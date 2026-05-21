@@ -48,5 +48,5 @@ function print_reaction_summary(reaction r, compound fuel, compound product) {
 };
 
 print_reaction_summary(combustion, methane, co2);
-compute_yield(combustion, CH4);
+compute_yield(combustion, methane);
 molar_mass(water);

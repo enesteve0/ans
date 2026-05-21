@@ -229,8 +229,6 @@ static const char *check_call(const AstNode *call, TypeEnv *tenv) {
         const char *expected = sig->param_type[i];
         if (!expected || expected[0] == '\0') continue; /* untyped */
         if (strcmp(got, expected) == 0) continue;
-        /* Allow formula where compound expected (formula-to-compound resolution) */
-        if (strcmp(expected, "compound") == 0 && strcmp(got, "formula") == 0) continue;
         if (strcmp(got, "unknown") == 0) continue; /* propagate errors silently */
         error_at(call->children[i+1]->line, 0,
             "argument %d of '%s': expected %s, got %s",
@@ -247,7 +245,20 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
         case ND_CHAR:     return "char";
         case ND_FORMULA:  return "formula";
         case ND_QUANTITY: return "quantity";
-        case ND_LIST:     return "list";
+        case ND_LIST: {
+            if (node->n_children == 0) return "list";
+            const char *elem_type = check_expr(node->children[0], tenv);
+            for (int i = 1; i < node->n_children; i++) {
+                const char *t = check_expr(node->children[i], tenv);
+                if (strcmp(elem_type, "unknown") != 0 && strcmp(t, "unknown") != 0
+                    && strcmp(elem_type, t) != 0) {
+                    error_at(node->children[i]->line, 0,
+                        "list elements must all be the same type: "
+                        "expected %s, got %s", elem_type, t);
+                }
+            }
+            return "list";
+        }
 
         case ND_IDENT: {
             /* Check local type env first, then global declarations */
@@ -313,9 +324,26 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
 
         case ND_INDEX: {
             const char *obj = check_expr(node->children[0], tenv);
-            if (strcmp(obj, "list") == 0)          return "unknown";
-            if (strcmp(obj, "formula") == 0)        return "number";
-            if (strcmp(obj, "reaction_side") == 0)  return "number";
+            const char *idx = check_expr(node->children[1], tenv);
+            if (strcmp(obj, "list") == 0) {
+                if (strcmp(idx, "number") != 0 && strcmp(idx, "unknown") != 0)
+                    error_at(node->children[1]->line, 0,
+                        "list index must be number, got %s", idx);
+                return "unknown";
+            }
+            if (strcmp(obj, "formula") == 0) {
+                if (strcmp(idx, "element") != 0 && strcmp(idx, "unknown") != 0)
+                    error_at(node->children[1]->line, 0,
+                        "formula index must be element, got %s", idx);
+                return "number";
+            }
+            if (strcmp(obj, "reaction_side") == 0) {
+                if (strcmp(idx, "compound") != 0 && strcmp(idx, "formula") != 0
+                    && strcmp(idx, "unknown") != 0)
+                    error_at(node->children[1]->line, 0,
+                        "reaction_side index must be compound, got %s", idx);
+                return "number";
+            }
             return "unknown";
         }
 
@@ -346,11 +374,27 @@ static void check_stmt(const AstNode *node, TypeEnv *tenv) {
             tenv_bind(tenv, node->text, t);
             break;
         }
-        case ND_ASSIGN:
-        case ND_AUG_ASSIGN:
-            check_expr(node->children[0], tenv);
-            check_expr(node->children[1], tenv);
+        case ND_ASSIGN: {
+            const char *ltype = check_expr(node->children[0], tenv);
+            const char *rtype = check_expr(node->children[1], tenv);
+            if (strcmp(ltype, "unknown") != 0 && strcmp(rtype, "unknown") != 0
+                && strcmp(ltype, rtype) != 0)
+                error_at(node->line, 0,
+                    "assignment type mismatch: variable is %s, value is %s",
+                    ltype, rtype);
             break;
+        }
+        case ND_AUG_ASSIGN: {
+            const char *ltype = check_expr(node->children[0], tenv);
+            const char *rtype = check_expr(node->children[1], tenv);
+            if (strcmp(ltype, "unknown") != 0 && strcmp(ltype, "number") != 0)
+                error_at(node->line, 0,
+                    "augmented assignment requires number, left is %s", ltype);
+            if (strcmp(rtype, "unknown") != 0 && strcmp(rtype, "number") != 0)
+                error_at(node->line, 0,
+                    "augmented assignment requires number, right is %s", rtype);
+            break;
+        }
         case ND_PRINT:
             check_expr(node->children[0], tenv);
             break;
@@ -381,7 +425,10 @@ static void check_stmt(const AstNode *node, TypeEnv *tenv) {
             /* alternating cond/block pairs, optional final else block */
             int i = 0;
             while (i + 1 < node->n_children) {
-                check_expr(node->children[i], tenv);
+                const char *ctype = check_expr(node->children[i], tenv);
+                if (strcmp(ctype, "bool") != 0 && strcmp(ctype, "unknown") != 0)
+                    error_at(node->children[i]->line, 0,
+                        "if/elif condition must be bool, got %s", ctype);
                 check_block(node->children[i+1], tenv);
                 i += 2;
             }
@@ -589,10 +636,19 @@ static void collect_declarations(const AstNode *prog) {
         const AstNode *node = prog->children[i];
         switch (node->kind) {
             case ND_ELEMENT_DECL:
-                if (ck_n_elems < MAX_DECLS)
+                if (elem_is_declared(node->text)) {
+                    error_at(node->line, 0,
+                        "element '%s' already declared", node->text);
+                } else if (ck_n_elems < MAX_DECLS) {
                     ck_elem_sym[ck_n_elems++] = node->text;
+                }
                 break;
             case ND_COMPOUND_DECL: {
+                if (comp_is_declared(node->text)) {
+                    error_at(node->line, 0,
+                        "compound '%s' already declared", node->text);
+                    break;
+                }
                 if (ck_n_comps >= MAX_DECLS) break;
                 ck_comp_name[ck_n_comps] = node->text;
                 /* Extract formula string */
@@ -606,10 +662,19 @@ static void collect_declarations(const AstNode *prog) {
                 break;
             }
             case ND_REACTION_DECL:
-                if (ck_n_rxns < MAX_DECLS)
+                if (rxn_is_declared(node->text)) {
+                    error_at(node->line, 0,
+                        "reaction '%s' already declared", node->text);
+                } else if (ck_n_rxns < MAX_DECLS) {
                     ck_rxn_name[ck_n_rxns++] = node->text;
+                }
                 break;
             case ND_FUNCTION_DECL: {
+                if (func_sig(node->text)) {
+                    error_at(node->line, 0,
+                        "function '%s' already declared", node->text);
+                    break;
+                }
                 if (ck_n_funcs >= MAX_DECLS) break;
                 FuncSig *sig = &ck_funcs[ck_n_funcs++];
                 sig->name = node->text;
