@@ -1,0 +1,12 @@
+// Runtime error 2: list index out of range.
+
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound water   { formula = H2O, name = "Water"   };
+compound methane { formula = CH4, name = "Methane"  };
+
+element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
+
+let xs = [water, methane];
+let bad = xs[5];

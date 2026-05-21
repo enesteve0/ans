@@ -1,0 +1,6 @@
+// Semantic error 3: compound declaration is missing the required 'name' field.
+
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound water { formula = H2O };

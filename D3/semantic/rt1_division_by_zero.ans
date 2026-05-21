@@ -1,0 +1,6 @@
+// Runtime error 1: division by zero.
+
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+
+let denom = 0.0;
+let result = 42.0 / denom;

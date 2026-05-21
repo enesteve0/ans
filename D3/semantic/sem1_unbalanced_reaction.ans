@@ -1,0 +1,14 @@
+// Semantic error 1: unbalanced reaction.
+// Reactants: H2 + O2  → { H:2, O:2 }
+// Products:  H2O      → { H:2, O:1 }
+// O counts differ → checker must reject.
+
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+reaction bad_water {
+    reactants = H2 + O2,
+    products  = H2O,
+    check     = balanced,
+    energy    = exothermic 0 kJ
+};

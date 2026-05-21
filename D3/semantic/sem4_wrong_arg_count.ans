@@ -1,0 +1,18 @@
+// Semantic error 4: function called with wrong number of arguments.
+// molar_mass expects 1 argument (compound c), called with 0.
+
+element H { atomic_mass = 1.008,  valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound water { formula = H2O, name = "Water" };
+
+function molar_mass(compound c) {
+    let formula = c.formula;
+    let mass = 0.0;
+    for (let element in formula) {
+        mass += element.atomic_mass * formula[element];
+    }
+    return mass;
+};
+
+molar_mass();

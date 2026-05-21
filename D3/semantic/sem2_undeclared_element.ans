@@ -1,0 +1,7 @@
+// Semantic error 2: formula references an undeclared element.
+// Element 'N' is never declared, so NH3 is invalid.
+
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound ammonia { formula = NH3, name = "Ammonia" };
