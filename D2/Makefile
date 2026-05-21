@@ -1,6 +1,7 @@
 CC      = cc
 CFLAGS  = -std=c11 -Wall -Wextra -Wpedantic -Iinclude
-SRCS    = src/main.c src/lexer.c src/parser.c src/ast.c src/error.c
+SRCS    = src/main.c src/lexer.c src/parser.c src/ast.c src/error.c \
+          src/value.c src/checker.c src/interpreter.c
 TARGET  = ans
 
 .PHONY: all debug test clean
