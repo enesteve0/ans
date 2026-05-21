@@ -1,0 +1,8 @@
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+compound water { formula = H2O, name = "Water" };
+
+let compounds = [water];
+let formula = compounds[0].formula;
+let name = compounds[0].name;

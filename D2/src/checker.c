@@ -80,6 +80,34 @@ static void tenv_bind(TypeEnv *e, const char *name, const char *type) {
     e->count++;
 }
 
+/* List types are represented as list<T> so the checker can preserve the
+   element type through indexing and for-in loops. */
+static int type_is_list(const char *type) {
+    size_t len;
+    if (!type) return 0;
+    len = strlen(type);
+    return len > 6 && strncmp(type, "list<", 5) == 0 && type[len - 1] == '>';
+}
+
+static char *make_list_type(const char *elem_type) {
+    const char *elem = elem_type ? elem_type : "unknown";
+    size_t len = strlen(elem) + strlen("list<>") + 1;
+    char *out = malloc(len);
+    snprintf(out, len, "list<%s>", elem);
+    return out;
+}
+
+static char *list_element_type(const char *list_type) {
+    size_t len;
+    char *out;
+    if (!type_is_list(list_type)) return strdup("unknown");
+    len = strlen(list_type);
+    out = malloc(len - 5); /* total len - "list<" - ">" + NUL */
+    memcpy(out, list_type + 5, len - 6);
+    out[len - 6] = '\0';
+    return out;
+}
+
 /* ================================================================
    Lookup helpers
    ================================================================ */
@@ -198,6 +226,7 @@ static int amaps_equal(const AtomMap *a, const AtomMap *b) {
    ================================================================ */
 
 static const char *check_expr(const AstNode *node, TypeEnv *tenv);
+static const char *check_assign_target(const AstNode *node, TypeEnv *tenv);
 
 static const char *check_call(const AstNode *call, TypeEnv *tenv) {
     /* call->children[0] = callee ident; [1..] = args */
@@ -246,7 +275,11 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
         case ND_FORMULA:  return "formula";
         case ND_QUANTITY: return "quantity";
         case ND_LIST: {
-            if (node->n_children == 0) return "list";
+            if (node->n_children == 0) {
+                error_at(node->line, 0,
+                    "empty list requires an element type");
+                return "list<unknown>";
+            }
             const char *elem_type = check_expr(node->children[0], tenv);
             for (int i = 1; i < node->n_children; i++) {
                 const char *t = check_expr(node->children[i], tenv);
@@ -257,7 +290,7 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
                         "expected %s, got %s", elem_type, t);
                 }
             }
-            return "list";
+            return make_list_type(elem_type);
         }
 
         case ND_IDENT: {
@@ -319,17 +352,22 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
                 error_at(node->line, 0, "reaction has no field '%s'", field);
                 return "unknown";
             }
+            if (strcmp(obj, "unknown") != 0) {
+                error_at(node->line, 0,
+                    "member access '.%s' requires element, compound, or reaction, got %s",
+                    field, obj);
+            }
             return "unknown";
         }
 
         case ND_INDEX: {
             const char *obj = check_expr(node->children[0], tenv);
             const char *idx = check_expr(node->children[1], tenv);
-            if (strcmp(obj, "list") == 0) {
+            if (type_is_list(obj)) {
                 if (strcmp(idx, "number") != 0 && strcmp(idx, "unknown") != 0)
                     error_at(node->children[1]->line, 0,
                         "list index must be number, got %s", idx);
-                return "unknown";
+                return list_element_type(obj);
             }
             if (strcmp(obj, "formula") == 0) {
                 if (strcmp(idx, "element") != 0 && strcmp(idx, "unknown") != 0)
@@ -344,6 +382,10 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
                         "reaction_side index must be compound, got %s", idx);
                 return "number";
             }
+            if (strcmp(obj, "unknown") != 0) {
+                error_at(node->line, 0,
+                    "index operator not supported for type %s", obj);
+            }
             return "unknown";
         }
 
@@ -353,6 +395,68 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
         default:
             return "unknown";
     }
+}
+
+static const char *check_assign_target(const AstNode *node, TypeEnv *tenv) {
+    if (!node) return "unknown";
+
+    if (node->kind == ND_IDENT) {
+        const char *type = check_expr(node, tenv);
+        if (strcmp(type, "function") == 0) {
+            error_at(node->line, 0,
+                "function name cannot be assigned to");
+            return "unknown";
+        }
+        return type;
+    }
+
+    if (node->kind == ND_INDEX) {
+        const char *obj = check_expr(node->children[0], tenv);
+        const char *idx = check_expr(node->children[1], tenv);
+
+        if (type_is_list(obj)) {
+            if (strcmp(idx, "number") != 0 && strcmp(idx, "unknown") != 0)
+                error_at(node->children[1]->line, 0,
+                    "list index must be number, got %s", idx);
+            return list_element_type(obj);
+        }
+
+        if (strcmp(obj, "formula") == 0) {
+            error_at(node->line, 0,
+                "formula atom counts are read-only assignment targets");
+            return "number";
+        }
+
+        if (strcmp(obj, "reaction_side") == 0) {
+            error_at(node->line, 0,
+                "reaction side coefficients are read-only assignment targets");
+            return "number";
+        }
+
+        if (strcmp(obj, "unknown") != 0)
+            error_at(node->line, 0,
+                "assignment target is not writable");
+        return "unknown";
+    }
+
+    if (node->kind == ND_MEMBER) {
+        const char *type = check_expr(node, tenv);
+        error_at(node->line, 0,
+            "record fields are read-only assignment targets");
+        return type;
+    }
+
+    if (node->kind == ND_CALL) {
+        check_expr(node, tenv);
+        error_at(node->line, 0,
+            "function call cannot be an assignment target");
+        return "unknown";
+    }
+
+    check_expr(node, tenv);
+    error_at(node->line, 0,
+        "invalid assignment target");
+    return "unknown";
 }
 
 /* ================================================================
@@ -375,7 +479,7 @@ static void check_stmt(const AstNode *node, TypeEnv *tenv) {
             break;
         }
         case ND_ASSIGN: {
-            const char *ltype = check_expr(node->children[0], tenv);
+            const char *ltype = check_assign_target(node->children[0], tenv);
             const char *rtype = check_expr(node->children[1], tenv);
             if (strcmp(ltype, "unknown") != 0 && strcmp(rtype, "unknown") != 0
                 && strcmp(ltype, rtype) != 0)
@@ -385,7 +489,7 @@ static void check_stmt(const AstNode *node, TypeEnv *tenv) {
             break;
         }
         case ND_AUG_ASSIGN: {
-            const char *ltype = check_expr(node->children[0], tenv);
+            const char *ltype = check_assign_target(node->children[0], tenv);
             const char *rtype = check_expr(node->children[1], tenv);
             if (strcmp(ltype, "unknown") != 0 && strcmp(ltype, "number") != 0)
                 error_at(node->line, 0,
@@ -413,7 +517,7 @@ static void check_stmt(const AstNode *node, TypeEnv *tenv) {
             /* Determine the loop variable type */
             const char *var_type = "unknown";
             if (strcmp(iter_type, "formula") == 0)        var_type = "element";
-            else if (strcmp(iter_type, "list") == 0)      var_type = "unknown";
+            else if (type_is_list(iter_type))              var_type = list_element_type(iter_type);
             else if (strcmp(iter_type, "reaction_side") == 0) var_type = "compound";
             TypeEnv *inner = tenv_new(tenv);
             tenv_bind(inner, node->children[0]->text, var_type);

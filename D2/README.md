@@ -51,9 +51,16 @@ Runs all test categories and reports a pass/fail count.  Exits **0** if every te
 |---|---|---|
 | Parser — valid programs | `tests/valid/` | 0 |
 | Parser — invalid programs | `tests/invalid/` | 1 |
+| Type checker — valid programs | `tests/check-valid/` | 0 |
+| Type checker — invalid programs | `tests/check-invalid/` | 1 |
 | D3 example programs (end-to-end) | `../D3/programs/` | 0 |
+| D3 malformed parser programs | `../D3/malformed/` | 1 |
 | Type-checker negative tests | `../D3/semantic/sem*.ans` | 1 |
 | Runtime-error tests | `../D3/semantic/rt*.ans` | 1 |
+
+The D3 folders are required for the Part 2 test target.  If they are missing,
+`make test` reports a failure instead of silently skipping the end-to-end
+evidence programs.
 
 ---
 
@@ -96,7 +103,9 @@ D2/
 │   └── interpreter.c   tree-walking interpreter with static scoping
 └── tests/
     ├── valid/          8 programs — must all be accepted (exit 0)
-    └── invalid/        4 programs — must all be rejected (exit 1)
+    ├── invalid/        4 programs — must all be rejected (exit 1)
+    ├── check-valid/    semantic programs that must pass --check
+    └── check-invalid/  semantic programs that must fail --check
 ```
 
 ---

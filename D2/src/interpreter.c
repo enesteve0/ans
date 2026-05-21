@@ -609,13 +609,30 @@ static Value exec_stmt(const AstNode *node, Env *env) {
             const AstNode *lhs_node = node->children[0];
             Value rhs = eval_expr(node->children[1], env);
 
-            if (lhs_node->kind != ND_IDENT)
-                runtime_error(node->line, "augmented assignment requires a simple variable");
-
             Value cur;
-            if (!env_lookup_opt(env, lhs_node->text, &cur))
-                runtime_error(node->line,
-                    "augmented assignment to undeclared variable '%s'", lhs_node->text);
+            Value *store_slot = NULL;
+            char *store_name = NULL;
+
+            if (lhs_node->kind == ND_IDENT) {
+                if (!env_lookup_opt(env, lhs_node->text, &cur))
+                    runtime_error(node->line,
+                        "augmented assignment to undeclared variable '%s'", lhs_node->text);
+                store_name = lhs_node->text;
+            } else if (lhs_node->kind == ND_INDEX) {
+                Value obj   = eval_expr(lhs_node->children[0], env);
+                Value index = eval_expr(lhs_node->children[1], env);
+                if (obj.type != VAL_LIST || index.type != VAL_NUMBER)
+                    runtime_error(node->line, "invalid augmented assignment target");
+                int idx = (int)index.number;
+                if (idx < 0 || idx >= obj.list.count)
+                    runtime_error(node->line,
+                        "list index %d out of range [0..%d]",
+                        idx, obj.list.count - 1);
+                store_slot = &obj.list.items[idx];
+                cur = *store_slot;
+            } else {
+                runtime_error(node->line, "unsupported augmented assignment target");
+            }
 
             if (cur.type != VAL_NUMBER || rhs.type != VAL_NUMBER)
                 runtime_error(node->line, "augmented assignment requires numbers");
@@ -633,7 +650,11 @@ static Value exec_stmt(const AstNode *node, Env *env) {
                 runtime_error(node->line, "unknown augmented operator '%s'", op);
                 result = 0;
             }
-            env_set(env, lhs_node->text, make_number(result));
+            if (store_slot) {
+                *store_slot = make_number(result);
+            } else {
+                env_set(env, store_name, make_number(result));
+            }
             return make_void();
         }
 

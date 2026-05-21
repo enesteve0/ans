@@ -1,4 +1,5 @@
-// Heterogeneous list literals and indexing
+// Parser-only list syntax coverage. The semantic checker rejects mixed and
+// empty lists in tests/check-invalid/.
 element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
 element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
 element C { atomic_mass = 12.011, valence = 4, symbol = "C" };
