@@ -1,6 +1,6 @@
 % =====================================================================
 % CSE 341: Concepts of Programming Languages
-% Project D4 (Part 2): AI Usage Journal
+% Project D4 (Part 2): Cumulative AI Usage Journal
 % Student: 220104004931 Enes Ozkan
 % Compile with: pdflatex 220104004931_D4_P2.tex
 % =====================================================================
@@ -39,16 +39,22 @@
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
 \fancyfoot[L]{\footnotesize\color{anscaption}%
-  CSE 341: AI Usage Journal (D4, Part 2) \(\cdot\)
+  CSE 341: AI Usage Journal (D4, Part 2 Cumulative) \(\cdot\)
   Student 220104004931 Enes \"{O}zkan}
 \fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
 
 \hypersetup{
-  pdftitle  = {AI Usage Journal (D4, Part 2)},
+  pdftitle  = {AI Usage Journal (D4, Part 2 Cumulative)},
   pdfauthor = {220104004931 Enes Ozkan},
   pdfsubject= {CSE 341 Project Part 2},
   pdfkeywords={AI, usage journal, ANS, DSL, type system, interpreter}
 }
+
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\def\UrlBreaks{\do\/\do-\do_\do.\do~}
 
 \newcommand{\code}[1]{\texttt{\detokenize{#1}}}
 \newcommand{\field}[2]{\textbf{#1.} #2\par}
@@ -57,6 +63,14 @@
   \begin{quote}\small #1\end{quote}
 }
 \newcommand{\sessionlog}[1]{\textbf{Session log.} #1\par}
+\newcommand{\entrygap}{\vspace{7pt}}
+\newenvironment{journalentry}{%
+  \begin{center}\small\renewcommand{\arraystretch}{1.16}%
+  \begin{tabular}{|>{\columncolor{anscodebg}\bfseries}p{2.65cm}|>{\RaggedRight\arraybackslash}p{13.35cm}|}%
+  \hline
+}{%
+  \end{tabular}\end{center}\entrygap
+}
 
 \begin{document}
 
@@ -65,7 +79,7 @@
   \vspace{3pt}
   {\huge\bfseries\sffamily AI Usage Journal\par}
   \vspace{4pt}
-  {\large Deliverable 4 (D4), Part 2\par}
+  {\large Deliverable 4 (D4), Part 2 Cumulative Journal\par}
   \vspace{6pt}
   {\footnotesize\color{anscaption}
     Student: 220104004931 Enes \"{O}zkan \(\cdot\)
@@ -74,8 +88,184 @@
 \end{center}
 \vspace{5pt}
 
+\field{Submission note}{This Part 2 upload keeps the Part 1 AI Journal entries first, then adds the Part 2 continuation entries required by the handout. For ChatGPT web-app sessions, the project-history proof link is provided where relevant and may require ChatGPT login.}
+
 % =====================================================================
-\section{Entry 1 of 8}
+\section{Part 1 Journal Entries}
+
+\begin{journalentry}
+Entry \# & 1 of 12 \\ \hline
+Date & 2026-05-04 \\ \hline
+Phase & Design \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Connect the ANS language idea to Sebesta's language evaluation criteria. \\ \hline
+Prompt & Which criteria does this DSL prioritize, and which does it knowingly sacrifice according to Sebesta? \\ \hline
+Response (key part) & The response argued that ANS should prioritize readability, writability, and reliability because domain terms such as \code{element}, \code{compound}, \code{reaction}, and \code{check = balanced} make chemistry concepts visible in the program. It also said ANS sacrifices generality, orthogonality, and implementation cost. \\ \hline
+Accepted & I kept the readability and reliability arguments because they match the project goal: ANS should make chemistry notation clearer and catch reaction mistakes earlier than a general-purpose script. \\ \hline
+Rejected / modified & I shortened the wording for D1 and removed broad claims that made ANS sound more complete than the Part 1 lexer and parser actually are. \\ \hline
+Errors you caught & The answer was mostly useful, but it treated some future semantic checks as if they already existed. I detected that by comparing it with the D2 implementation, which is still lexer and parser only in Part 1. \\ \hline
+Reflection & This was a good example of using AI for framing, not for final truth. It helped me organize Sebesta terminology, but I still had to separate implemented behavior from planned behavior. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 2 of 12 \\ \hline
+Date & 2026-05-04 \\ \hline
+Phase & Lexer \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Draft token categories and regular-expression-style patterns for the lexical structure section. \\ \hline
+Prompt & Can you explain the list of token categories: identifiers, literals, keywords, operators, separators. Give the regular expression or pattern for each in ANS. \\ \hline
+Response (key part) & The response proposed categories for identifiers, number literals, string literals, formula literals, unit literals, keywords, operators, separators, and comments. One formula pattern was similar to \code{(?:[A-Z][a-z]?\\d*)+}. \\ \hline
+Accepted & I kept the category breakdown and the idea of checking keywords after scanning identifier-shaped text. That matches a normal lexer design and kept the D1 lexical section organized. \\ \hline
+Rejected / modified & The first formula pattern was too permissive and did not prove that a formula uses real element symbols. I treated formula validation as a later semantic issue instead of pretending the lexer solves chemistry correctness. \\ \hline
+Errors you caught & The AI blurred lexical validity and chemical validity. A token can look like a formula while still not be chemically meaningful, so the report needed to say what the lexer can and cannot know. \\ \hline
+Reflection & This entry helped me see the boundary between scanning text and validating domain meaning. That boundary became important again when planning the Part 2 type checker. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 3 of 12 \\ \hline
+Date & 2026-05-05 \\ \hline
+Phase & Lexer / Parser \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Clarify how ANS should distinguish chemical formula literals from ordinary identifiers. \\ \hline
+Prompt & For ANS, I would treat chemical formulas like H2O, CH4, CO2, and O2 as formula literals. Could you explain how the lexer and parser should distinguish formula literals from identifiers properly? \\ \hline
+Response (key part) & The response said the lexer should recognize the shape of the text and the parser should decide the role from grammar position. It gave examples where \code{H2O} appears as a compound formula while lowercase names such as \code{water} remain identifiers. \\ \hline
+Accepted & I kept the general principle that parser context matters. It made the design easier to explain because uppercase formula-shaped tokens and lowercase identifiers have different roles in ANS. \\ \hline
+Rejected / modified & I did not use the suggested single broad \code{WORD} token. The actual implementation separates \code{FORMULA} and identifier-like tokens because that fit the C lexer and parser better. \\ \hline
+Errors you caught & The AI's broad-token suggestion would have moved too much responsibility into the parser for our implementation. I caught this while checking how the recursive-descent parser consumes token kinds. \\ \hline
+Reflection & AI gave a useful compiler-design concept, but the implementation still had to be adapted to the actual C code structure. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 4 of 12 \\ \hline
+Date & 2026-05-05 \\ \hline
+Phase & Lexer \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Improve the lexical specification for units such as \code{g/mol}, \code{kg/mol}, and \code{kJ/mol}. \\ \hline
+Prompt & List the token categories for ANS more completely, including identifiers, literals, keywords, operators, separators, formula literals, and unit literals. Give the regex or pattern for each and think carefully about ambiguity. \\ \hline
+Response (key part) & The response suggested a \code{UNIT_LITERAL} pattern using lookbehind and lookahead assertions, such as a boundary check around \code{kg/mol}, \code{g/mol}, and \code{kJ/mol}. It also recommended longest-match handling before treating \code{/} as division. \\ \hline
+Accepted & I kept the longest-match idea for slash units. The current lexer probes \code{g/mol}, \code{kg/mol}, and \code{kJ/mol} before returning the slash operator, which avoids splitting a unit into several tokens. \\ \hline
+Rejected / modified & I rejected the lookbehind-based regex because a hand-written C lexer does not use Python-style regex features. The final implementation uses direct string checks instead. \\ \hline
+Errors you caught & The AI proposed a technically neat regex that was mismatched with the implementation language. I detected this by checking what would actually be reasonable in plain C. \\ \hline
+Reflection & This entry reminded me that a correct-looking formal pattern is not automatically a good implementation plan. The target language matters. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 5 of 12 \\ \hline
+Date & 2026-05-05 \\ \hline
+Phase & Design / Parser \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Review the move toward a more C-like ANS syntax and identify parser consequences. \\ \hline
+Prompt & We decided to change the syntax to a more C-like type with braces, semicolons, assignments using equals, function declarations, if statements, and line comments. What lexer and parser changes does this imply for ANS? \\ \hline
+Response (key part) & The response said C-like syntax would make the grammar more familiar through \code{let}, braces, semicolons, \code{=}, and function-call syntax. It also proposed updated token patterns and grammar fragments. \\ \hline
+Accepted & I kept the direction of using semicolons, braces, \code{=}, function calls, and \code{//} comments. Those choices are reflected in the submitted D1 and D2 parser. \\ \hline
+Rejected / modified & The AI suggested a \code{compute_yield} shape that did not match our examples. I did not treat that as final and kept the parser aligned with the D3 programs instead. \\ \hline
+Errors you caught & The hallucinated function signature showed that the AI was filling gaps from its own assumptions. I caught it by comparing the suggestion against the example programs we were actually using. \\ \hline
+Reflection & Syntax changes ripple through the whole project. This was useful, but only because I checked every suggestion against the examples and implementation. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 6 of 12 \\ \hline
+Date & 2026-05-05 \\ \hline
+Phase & Parser \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Generate an unambiguous EBNF grammar and review ambiguity-resolution choices. \\ \hline
+Prompt & Can you write the complete EBNF for our DSL ANS. The EBNF must be unambiguous for the subset you implement. Annotate any places where you resolve ambiguity, such as operator precedence and dangling else. \\ \hline
+Response (key part) & The response separated expression precedence into additive, multiplicative, unary, and primary rules. It also described reaction terms such as \code{2*O2} and discussed formula-shaped tokens in context. \\ \hline
+Accepted & I kept the precedence hierarchy because it directly matches the recursive-descent parser shape. I also kept the idea that stoichiometric coefficients must use \code{*} rather than being written as \code{2O2}. \\ \hline
+Rejected / modified & The response incorrectly said there was no dangling-else issue because the subset had no \code{if}/\code{else}. ANS does have \code{if}, \code{elif}, and \code{else}, so I did not use that part. \\ \hline
+Errors you caught & The AI contradicted the language features already in our examples. I caught this by checking the grammar against the D3 control-flow programs. \\ \hline
+Reflection & This entry is a clear case where AI was useful for structure but unreliable on details. The safest workflow was to compare each grammar claim with a real program. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 7 of 12 \\ \hline
+Date & 2026-05-05 \\ \hline
+Phase & Names / Binding / Scope \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Explain ANS identifier rules, binding times, scoping, and lifetime using Sebesta Chapter 5 concepts. \\ \hline
+Prompt & Answer for ANS, citing Sebesta Ch. 5: What are the rules for legal identifiers? What bindings happen at compile time vs. run time? Does your language use static scoping or dynamic scoping? Why? What is the lifetime of local variables? \\ \hline
+Response (key part) & The response recommended static lexical scoping and stack-dynamic local variables. It separated compile-time bindings such as declaration lookup from run-time bindings such as values produced during execution. \\ \hline
+Accepted & I accepted static scoping and stack-dynamic locals because they make functions easier to reason about and match the D1 design. A chemistry calculation should not change because a caller happens to have a local variable with the same name. \\ \hline
+Rejected / modified & I removed wording that sounded like a finished interpreter already existed. In Part 1, this is a design commitment and parser-compatible plan, not executed run-time behavior yet. \\ \hline
+Errors you caught & The response sometimes blurred D1 design decisions with D2 implementation status. I corrected that distinction in the report. \\ \hline
+Reflection & This helped me use Sebesta vocabulary more accurately, especially the difference between binding time, scope, and lifetime. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 8 of 12 \\ \hline
+Date & 2026-05-07 \\ \hline
+Phase & Design / Parser \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Ask for a critique of the current ANS design before finishing the implementation. \\ \hline
+Prompt & Do you see any issues with the current state of ANS that we will be implementing? \\ \hline
+Response (key part) & The response flagged scope creep, contextual keywords, formula literals versus compound identifiers, and an unclear \code{compute_yield} signature. It recommended that reaction species allow both formula literals and compound identifiers. \\ \hline
+Accepted & I accepted the warning about scope creep and the need to handle both formula literals and identifiers as reaction species. Those are real parser risks in a chemistry DSL. \\ \hline
+Rejected / modified & I did not accept every proposed semantic feature, because Part 1 only needed the lexer and parser. Some suggestions were moved into the Part 2 plan instead. \\ \hline
+Errors you caught & The AI treated several type-checker and interpreter concerns as urgent Part 1 work. I caught that by checking the handout, which only requires lexer and parser for D2 Part 1. \\ \hline
+Reflection & A critique prompt was more useful than asking for code. It helped identify design risks without pretending that all of them had to be solved immediately. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 9 of 12 \\ \hline
+Date & 2026-05-07 \\ \hline
+Phase & Lexer \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Generate a lexer from the ANS EBNF and design specification. \\ \hline
+Prompt & I want you to build a working lexer according to our EBNF for our programming language we're creating named ANS. Make sure to follow the file I provided to you accordingly and properly. \\ \hline
+Response (key part) & The response created a Python lexer with token classes, regex scanning, keyword handling, and unit handling. It kept chemistry words such as \code{element}, \code{compound}, and \code{reaction} contextual rather than hard keywords. \\ \hline
+Accepted & I kept the keyword-classification idea, especially the split between hard programming keywords and contextual chemistry words. \\ \hline
+Rejected / modified & I rejected the actual generated code because it was Python and our implementation is in C. The prompt was underspecified because I did not state the implementation language. \\ \hline
+Errors you caught & Wrong target language. If accepted blindly, it would not fit the project structure or Makefile. \\ \hline
+Reflection & This taught me to include hard constraints in implementation prompts. AI often chooses Python for scanners unless the target language is explicit. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 10 of 12 \\ \hline
+Date & 2026-05-07 \\ \hline
+Phase & Lexer \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Translate the lexer approach into C and compare it with the project structure. \\ \hline
+Prompt & The code needs to be in C, and it should follow the ANS lexer and parser design we discussed: C-like syntax, formula literals, string and char literals, slash units, hard keywords, and line comments. \\ \hline
+Response (key part) & The response rebuilt the lexer idea in C with token enums, scanner helper functions, keyword filtering, and direct checks for compound units such as \code{kg/mol}, \code{kJ/mol}, and \code{g/mol}. \\ \hline
+Accepted & I accepted the manual-scanning approach and the direct unit checks because they match a hand-written C lexer. \\ \hline
+Rejected / modified & I adapted the generated structure to the actual repository files and error format. I did not keep any claim that comment handling had extra build-time options, since the current lexer simply skips \code{//} comments. \\ \hline
+Errors you caught & The AI's code shape did not automatically match our existing file layout and naming. I caught that during integration with \code{D2/include} and \code{D2/src}. \\ \hline
+Reflection & AI was useful for translating the idea into C, but repository integration still required manual checking against headers, token names, and tests. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 11 of 12 [EXPERIMENT E1] \\ \hline
+Date & 2026-05-08 \\ \hline
+Phase & Parser \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & \textbf{Experiment E1:} ask AI to generate an EBNF grammar from a one-paragraph language description. \\ \hline
+Prompt & I am designing a domain-specific programming language called ANS (Atomic Notation Script) for chemistry. It has C-like syntax with statements ending in semicolons and blocks in curly braces. The language supports standard constructs like 'let' variable declarations, 'if/elif/else' conditionals, 'for ... in' loops, and 'function' definitions. It also has domain-specific constructs: users can declare an 'element' with properties like atomic\_mass and valence, a 'compound' with a chemical formula literal like H2O or CH4, and a 'reaction' that defines reactants, products, a 'check = balanced' constraint, and energy changes such as 'exothermic 890.3 kJ/mol'. The expression language supports standard arithmetic (+, -, *, /) and comparison operators. Please generate a complete EBNF grammar for this language. \\ \hline
+Response (key part) & The response produced a full grammar with statements, declarations, formulas, reactions, and expression precedence. It also added primitive type names such as \code{number}, \code{string}, and \code{bool}, plus extra domain details not requested in the prompt. \\ \hline
+Accepted & I accepted the general hierarchy and the precedence structure, because the expression grammar was close to what a recursive-descent parser needs. \\ \hline
+Rejected / modified & I rejected the invented primitive type declarations, nested formula forms, and hardcoded chemical states. Our Part 1 language has literals, typed domain parameters, and flat formula literals, but not all of those extra grammar features. \\ \hline
+Errors you caught & The AI overfilled gaps in the one-paragraph description with generic language-design assumptions. I detected this by comparing the generated grammar to D1 and the D3 examples. \\ \hline
+Reflection & E1 showed that a short prompt is not enough for a precise grammar. AI handles the common structure well, but it invents details unless constraints are made explicit. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 12 of 12 \\ \hline
+Date & 2026-05-08 \\ \hline
+Phase & Parser \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Refine the E1 grammar after identifying missing constraints and ambiguous syntax. \\ \hline
+Prompt & Good start, but fix these constraints: in reactions require a * between a coefficient and a species, as in 2 * O2; do not invent primitive type declarations; function parameters may use domain types such as element, compound, and reaction; chemical formulas are flat; all top-level declarations end with semicolons; units like g/mol, kg/mol, and kJ/mol are unit tokens; do not invent syntax that was not stated. \\ \hline
+Response (key part) & The response revised the grammar so reaction terms use an optional coefficient followed by \code{*} and a species reference, top-level declarations end with semicolons, formulas stay flat, and unit syntax is represented separately from division. \\ \hline
+Accepted & I accepted the corrections that matched the implementation direction: explicit \code{*} in reaction terms, flat formulas, semicolon-terminated top-level declarations, and separate treatment for slash units. \\ \hline
+Rejected / modified & I still reviewed the final grammar manually before using it, because the parser had to match exact C implementation functions and the actual D3 programs. \\ \hline
+Errors you caught & The first E1 output had ambiguity and invented features. The corrected prompt reduced those problems, which showed that negative constraints are necessary when asking AI for formal syntax. \\ \hline
+Reflection & The useful part was not just the final grammar. The iteration exposed exactly which language details had to be decided before the parser could be written safely. \\ \hline
+\end{journalentry}
+
+% =====================================================================
+\section{Part 2 Continuation Entries}
+
+% =====================================================================
+\section{Part 2 Entry 1 of 8}
 \field{Date}{2026-05-10}
 \field{Phase}{Planning / Requirements}
 \field{AI tool}{OpenAI Codex, GPT-5 coding agent}
@@ -89,7 +279,7 @@
 \sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
 
 % =====================================================================
-\section{Entry 2 of 8, Experiment E3}
+\section{Part 2 Entry 2 of 8, Experiment E3}
 \field{Date}{2026-05-10}
 \field{Phase}{Implementation / Type Checker}
 \field{AI tool}{OpenAI Codex, GPT-5 coding agent}
@@ -103,7 +293,7 @@
 \sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
 
 % =====================================================================
-\section{Entry 3 of 8}
+\section{Part 2 Entry 3 of 8}
 \field{Date}{2026-05-13}
 \field{Phase}{Exam Preparation / Understanding}
 \field{AI tool}{OpenAI Codex, GPT-5 coding agent}
@@ -117,7 +307,7 @@
 \sessionlog{Local Codex session \code{019e205b-c8c4-7563-801c-edd132cd1675}, May 13, 2026.}
 
 % =====================================================================
-\section{Entry 4 of 8}
+\section{Part 2 Entry 4 of 8}
 \field{Date}{2026-05-19}
 \field{Phase}{Design / Operational Semantics}
 \field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
@@ -128,10 +318,10 @@
 \field{Rejected / modified}{The first output was too vague about iteration order, loop scope, empty formulas, energy type checking, and whether reaction field checks were semantic or syntactic. I did not paste it directly into D1.}
 \field{Errors caught}{The AI used \code{formula_elements(F)} like a set without defining an order. That is a real semantics gap, because interpreter behavior should be deterministic. I caught it by reviewing the output against the D3 molar-mass loop.}
 \field{Reflection}{This was a good example of AI producing the right shape but not enough precision. For semantics, small omissions like scope lifetime and iteration order become implementation bugs later.}
-\field{Session log}{ChatGPT web app response copied into the May 19 Codex session notes; no public share link saved.}
+\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
-\section{Entry 5 of 8}
+\section{Part 2 Entry 5 of 8}
 \field{Date}{2026-05-19}
 \field{Phase}{Design Review / Semantics}
 \field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
@@ -142,10 +332,10 @@
 \field{Rejected / modified}{I rejected the idea that every helper deserved a full subsection. That made the section too long for D1, so the final version compressed helper operations while keeping the important checks.}
 \field{Errors caught}{The review exposed a hidden design problem: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field.}
 \field{Reflection}{This session was valuable because the AI acted as a reviewer instead of a writer. A critique prompt made it easier to keep my own wording while still finding missing rules.}
-\field{Session log}{ChatGPT web app response copied into the May 19 Codex session notes; no public share link saved.}
+\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
-\section{Entry 6 of 8, Experiment E2}
+\section{Part 2 Entry 6 of 8, Experiment E2}
 \field{Date}{2026-05-19}
 \field{Phase}{Type System}
 \field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
@@ -156,10 +346,10 @@
 \field{Rejected / modified}{The response did not clearly distinguish record-like domain objects from list constructors. I rewrote that part because saying only ``structural equivalence'' could imply that two compounds are different types based on their internal fields, which is not the ANS rule.}
 \field{Errors caught}{The subtle error was conflating the structure of a chemistry record with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape.}
 \field{Reflection}{E2 helped me understand why Sebesta's type-equivalence vocabulary matters. Without a precise rule, the type checker could become either too strict for compounds or too weak for lists.}
-\field{Session log}{ChatGPT web app response copied into the May 19 Codex session notes; no public share link saved.}
+\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
-\section{Entry 7 of 8}
+\section{Part 2 Entry 7 of 8}
 \field{Date}{2026-05-20}
 \field{Phase}{Expressions / Assignment}
 \field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
@@ -170,10 +360,10 @@
 \field{Rejected / modified}{The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned.}
 \field{Errors caught}{The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable.}
 \field{Reflection}{This session made me more careful about the difference between syntax and storage. An expression can be parsed correctly and still be semantically non-writable.}
-\field{Session log}{ChatGPT web app response copied into the May 19--20 Codex session notes; no public share link saved.}
+\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
-\section{Entry 8 of 8}
+\section{Part 2 Entry 8 of 8}
 \field{Date}{2026-05-22}
 \field{Phase}{Submission Audit / Enes Individual Files}
 \field{AI tool}{OpenAI Codex, GPT-5 coding agent}
