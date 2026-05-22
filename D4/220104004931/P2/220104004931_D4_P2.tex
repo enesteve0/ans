@@ -88,7 +88,7 @@
 \end{center}
 \vspace{5pt}
 
-\field{Submission note}{This Part 2 upload keeps the Part 1 AI Journal entries first, then adds the Part 2 continuation entries required by the handout. For ChatGPT web-app sessions, the project-history proof link is provided where relevant and may require ChatGPT login.}
+\field{Submission note}{This Part 2 upload keeps my Part 1 AI Journal entries first, then adds the Part 2 continuation entries required by the handout. For ChatGPT web-app sessions, I added the project-history proof link where it is relevant. The link may require ChatGPT login.}
 
 % =====================================================================
 \section{Part 1 Journal Entries}
@@ -104,7 +104,7 @@ Response (key part) & The response argued that ANS should prioritize readability
 Accepted & I kept the readability and reliability arguments because they match the project goal: ANS should make chemistry notation clearer and catch reaction mistakes earlier than a general-purpose script. \\ \hline
 Rejected / modified & I shortened the wording for D1 and removed broad claims that made ANS sound more complete than the Part 1 lexer and parser actually are. \\ \hline
 Errors you caught & The answer was mostly useful, but it treated some future semantic checks as if they already existed. I detected that by comparing it with the D2 implementation, which is still lexer and parser only in Part 1. \\ \hline
-Reflection & This was a good example of using AI for framing, not for final truth. It helped me organize Sebesta terminology, but I still had to separate implemented behavior from planned behavior. \\ \hline
+Reflection & This helped me frame the idea, but I could not treat the AI answer as final. I still had to separate what ANS already implemented from what was only planned. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -118,7 +118,7 @@ Response (key part) & The response proposed categories for identifiers, number l
 Accepted & I kept the category breakdown and the idea of checking keywords after scanning identifier-shaped text. That matches a normal lexer design and kept the D1 lexical section organized. \\ \hline
 Rejected / modified & The first formula pattern was too permissive and did not prove that a formula uses real element symbols. I treated formula validation as a later semantic issue instead of pretending the lexer solves chemistry correctness. \\ \hline
 Errors you caught & The AI blurred lexical validity and chemical validity. A token can look like a formula while still not be chemically meaningful, so the report needed to say what the lexer can and cannot know. \\ \hline
-Reflection & This entry helped me see the boundary between scanning text and validating domain meaning. That boundary became important again when planning the Part 2 type checker. \\ \hline
+Reflection & This made the lexer/checker boundary clearer for me. The lexer can classify text, but chemical correctness belongs later in the project. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -132,7 +132,7 @@ Response (key part) & The response said the lexer should recognize the shape of 
 Accepted & I kept the general principle that parser context matters. It made the design easier to explain because uppercase formula-shaped tokens and lowercase identifiers have different roles in ANS. \\ \hline
 Rejected / modified & I did not use the suggested single broad \code{WORD} token. The actual implementation separates \code{FORMULA} and identifier-like tokens because that fit the C lexer and parser better. \\ \hline
 Errors you caught & The AI's broad-token suggestion would have moved too much responsibility into the parser for our implementation. I caught this while checking how the recursive-descent parser consumes token kinds. \\ \hline
-Reflection & AI gave a useful compiler-design concept, but the implementation still had to be adapted to the actual C code structure. \\ \hline
+Reflection & The concept was useful, but I still had to adapt it to our C lexer and parser instead of using the answer directly. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -146,7 +146,7 @@ Response (key part) & The response suggested a \code{UNIT_LITERAL} pattern using
 Accepted & I kept the longest-match idea for slash units. The current lexer probes \code{g/mol}, \code{kg/mol}, and \code{kJ/mol} before returning the slash operator, which avoids splitting a unit into several tokens. \\ \hline
 Rejected / modified & I rejected the lookbehind-based regex because a hand-written C lexer does not use Python-style regex features. The final implementation uses direct string checks instead. \\ \hline
 Errors you caught & The AI proposed a technically neat regex that was mismatched with the implementation language. I detected this by checking what would actually be reasonable in plain C. \\ \hline
-Reflection & This entry reminded me that a correct-looking formal pattern is not automatically a good implementation plan. The target language matters. \\ \hline
+Reflection & This reminded me that a good-looking regex is not automatically a good plan for a hand-written C lexer. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -160,7 +160,7 @@ Response (key part) & The response said C-like syntax would make the grammar mor
 Accepted & I kept the direction of using semicolons, braces, \code{=}, function calls, and \code{//} comments. Those choices are reflected in the submitted D1 and D2 parser. \\ \hline
 Rejected / modified & The AI suggested a \code{compute_yield} shape that did not match our examples. I did not treat that as final and kept the parser aligned with the D3 programs instead. \\ \hline
 Errors you caught & The hallucinated function signature showed that the AI was filling gaps from its own assumptions. I caught it by comparing the suggestion against the example programs we were actually using. \\ \hline
-Reflection & Syntax changes ripple through the whole project. This was useful, but only because I checked every suggestion against the examples and implementation. \\ \hline
+Reflection & Syntax changes affect many files at once. The answer was useful only after I checked it against our examples and implementation. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -174,7 +174,7 @@ Response (key part) & The response separated expression precedence into additive
 Accepted & I kept the precedence hierarchy because it directly matches the recursive-descent parser shape. I also kept the idea that stoichiometric coefficients must use \code{*} rather than being written as \code{2O2}. \\ \hline
 Rejected / modified & The response incorrectly said there was no dangling-else issue because the subset had no \code{if}/\code{else}. ANS does have \code{if}, \code{elif}, and \code{else}, so I did not use that part. \\ \hline
 Errors you caught & The AI contradicted the language features already in our examples. I caught this by checking the grammar against the D3 control-flow programs. \\ \hline
-Reflection & This entry is a clear case where AI was useful for structure but unreliable on details. The safest workflow was to compare each grammar claim with a real program. \\ \hline
+Reflection & This was useful for grammar structure, but not reliable enough on details. I learned to compare each grammar claim with a real ANS program. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -188,7 +188,7 @@ Response (key part) & The response recommended static lexical scoping and stack-
 Accepted & I accepted static scoping and stack-dynamic locals because they make functions easier to reason about and match the D1 design. A chemistry calculation should not change because a caller happens to have a local variable with the same name. \\ \hline
 Rejected / modified & I removed wording that sounded like a finished interpreter already existed. In Part 1, this is a design commitment and parser-compatible plan, not executed run-time behavior yet. \\ \hline
 Errors you caught & The response sometimes blurred D1 design decisions with D2 implementation status. I corrected that distinction in the report. \\ \hline
-Reflection & This helped me use Sebesta vocabulary more accurately, especially the difference between binding time, scope, and lifetime. \\ \hline
+Reflection & This helped me use Sebesta terms more carefully, especially binding time, scope, and lifetime. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -202,7 +202,7 @@ Response (key part) & The response flagged scope creep, contextual keywords, for
 Accepted & I accepted the warning about scope creep and the need to handle both formula literals and identifiers as reaction species. Those are real parser risks in a chemistry DSL. \\ \hline
 Rejected / modified & I did not accept every proposed semantic feature, because Part 1 only needed the lexer and parser. Some suggestions were moved into the Part 2 plan instead. \\ \hline
 Errors you caught & The AI treated several type-checker and interpreter concerns as urgent Part 1 work. I caught that by checking the handout, which only requires lexer and parser for D2 Part 1. \\ \hline
-Reflection & A critique prompt was more useful than asking for code. It helped identify design risks without pretending that all of them had to be solved immediately. \\ \hline
+Reflection & Asking for critique was more useful than asking for code here. It showed design risks, but I still had to decide which ones belonged to Part 1 and which ones could wait. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -216,7 +216,7 @@ Response (key part) & The response created a Python lexer with token classes, re
 Accepted & I kept the keyword-classification idea, especially the split between hard programming keywords and contextual chemistry words. \\ \hline
 Rejected / modified & I rejected the actual generated code because it was Python and our implementation is in C. The prompt was underspecified because I did not state the implementation language. \\ \hline
 Errors you caught & Wrong target language. If accepted blindly, it would not fit the project structure or Makefile. \\ \hline
-Reflection & This taught me to include hard constraints in implementation prompts. AI often chooses Python for scanners unless the target language is explicit. \\ \hline
+Reflection & This taught me to state the implementation language clearly. If I do not say C, the AI may choose Python and produce code that does not fit the project. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -230,7 +230,7 @@ Response (key part) & The response rebuilt the lexer idea in C with token enums,
 Accepted & I accepted the manual-scanning approach and the direct unit checks because they match a hand-written C lexer. \\ \hline
 Rejected / modified & I adapted the generated structure to the actual repository files and error format. I did not keep any claim that comment handling had extra build-time options, since the current lexer simply skips \code{//} comments. \\ \hline
 Errors you caught & The AI's code shape did not automatically match our existing file layout and naming. I caught that during integration with \code{D2/include} and \code{D2/src}. \\ \hline
-Reflection & AI was useful for translating the idea into C, but repository integration still required manual checking against headers, token names, and tests. \\ \hline
+Reflection & The C version was closer, but integration was still my job. I had to check headers, token names, and tests before trusting it. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -244,7 +244,7 @@ Response (key part) & The response produced a full grammar with statements, decl
 Accepted & I accepted the general hierarchy and the precedence structure, because the expression grammar was close to what a recursive-descent parser needs. \\ \hline
 Rejected / modified & I rejected the invented primitive type declarations, nested formula forms, and hardcoded chemical states. Our Part 1 language has literals, typed domain parameters, and flat formula literals, but not all of those extra grammar features. \\ \hline
 Errors you caught & The AI overfilled gaps in the one-paragraph description with generic language-design assumptions. I detected this by comparing the generated grammar to D1 and the D3 examples. \\ \hline
-Reflection & E1 showed that a short prompt is not enough for a precise grammar. AI handles the common structure well, but it invents details unless constraints are made explicit. \\ \hline
+Reflection & E1 showed me that a short prompt is not enough for a precise grammar. The AI handled the common structure, but invented details when I did not give constraints. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
@@ -258,7 +258,7 @@ Response (key part) & The response revised the grammar so reaction terms use an 
 Accepted & I accepted the corrections that matched the implementation direction: explicit \code{*} in reaction terms, flat formulas, semicolon-terminated top-level declarations, and separate treatment for slash units. \\ \hline
 Rejected / modified & I still reviewed the final grammar manually before using it, because the parser had to match exact C implementation functions and the actual D3 programs. \\ \hline
 Errors you caught & The first E1 output had ambiguity and invented features. The corrected prompt reduced those problems, which showed that negative constraints are necessary when asking AI for formal syntax. \\ \hline
-Reflection & The useful part was not just the final grammar. The iteration exposed exactly which language details had to be decided before the parser could be written safely. \\ \hline
+Reflection & The useful part was not only the final grammar. The iteration showed which details had to be decided before the parser could be written safely. \\ \hline
 \end{journalentry}
 
 % =====================================================================
@@ -272,10 +272,10 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{Goal}{Turn the Part 2 handout and submission guide into a concrete work plan before changing the project.}
 \prompt{``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly and then understand where we are. We have finished Part 1 and now we have to work on Part 2 and make this assignment finished done absolute. Plan that accordingly and properly.''}
 \field{Response key part}{Codex identified Part 2 as a full revised submission: final D1, D2 type checker and interpreter, executed D3 examples, continued D4 journals, D5 retrospectives, and D6 contribution report. It separated individual files (\code{D1}, \code{D4}, \code{D5}) from shared pair files (\code{D2}, \code{D3}, \code{D6}).}
-\field{Accepted}{I kept the order: read the handout first, then align D1 and D2, then generate evidence in D3, then package. That prevented me from treating the code as finished before the reports and submission rules were checked.}
+\field{Accepted}{I kept the order: read the handout first, then align D1 and D2, then run D3 examples, then package. That stopped me from treating the code as finished while the reports and upload files were still incomplete.}
 \field{Rejected / modified}{I did not accept the early ``fully done'' framing as proof. The plan still needed real builds, actual interpreter output, and extracted-archive checks.}
 \field{Errors caught}{The first planning pass could make the project sound closer to final than it was. I caught that by comparing the plan against the handout requirement for type checking, interpreter execution, D4 E2/E3, and final upload structure.}
-\field{Reflection}{This was useful because it converted a broad deadline into verifiable gates. The important lesson was that a good AI plan is not evidence; it only tells me what evidence I must produce.}
+\field{Reflection}{This helped me turn a broad deadline into a checklist. The important lesson was that a good AI plan is not proof; I still needed builds, outputs, PDFs, and package checks.}
 \sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
 
 % =====================================================================
@@ -285,11 +285,11 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{AI tool}{OpenAI Codex, GPT-5 coding agent}
 \field{Goal}{Ask AI to implement the Part 2 type-checker/interpreter work and then test its code on known cases.}
 \prompt{``Implement the plan.''}
-\field{Response key part}{Codex added the Part 2 semantic layer, command-line checking/execution modes, runtime value handling, and tests. During the same session it ran D3 check/run commands and found concrete failures before the code was accepted.}
-\field{Accepted}{I accepted the idea of a two-stage pipeline: parse first, then type-check, then interpret only if semantic checks pass. I also kept the concrete negative-test strategy: known type errors, known runtime errors, and the three D3 examples.}
+\field{Response key part}{Codex added the Part 2 semantic layer, command-line checking/execution modes, runtime value handling, and tests. In the same session it ran D3 check/run commands and found real failures before I accepted the code.}
+\field{Accepted}{I accepted the two-stage idea: parse first, then type-check, then interpret only if semantic checks pass. I also kept the negative-test strategy: known type errors, known runtime errors, and the three D3 examples.}
 \field{Rejected / modified}{I did not trust the generated implementation by inspection. The first version exposed problems: D3 programs failed around expression statements, and character equality needed explicit handling. Those were fixed only after running known inputs.}
 \field{Errors caught}{This is the required E3 case. The tests caught parser/expression-statement failures and missing comparison behavior. If I had only read the generated code, those bugs would have stayed hidden until D3 execution.}
-\field{Reflection}{AI was useful for building a large C feature quickly, but it needed adversarial testing. The most important part of the session was not the generated code; it was using tests where I already knew the expected result.}
+\field{Reflection}{AI helped with a large C feature quickly, but the code still needed tough tests. The most important part was using inputs where I already knew the expected result.}
 \sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
 
 % =====================================================================
@@ -299,11 +299,11 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{AI tool}{OpenAI Codex, GPT-5 coding agent}
 \field{Goal}{Prepare for the personalized written exam by studying the actual submitted PDFs and C code.}
 \prompt{``I need to be ready for the Part 1 exam and I need you to teach me everything about my submission like I know nothing about it. I'm Enes btw in case you need to read according to that.''}
-\field{Response key part}{Codex read the submitted PDFs and code, then built a personalized Enes exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It emphasized the parser workflow, AST dump, token handling, and caveats such as the difference between Part 1 parsing and Part 2 semantics.}
+\field{Response key part}{Codex read the submitted PDFs and code, then made an Enes-specific exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It focused on parser flow, AST dump, token handling, and the difference between Part 1 parsing and Part 2 semantics.}
 \field{Accepted}{I accepted the code-grounded explanation style because it forced me to connect written claims to actual files such as \code{lexer.c}, \code{parser.c}, \code{ast.c}, and \code{error.c}.}
-\field{Rejected / modified}{I had to push the AI beyond a report summary by explicitly asking it to read all PDFs and then the code. A report-only explanation would not have prepared me for project-specific exam questions.}
+\field{Rejected / modified}{I had to push the AI beyond a report summary by asking it to read the PDFs and then the code. A report-only explanation would not prepare me for project-specific exam questions.}
 \field{Errors caught}{The danger was over-explaining future type-checking behavior while studying a Part 1 parser submission. I detected that by checking which features were actually implemented at that point.}
-\field{Reflection}{This session showed that AI tutoring works best when the source of truth is the repository, not a generic explanation. It also made clear that I should be able to defend implementation details, not just repeat polished report text.}
+\field{Reflection}{This session showed me that AI tutoring is only useful when it is tied to the repository. For the exam I need to explain code details, not only repeat clean report sentences.}
 \sessionlog{Local Codex session \code{019e205b-c8c4-7563-801c-edd132cd1675}, May 13, 2026.}
 
 % =====================================================================
@@ -317,7 +317,7 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{Accepted}{I kept the abstract-machine style because it matched Sebesta's idea of explaining meaning through execution effects. It also fit the interpreter I expected to build in D2.}
 \field{Rejected / modified}{The first output was too vague about iteration order, loop scope, empty formulas, energy type checking, and whether reaction field checks were semantic or syntactic. I did not paste it directly into D1.}
 \field{Errors caught}{The AI used \code{formula_elements(F)} like a set without defining an order. That is a real semantics gap, because interpreter behavior should be deterministic. I caught it by reviewing the output against the D3 molar-mass loop.}
-\field{Reflection}{This was a good example of AI producing the right shape but not enough precision. For semantics, small omissions like scope lifetime and iteration order become implementation bugs later.}
+\field{Reflection}{The AI gave the right general shape, but not enough precision. In semantics, missing details like scope lifetime or iteration order can become implementation bugs later.}
 \sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
@@ -330,8 +330,8 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{Response key part}{The response said the section mostly fit Sebesta-style operational semantics, but recommended moving helper operations out of the main constructs, clarifying empty formula behavior, stating that field checks are semantic checks, and separating runtime execution from pre-execution validation.}
 \field{Accepted}{I accepted the critique that 4.4 needed clearer helper-operation boundaries and better distinction between semantic checking and runtime interpretation.}
 \field{Rejected / modified}{I rejected the idea that every helper deserved a full subsection. That made the section too long for D1, so the final version compressed helper operations while keeping the important checks.}
-\field{Errors caught}{The review exposed a hidden design problem: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field.}
-\field{Reflection}{This session was valuable because the AI acted as a reviewer instead of a writer. A critique prompt made it easier to keep my own wording while still finding missing rules.}
+\field{Errors caught}{The review exposed a design problem I had not written clearly enough: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field.}
+\field{Reflection}{This session was useful because the AI acted more like a reviewer than a writer. That helped me keep my own wording while still finding missing rules.}
 \sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
@@ -344,8 +344,8 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{Response key part}{The response described primitives, domain types, and constructed \code{List<T>} types. It stated that ANS has no automatic conversion and that \code{List<T>} is equivalent to \code{List<U>} only if the element types are equivalent.}
 \field{Accepted}{I kept the strong static typing, no-coercion rule, and homogeneous \code{List<T>} decision. For E2, I used the output to separate two cases: domain record-like values such as \code{Compound} use kind/name-style equivalence, while parameterized lists use structural equivalence over the element type.}
 \field{Rejected / modified}{The response did not clearly distinguish record-like domain objects from list constructors. I rewrote that part because saying only ``structural equivalence'' could imply that two compounds are different types based on their internal fields, which is not the ANS rule.}
-\field{Errors caught}{The subtle error was conflating the structure of a chemistry record with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape.}
-\field{Reflection}{E2 helped me understand why Sebesta's type-equivalence vocabulary matters. Without a precise rule, the type checker could become either too strict for compounds or too weak for lists.}
+\field{Errors caught}{The mistake was mixing up chemistry record structure with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape.}
+\field{Reflection}{E2 helped me understand why Sebesta's type-equivalence terms matter. Without a precise rule, the checker could become too strict for compounds or too weak for lists.}
 \sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
@@ -359,7 +359,7 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{Accepted}{I kept the precedence/associativity explanation, left-to-right operand evaluation, and assignment-as-statement rule because they directly map to the parser and interpreter.}
 \field{Rejected / modified}{The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned.}
 \field{Errors caught}{The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable.}
-\field{Reflection}{This session made me more careful about the difference between syntax and storage. An expression can be parsed correctly and still be semantically non-writable.}
+\field{Reflection}{This made me more careful about the difference between syntax and storage. An expression can parse correctly and still not be writable.}
 \sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
 
 % =====================================================================
@@ -373,7 +373,7 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \field{Accepted}{I accepted the strict boundary: only Enes D1/D4/D5 and Enes's submission folder should change. The shared pair package and Hamza's individual documents stay outside this fix.}
 \field{Rejected / modified}{I did not allow a broad ``fix everything'' pass, because that could modify Hamza's upload folder or shared pair artifacts without permission.}
 \field{Errors caught}{The audit caught a packaging-level issue that would not appear from reading D1 or D2 alone: Enes's Teams upload set was incomplete even though the shared project files looked mostly ready.}
-\field{Reflection}{This final session reinforced that submission readiness is file-specific. A deliverable can be technically good but still not ready if the correct student folder does not contain the correct PDFs.}
+\field{Reflection}{This final session reminded me that submission readiness is file-specific. A deliverable can be technically good but still not ready if my student folder does not contain the correct PDFs.}
 \field{Session log}{Current Codex session, 2026-05-22, in \path{/Users/enesteve/Desktop/Coding/university/cse341/ans}.}
 
 \end{document}

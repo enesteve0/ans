@@ -169,11 +169,11 @@ else { print "Light."; }
 
 \subsection{Sebesta Language-Evaluation Criteria (Ch.\,1)}
 
-Following Sebesta's Chapter\,1 framework --- \textbf{readability, writability, reliability}, and \textbf{cost} --- ANS deliberately prioritises the first three while accepting trade-offs in the last.
+Using Sebesta's Chapter\,1 criteria --- \textbf{readability, writability, reliability}, and \textbf{cost} --- I designed ANS to put readability, writability, and reliability first, even though this makes the implementation less general and more expensive.
 
 \textbf{Readability}: syntax mirrors chemistry vocabulary (\code{element}, \code{compound}, \code{reaction}, \code{reactants}, \code{products}, \code{balanced}) over a familiar C-like skeleton (\code{let}, braces, \code{if}/\code{elif}/\code{else}).
 
-\textbf{Writability}: domain tasks are first-class constructs: \code{CH4 + 2*O2}, \code{molar\_mass(water)}. No boilerplate imports.
+\textbf{Writability}: common chemistry tasks can be written directly: \code{CH4 + 2*O2}, \code{molar\_mass(water)}. The user does not need extra library boilerplate.
 
 \textbf{Reliability}: formula literals (\code{H2O}, \code{CH4}) and unit literals (\code{kJ/mol}) are distinct token categories. \code{check = balanced} verifies atom counts before execution.
 
@@ -183,7 +183,7 @@ Following Sebesta's Chapter\,1 framework --- \textbf{readability, writability, r
 \newpage
 \section{4.2\quad Lexical Structure}
 
-ANS uses six token categories produced by a maximal-munch scanner followed by a reserved-word filter (Sebesta \S4.2). Two key decisions: (i) formula tokens (\code{H2O}) must be distinct from identifiers, resolved by case (uppercase-leading $\Rightarrow$ formula); (ii) chemistry words (\code{reaction}, \code{compound}) can still be parameter names, resolved by treating them as contextual keywords promoted by the parser.
+ANS uses six token categories produced by a maximal-munch scanner followed by a reserved-word filter (Sebesta \S4.2). I made two important choices here: (i) formula tokens such as \code{H2O} are separate from identifiers, using case to decide this (uppercase-leading $\Rightarrow$ formula); (ii) chemistry words such as \code{reaction} and \code{compound} are contextual, so the parser treats them specially only in the grammar positions where they matter.
 
 \begin{tabularx}{\textwidth}{@{} L{2.2cm} L{2.8cm} Y @{}}
 \toprule
@@ -295,7 +295,7 @@ Comment      & \code{// text}                    & \rx{//[{\textasciicircum}\tex
 \newpage
 \section{4.4\quad Operational Semantics}
 
-Following Sebesta \S3.5, ANS describes the meaning of non-trivial constructs by explaining their effect on an abstract machine state. The state contains the current environment, the runtime store, and the global chemistry table of declared elements, compounds, reactions, and functions. The two main constructs are the \code{for}-in loop and the \code{check = balanced} reaction declaration.
+Following Sebesta \S3.5, I describe the meaning of the non-trivial constructs by showing what they do to an abstract machine state. That state contains the current environment, the runtime store, and the global chemistry table of declared elements, compounds, reactions, and functions. The two main constructs are the \code{for}-in loop and the \code{check = balanced} reaction declaration.
 
 \textbf{Helper operations:}
 \begin{lstlisting}[style=sem]
@@ -554,16 +554,16 @@ Assignment is a \textbf{statement}, not an expression. \code{mass = 18.0;} updat
 % =====================================================================
 \section{4.8\quad Design Rationale}
 
-Five selected decisions from sections 4.5--4.7, justified with Sebesta Ch.\,5--7 terminology.
+These are the five decisions from sections 4.5--4.7 that I think matter most, explained using Sebesta Ch.\,5--7 terminology.
 
-\textbf{1. Static strong typing with no implicit coercion} (Sebesta \S6.12, \S7.4). Chemistry calculations depend on matching kinds: a Number, Formula, Compound, and Quantity are not interchangeable. \code{5 g + 2 mol} is rejected rather than guessed. This supports Sebesta's \emph{reliability} criterion because mistakes surface before execution. The trade-off is lower convenience: programmers must match types and units explicitly instead of relying on automatic conversion.
+\textbf{1. Static strong typing with no implicit coercion} (Sebesta \S6.12, \S7.4). Chemistry calculations depend on matching the right kinds of values: a Number, Formula, Compound, and Quantity are not interchangeable. \code{5 g + 2 mol} is rejected instead of guessed. This supports Sebesta's \emph{reliability} criterion because mistakes show up before execution. The trade-off is lower convenience: programmers must match types and units explicitly instead of relying on automatic conversion.
 
-\textbf{2. Quantities with units as a domain type} (Sebesta \S6.2). A value such as \code{890.3 kJ/mol} is not a plain number; it represents an energy quantity with a specific unit. Keeping the unit inside the type makes reaction code more readable and allows the type checker to reject unit mistakes at compile time. The trade-off is higher implementation cost --- the lexer, parser, checker, and interpreter all preserve unit information --- and higher writability cost, because units must always be written explicitly.
+\textbf{2. Quantities with units as a domain type} (Sebesta \S6.2). A value such as \code{890.3 kJ/mol} is not just a plain number; it is an energy quantity with a specific unit. Keeping the unit inside the type makes reaction code easier to read and lets the type checker reject unit mistakes at compile time. The trade-off is higher implementation cost --- the lexer, parser, checker, and interpreter all have to preserve unit information --- and slightly more writing effort, because units must be written explicitly.
 
-\textbf{3. Static lexical scoping} (Sebesta \S5.5). Chemistry functions should not change meaning depending on who calls them. \code{molar\_mass(water)} must resolve \code{water}, \code{formula}, and \code{element} according to the source structure, not a caller's local variables. This makes compound references and formula calculations easier to reason about. The trade-off is implementation complexity: the interpreter must maintain nested environment frames and the compiler must walk the scope chain to validate names.
+\textbf{3. Static lexical scoping} (Sebesta \S5.5). Chemistry functions should not change meaning depending on who calls them. \code{molar\_mass(water)} must resolve \code{water}, \code{formula}, and \code{element} from the source structure, not from a caller's local variables. This makes compound references and formula calculations easier to follow. The trade-off is implementation complexity: the interpreter must maintain nested environment frames and the checker must walk the scope chain to validate names.
 
-\textbf{4. Left-to-right operand evaluation} (Sebesta \S7.2). Expression behaviour is predictable: every implementation produces the same observable ordering of any side effects. This matters especially for function calls that change program state. The trade-off is that the interpreter cannot freely reorder operand evaluation for optimisation.
+\textbf{4. Left-to-right operand evaluation} (Sebesta \S7.2). I chose left-to-right evaluation so expression behaviour stays predictable. Every implementation should run operands in the same order, which matters when function calls have side effects. The trade-off is that the interpreter cannot freely reorder operands for optimisation.
 
-\textbf{5. Assignment as a statement, not an expression} (Sebesta \S7.7). \code{mass = 18.0;} updates a storage location but does not produce a value, so it cannot appear inside another expression. This rules out confusing code such as \code{if (mass = 18.0)} and keeps assignment \code{=} visually distinct from equality \code{==}. The trade-off is reduced compactness: chained assignments (\code{x = y = 0}) are not allowed.
+\textbf{5. Assignment as a statement, not an expression} (Sebesta \S7.7). \code{mass = 18.0;} updates a storage location but does not produce a value, so it cannot appear inside another expression. This avoids confusing code such as \code{if (mass = 18.0)} and keeps assignment \code{=} separate from equality \code{==}. The trade-off is less compact syntax: chained assignments such as \code{x = y = 0} are not allowed.
 
 \end{document}

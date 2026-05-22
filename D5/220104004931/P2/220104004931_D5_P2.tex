@@ -69,23 +69,23 @@
 
 \section{Retrospective}
 
-If I were starting over, I would freeze the type-system decisions before writing so much syntax and report text. The biggest late change was moving from the Part 1 idea of loose or heterogeneous lists to homogeneous \code{List<T>}. That decision was correct because it makes \code{list[0].atomic_mass} statically checkable and keeps ANS honestly strongly typed, but making it late forced D1, D2, and D3 to be checked again together. I would also write small expression-statement tests earlier. A parser can appear correct when expressions occur inside \code{let} declarations or conditions, while still failing on a bare statement such as \code{1 + 2 * 3;}.
+If I were starting again, I would decide the type system earlier, before writing so much syntax and report text. The biggest late change was moving from the Part 1 idea of loose or heterogeneous lists to homogeneous \code{List<T>}. I still think that was the right decision, because \code{list[0].atomic_mass} can be checked statically and ANS stays strongly typed. The problem was timing: making that decision late meant D1, D2, and D3 all had to be reviewed again together. I would also add small expression-statement tests earlier. The parser looked fine when expressions were inside \code{let} declarations or conditions, but a bare statement like \code{1 + 2 * 3;} exposed a separate bug.
 
-The main thing scoped out was a richer chemistry arithmetic model. ANS preserves quantities such as \code{890.3 kJ/mol}, but it does not implement full unit arithmetic like adding same-unit energy values or converting \code{g} to \code{kg}. That would require a deeper quantity algebra and more type rules. We kept the subset smaller so the type checker, static scoping, reaction balance checks, interpreter, and D3 evidence could actually be completed and defended.
+The main feature I left out was a richer chemistry arithmetic model. ANS stores quantities such as \code{890.3 kJ/mol}, but it does not implement full unit arithmetic like adding same-unit energy values or converting \code{g} to \code{kg}. That would need a deeper quantity system and more type rules. We kept the subset smaller so the type checker, static scoping, reaction balance checks, interpreter, and D3 tests could actually be finished and explained.
 
-The hardest design decision for me was separating syntax from semantic writability. The grammar can parse member access, indexing, and function calls as expressions, but not every expression is a storage location. Keeping assignment as a statement and rejecting function-call results and formula atom counts as assignment targets made the language more reliable, but it required a clearer checker model and a more precise D1 Section 4.7.
+The hardest design decision for me was separating syntax from what is actually writable. The grammar can parse member access, indexing, and function calls as expressions, but that does not mean every expression can appear on the left side of \code{=}. Keeping assignment as a statement and rejecting function-call results and formula atom counts as assignment targets made the language safer, but it also forced me to be more precise in the checker and in D1 Section 4.7.
 
 \section{Self-Assessment}
 
-Using the project rubric, my honest self-assessment is:
+Using the project rubric, my self-assessment is:
 
 \begin{itemize}
-  \item \grade{Correctness: B.} The final D2/D3 behavior is much stronger than Part 1: the checker rejects semantic errors and the interpreter runs the three examples. I still rate B because several important bugs were found by final audits rather than by our first tests.
-  \item \grade{Design justification: A.} Sections 4.4, 4.7, and 4.8 now connect concrete ANS choices to Sebesta concepts: operational semantics, static scoping, operand evaluation, assignment, and trade-offs.
-  \item \grade{Use of Sebesta: B.} I can explain the Chapter 5--7 vocabulary in my own words, especially scope, lifetime, type equivalence, precedence, and assignment. The weak point was needing multiple review passes before the type-equivalence wording was precise.
+  \item \grade{Correctness: B.} The final D2/D3 behavior is much stronger than Part 1: the checker rejects semantic errors and the interpreter runs the three examples. I still give myself B because some important bugs were found during the final audits, not in our first tests.
+  \item \grade{Design justification: A.} Sections 4.4, 4.7, and 4.8 now connect ANS choices to Sebesta concepts: operational semantics, static scoping, operand evaluation, assignment, and trade-offs.
+  \item \grade{Use of Sebesta: B.} I can explain the Chapter 5--7 vocabulary in my own words, especially scope, lifetime, type equivalence, precedence, and assignment. The weak point was that type-equivalence wording needed several review passes before it became precise.
   \item \grade{Originality: A.} ANS is still a real chemistry DSL, not a renamed calculator: formula literals, reaction sides, balance checking, quantities, and molar-mass examples all belong to the domain.
-  \item \grade{Code quality: B.} The C implementation is understandable and modular, but the checker still represents types with simple strings in places, which is less robust than a dedicated type structure.
-  \item \grade{Exam readiness: B.} I can defend my owned areas: operational semantics, expressions and assignment, static scoping, parser behavior, and list-type decisions. I need one more review pass on edge cases around writable locations and reaction-side iteration before calling it an A.
+  \item \grade{Code quality: B.} The C implementation is understandable and modular, but the checker still represents types with simple strings in some places. A dedicated type structure would be cleaner.
+  \item \grade{Exam readiness: B.} I can defend my owned areas: operational semantics, expressions and assignment, static scoping, parser behavior, and list-type decisions. Before calling it an A, I still want one more review pass on writable-location edge cases and reaction-side iteration.
 \end{itemize}
 
 \end{document}
