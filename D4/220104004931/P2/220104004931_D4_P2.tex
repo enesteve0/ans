@@ -1,0 +1,189 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% Project D4 (Part 2): AI Usage Journal
+% Student: 220104004931 Enes Ozkan
+% Compile with: pdflatex 220104004931_D4_P2.tex
+% =====================================================================
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=1.85cm,top=1.65cm,bottom=1.85cm]{geometry}
+
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscaption}{HTML}{6B7280}
+\definecolor{anscodebg}{HTML}{F9FAFB}
+\usepackage[colorlinks=true, linkcolor=ansblue, urlcolor=ansblue,
+            citecolor=ansblue, pdfborder={0 0 0}]{hyperref}
+
+\usepackage[explicit]{titlesec}
+\titleformat{\section}
+  {\normalsize\bfseries\sffamily\color{black}}
+  {\thesection}{0.5em}{#1}
+\titlespacing*{\section}{0pt}{9pt}{3pt}
+\setlength{\parskip}{2.6pt plus 0.8pt minus 0.8pt}
+\setlength{\parindent}{0pt}
+\linespread{1.02}
+\setcounter{secnumdepth}{0}
+\emergencystretch=2em
+
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.1em,itemsep=0.5pt,topsep=1pt,parsep=0pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}%
+  CSE 341: AI Usage Journal (D4, Part 2) \(\cdot\)
+  Student 220104004931 Enes \"{O}zkan}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+\hypersetup{
+  pdftitle  = {AI Usage Journal (D4, Part 2)},
+  pdfauthor = {220104004931 Enes Ozkan},
+  pdfsubject= {CSE 341 Project Part 2},
+  pdfkeywords={AI, usage journal, ANS, DSL, type system, interpreter}
+}
+
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\field}[2]{\textbf{#1.} #2\par}
+\newcommand{\prompt}[1]{%
+  \textbf{Prompt.}
+  \begin{quote}\small #1\end{quote}
+}
+\newcommand{\sessionlog}[1]{\textbf{Session log.} #1\par}
+
+\begin{document}
+
+\begin{center}
+  {\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+  \vspace{3pt}
+  {\huge\bfseries\sffamily AI Usage Journal\par}
+  \vspace{4pt}
+  {\large Deliverable 4 (D4), Part 2\par}
+  \vspace{6pt}
+  {\footnotesize\color{anscaption}
+    Student: 220104004931 Enes \"{O}zkan \(\cdot\)
+    Spring 2026 \(\cdot\)
+    Gebze Technical University\par}
+\end{center}
+\vspace{5pt}
+
+% =====================================================================
+\section{Entry 1 of 8}
+\field{Date}{2026-05-10}
+\field{Phase}{Planning / Requirements}
+\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
+\field{Goal}{Turn the Part 2 handout and submission guide into a concrete work plan before changing the project.}
+\prompt{``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly and then understand where we are. We have finished Part 1 and now we have to work on Part 2 and make this assignment finished done absolute. Plan that accordingly and properly.''}
+\field{Response key part}{Codex identified Part 2 as a full revised submission: final D1, D2 type checker and interpreter, executed D3 examples, continued D4 journals, D5 retrospectives, and D6 contribution report. It separated individual files (\code{D1}, \code{D4}, \code{D5}) from shared pair files (\code{D2}, \code{D3}, \code{D6}).}
+\field{Accepted}{I kept the order: read the handout first, then align D1 and D2, then generate evidence in D3, then package. That prevented me from treating the code as finished before the reports and submission rules were checked.}
+\field{Rejected / modified}{I did not accept the early ``fully done'' framing as proof. The plan still needed real builds, actual interpreter output, and extracted-archive checks.}
+\field{Errors caught}{The first planning pass could make the project sound closer to final than it was. I caught that by comparing the plan against the handout requirement for type checking, interpreter execution, D4 E2/E3, and final upload structure.}
+\field{Reflection}{This was useful because it converted a broad deadline into verifiable gates. The important lesson was that a good AI plan is not evidence; it only tells me what evidence I must produce.}
+\sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
+
+% =====================================================================
+\section{Entry 2 of 8, Experiment E3}
+\field{Date}{2026-05-10}
+\field{Phase}{Implementation / Type Checker}
+\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
+\field{Goal}{Ask AI to implement the Part 2 type-checker/interpreter work and then test its code on known cases.}
+\prompt{``Implement the plan.''}
+\field{Response key part}{Codex added the Part 2 semantic layer, command-line checking/execution modes, runtime value handling, and tests. During the same session it ran D3 check/run commands and found concrete failures before the code was accepted.}
+\field{Accepted}{I accepted the idea of a two-stage pipeline: parse first, then type-check, then interpret only if semantic checks pass. I also kept the concrete negative-test strategy: known type errors, known runtime errors, and the three D3 examples.}
+\field{Rejected / modified}{I did not trust the generated implementation by inspection. The first version exposed problems: D3 programs failed around expression statements, and character equality needed explicit handling. Those were fixed only after running known inputs.}
+\field{Errors caught}{This is the required E3 case. The tests caught parser/expression-statement failures and missing comparison behavior. If I had only read the generated code, those bugs would have stayed hidden until D3 execution.}
+\field{Reflection}{AI was useful for building a large C feature quickly, but it needed adversarial testing. The most important part of the session was not the generated code; it was using tests where I already knew the expected result.}
+\sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
+
+% =====================================================================
+\section{Entry 3 of 8}
+\field{Date}{2026-05-13}
+\field{Phase}{Exam Preparation / Understanding}
+\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
+\field{Goal}{Prepare for the personalized written exam by studying the actual submitted PDFs and C code.}
+\prompt{``I need to be ready for the Part 1 exam and I need you to teach me everything about my submission like I know nothing about it. I'm Enes btw in case you need to read according to that.''}
+\field{Response key part}{Codex read the submitted PDFs and code, then built a personalized Enes exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It emphasized the parser workflow, AST dump, token handling, and caveats such as the difference between Part 1 parsing and Part 2 semantics.}
+\field{Accepted}{I accepted the code-grounded explanation style because it forced me to connect written claims to actual files such as \code{lexer.c}, \code{parser.c}, \code{ast.c}, and \code{error.c}.}
+\field{Rejected / modified}{I had to push the AI beyond a report summary by explicitly asking it to read all PDFs and then the code. A report-only explanation would not have prepared me for project-specific exam questions.}
+\field{Errors caught}{The danger was over-explaining future type-checking behavior while studying a Part 1 parser submission. I detected that by checking which features were actually implemented at that point.}
+\field{Reflection}{This session showed that AI tutoring works best when the source of truth is the repository, not a generic explanation. It also made clear that I should be able to defend implementation details, not just repeat polished report text.}
+\sessionlog{Local Codex session \code{019e205b-c8c4-7563-801c-edd132cd1675}, May 13, 2026.}
+
+% =====================================================================
+\section{Entry 4 of 8}
+\field{Date}{2026-05-19}
+\field{Phase}{Design / Operational Semantics}
+\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
+\field{Goal}{Revise D1 Section 4.4 so it used Sebesta-style operational semantics instead of only formal-looking rules.}
+\prompt{``The Semantics needs to be like Sebesta style as you can see through the book's 3.5 section.''}
+\field{Response key part}{The response described operational semantics using abstract-machine operations such as \code{evaluate(E)}, \code{formula_elements(F)}, \code{reaction_atoms(R)}, and \code{semantic_error(M)}. It rewrote formula iteration and reaction balance checking as lower-level state changes.}
+\field{Accepted}{I kept the abstract-machine style because it matched Sebesta's idea of explaining meaning through execution effects. It also fit the interpreter I expected to build in D2.}
+\field{Rejected / modified}{The first output was too vague about iteration order, loop scope, empty formulas, energy type checking, and whether reaction field checks were semantic or syntactic. I did not paste it directly into D1.}
+\field{Errors caught}{The AI used \code{formula_elements(F)} like a set without defining an order. That is a real semantics gap, because interpreter behavior should be deterministic. I caught it by reviewing the output against the D3 molar-mass loop.}
+\field{Reflection}{This was a good example of AI producing the right shape but not enough precision. For semantics, small omissions like scope lifetime and iteration order become implementation bugs later.}
+\field{Session log}{ChatGPT web app response copied into the May 19 Codex session notes; no public share link saved.}
+
+% =====================================================================
+\section{Entry 5 of 8}
+\field{Date}{2026-05-19}
+\field{Phase}{Design Review / Semantics}
+\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
+\field{Goal}{Ask AI to review the revised 4.4 section like an instructor and identify remaining implementation risks.}
+\prompt{``Can you check my 4.4 Semantics section like my teacher would? I just want to know if it fits Sebesta-style operational semantics, if anything is unclear or too long, and if it says anything that would be hard to implement in D2. Please don't rewrite everything unless needed, just tell me what to fix.''}
+\field{Response key part}{The response said the section mostly fit Sebesta-style operational semantics, but recommended moving helper operations out of the main constructs, clarifying empty formula behavior, stating that field checks are semantic checks, and separating runtime execution from pre-execution validation.}
+\field{Accepted}{I accepted the critique that 4.4 needed clearer helper-operation boundaries and better distinction between semantic checking and runtime interpretation.}
+\field{Rejected / modified}{I rejected the idea that every helper deserved a full subsection. That made the section too long for D1, so the final version compressed helper operations while keeping the important checks.}
+\field{Errors caught}{The review exposed a hidden design problem: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field.}
+\field{Reflection}{This session was valuable because the AI acted as a reviewer instead of a writer. A critique prompt made it easier to keep my own wording while still finding missing rules.}
+\field{Session log}{ChatGPT web app response copied into the May 19 Codex session notes; no public share link saved.}
+
+% =====================================================================
+\section{Entry 6 of 8, Experiment E2}
+\field{Date}{2026-05-19}
+\field{Phase}{Type System}
+\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
+\field{Goal}{Document the type-equivalence decision for ANS using Sebesta Chapter 6, including name/kind equivalence for domain records and structural equivalence for lists.}
+\prompt{``Next section! Can you help draft D1 Section 4.5: Type System for our chemistry language? Here are our rules: it is strongly typed and checked statically before execution; no implicit coercion; primitives are Number, String, Char, Bool; domain types are Quantity, Element, Compound, Formula, and Reaction. Can you explain our type categories and type-equivalence rules, like lists having to be homogeneous, using Sebesta's definitions?''}
+\field{Response key part}{The response described primitives, domain types, and constructed \code{List<T>} types. It stated that ANS has no automatic conversion and that \code{List<T>} is equivalent to \code{List<U>} only if the element types are equivalent.}
+\field{Accepted}{I kept the strong static typing, no-coercion rule, and homogeneous \code{List<T>} decision. For E2, I used the output to separate two cases: domain record-like values such as \code{Compound} use kind/name-style equivalence, while parameterized lists use structural equivalence over the element type.}
+\field{Rejected / modified}{The response did not clearly distinguish record-like domain objects from list constructors. I rewrote that part because saying only ``structural equivalence'' could imply that two compounds are different types based on their internal fields, which is not the ANS rule.}
+\field{Errors caught}{The subtle error was conflating the structure of a chemistry record with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape.}
+\field{Reflection}{E2 helped me understand why Sebesta's type-equivalence vocabulary matters. Without a precise rule, the type checker could become either too strict for compounds or too weak for lists.}
+\field{Session log}{ChatGPT web app response copied into the May 19 Codex session notes; no public share link saved.}
+
+% =====================================================================
+\section{Entry 7 of 8}
+\field{Date}{2026-05-20}
+\field{Phase}{Expressions / Assignment}
+\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
+\field{Goal}{Draft D1 Section 4.7 using Sebesta Chapter 7 concepts and then correct it against the grammar and checker.}
+\prompt{``Can you help me write D1 section 4.7 for our ANS language? It needs to be about expressions and assignment using Sebesta Ch. 7. Our grammar has comparison operators, + - * /, unary -, function calls, indexing, and member access. Assignment is a statement, not an expression, and function calls cannot be assignment targets.''}
+\field{Response key part}{The response covered expression forms, precedence, associativity, operand evaluation order, static type rules, function calls, member access, indexing, assignment statements, and augmented assignment. Key ideas were that grammar structure defines precedence, operands evaluate left-to-right, and assignment is not an expression.}
+\field{Accepted}{I kept the precedence/associativity explanation, left-to-right operand evaluation, and assignment-as-statement rule because they directly map to the parser and interpreter.}
+\field{Rejected / modified}{The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned.}
+\field{Errors caught}{The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable.}
+\field{Reflection}{This session made me more careful about the difference between syntax and storage. An expression can be parsed correctly and still be semantically non-writable.}
+\field{Session log}{ChatGPT web app response copied into the May 19--20 Codex session notes; no public share link saved.}
+
+% =====================================================================
+\section{Entry 8 of 8}
+\field{Date}{2026-05-22}
+\field{Phase}{Submission Audit / Enes Individual Files}
+\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
+\field{Goal}{Check the almost-final submission folder and make Enes's individual Part 2 upload complete without editing Hamza's files.}
+\prompt{``The current structures and files for the project are almost the final ones, so check deeply and tell me for the submission what things are left and if anything is wrong that needs fixing. Then create a detailed plan for me Enes, make it ready, and do not touch Hamza's stuff.''}
+\field{Response key part}{Codex found that Enes's submission folder had only \code{220104004931_D1_P2.pdf}; Enes \code{D4_P2} and \code{D5_P2} were missing. It also found the D1 PDF was 13 pages while the handout limit was 8--12 pages.}
+\field{Accepted}{I accepted the strict boundary: only Enes D1/D4/D5 and Enes's submission folder should change. The shared pair package and Hamza's individual documents stay outside this fix.}
+\field{Rejected / modified}{I did not allow a broad ``fix everything'' pass, because that could modify Hamza's upload folder or shared pair artifacts without permission.}
+\field{Errors caught}{The audit caught a packaging-level issue that would not appear from reading D1 or D2 alone: Enes's Teams upload set was incomplete even though the shared project files looked mostly ready.}
+\field{Reflection}{This final session reinforced that submission readiness is file-specific. A deliverable can be technically good but still not ready if the correct student folder does not contain the correct PDFs.}
+\field{Session log}{Current Codex session, 2026-05-22, in \path{/Users/enesteve/Desktop/Coding/university/cse341/ans}.}
+
+\end{document}
