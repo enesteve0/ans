@@ -88,7 +88,7 @@
 \end{center}
 \vspace{7pt}
 
-\field{Submission note}{This Part 2 upload keeps my Part 1 AI Journal entries first, then adds the Part 2 continuation entries required by the handout. For ChatGPT web-app sessions, I added the project-history proof link where it is relevant. The link may require ChatGPT login.}
+\field{Submission note}{This Part 2 upload keeps my Part 1 AI Journal entries first, then adds the Part 2 continuation entries. All ChatGPT web-app sessions are from the following project history: \url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (may require ChatGPT login).}
 
 % =====================================================================
 \section{Part 1 Journal Entries}
@@ -264,117 +264,130 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 % =====================================================================
 \section{Part 2 Continuation Entries}
 
-% =====================================================================
-\section{Part 2 Entry 1 of 8}
-\field{Date}{2026-05-10}
-\field{Phase}{Planning / Requirements}
-\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
-\field{Goal}{Turn the Part 2 handout and submission guide into a concrete work plan before changing the project.}
-\prompt{``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly and then understand where we are. We have finished Part 1 and now we have to work on Part 2 and make this assignment finished done absolute. Plan that accordingly and properly.''}
-\field{Response key part}{Codex identified Part 2 as a full revised submission: final D1, D2 type checker and interpreter, executed D3 examples, continued D4 journals, D5 retrospectives, and D6 contribution report. It separated individual files (\code{D1}, \code{D4}, \code{D5}) from shared pair files (\code{D2}, \code{D3}, \code{D6}).}
-\field{Accepted}{I kept the order: read the handout first, then align D1 and D2, then run D3 examples, then package. That stopped me from treating the code as finished while the reports and upload files were still incomplete.}
-\field{Rejected / modified}{I did not accept the early ``fully done'' framing as proof. The plan still needed real builds, actual interpreter output, and extracted-archive checks.}
-\field{Errors caught}{The first planning pass could make the project sound closer to final than it was. I caught that by comparing the plan against the handout requirement for type checking, interpreter execution, D4 E2/E3, and final upload structure.}
-\field{Reflection}{This helped me turn a broad deadline into a checklist. The important lesson was that a good AI plan is not proof; I still needed builds, outputs, PDFs, and package checks.}
-\sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
+\begin{journalentry}
+Entry \# & 1 of 9 \\ \hline
+Date & 2026-05-10 \\ \hline
+Phase & Planning / Requirements \\ \hline
+AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
+Goal & Turn the Part 2 handout and submission guide into a concrete work plan before changing the project. \\ \hline
+Prompt & ``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly and then understand where we are. We have finished Part 1 and now we have to work on Part 2 and make this assignment finished done absolute. Plan that accordingly and properly.'' \\ \hline
+Response (key part) & Codex identified Part 2 as a full revised submission: final D1, D2 type checker and interpreter, executed D3 examples, continued D4 journals, D5 retrospectives, and D6 contribution report. It separated individual files (\code{D1}, \code{D4}, \code{D5}) from shared pair files (\code{D2}, \code{D3}, \code{D6}). \\ \hline
+Accepted & I kept the order: read the handout first, then align D1 and D2, then run D3 examples, then package. That stopped me from treating the code as finished while the reports and upload files were still incomplete. \\ \hline
+Rejected / modified & I did not accept the early ``fully done'' framing as proof. The plan still needed real builds, actual interpreter output, and extracted-archive checks. \\ \hline
+Errors you caught & The first planning pass could make the project sound closer to final than it was. I caught that by comparing the plan against the handout requirement for type checking, interpreter execution, D4 E2/E3, and final upload structure. \\ \hline
+Reflection & This helped me turn a broad deadline into a checklist. The important lesson was that a good AI plan is not proof; I still needed builds, outputs, PDFs, and package checks. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-\section{Part 2 Entry 2 of 8, Experiment E3}
-\field{Date}{2026-05-10}
-\field{Phase}{Implementation / Type Checker}
-\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
-\field{Goal}{Ask AI to implement the Part 2 type-checker/interpreter work and then test its code on known cases.}
-\prompt{``Implement the plan.''}
-\field{Response key part}{Codex added the Part 2 semantic layer, command-line checking/execution modes, runtime value handling, and tests. In the same session it ran D3 check/run commands and found real failures before I accepted the code.}
-\field{Accepted}{I accepted the two-stage idea: parse first, then type-check, then interpret only if semantic checks pass. I also kept the negative-test strategy: known type errors, known runtime errors, and the three D3 examples.}
-\field{Rejected / modified}{I did not trust the generated implementation by inspection. The first version exposed problems: D3 programs failed around expression statements, and character equality needed explicit handling. Those were fixed only after running known inputs.}
-\field{Errors caught}{This is the required E3 case. The tests caught parser/expression-statement failures and missing comparison behavior. If I had only read the generated code, those bugs would have stayed hidden until D3 execution.}
-\field{Reflection}{AI helped with a large C feature quickly, but the code still needed tough tests. The most important part was using inputs where I already knew the expected result.}
-\sessionlog{Local Codex session \code{019e0fdd-ec6f-7071-ac43-19e2eb257f32}, May 10, 2026.}
+\begin{journalentry}
+Entry \# & 2 of 9 [EXPERIMENT E3] \\ \hline
+Date & 2026-05-10 \\ \hline
+Phase & Implementation / Type Checker \\ \hline
+AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
+Goal & Ask AI to implement the Part 2 type-checker/interpreter work and then test its code on known cases. \\ \hline
+Prompt & ``Implement the plan.'' \\ \hline
+Response (key part) & Codex added the Part 2 semantic layer, command-line checking/execution modes, runtime value handling, and tests. In the same session it ran D3 check/run commands and found real failures before I accepted the code. \\ \hline
+Accepted & I accepted the two-stage idea: parse first, then type-check, then interpret only if semantic checks pass. I also kept the negative-test strategy: known type errors, known runtime errors, and the three D3 examples. \\ \hline
+Rejected / modified & I did not trust the generated implementation by inspection. The first version exposed problems: D3 programs failed around expression statements, and character equality needed explicit handling. Those were fixed only after running known inputs. \\ \hline
+Errors you caught & This is the required E3 case. The tests caught parser/expression-statement failures and missing comparison behavior. If I had only read the generated code, those bugs would have stayed hidden until D3 execution. \\ \hline
+Reflection & AI helped with a large C feature quickly, but the code still needed tough tests. The most important part was using inputs where I already knew the expected result. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-\section{Part 2 Entry 3 of 8}
-\field{Date}{2026-05-13}
-\field{Phase}{Exam Preparation / Understanding}
-\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
-\field{Goal}{Prepare for the personalized written exam by studying the actual submitted PDFs and C code.}
-\prompt{``I need to be ready for the Part 1 exam and I need you to teach me everything about my submission like I know nothing about it. I'm Enes btw in case you need to read according to that.''}
-\field{Response key part}{Codex read the submitted PDFs and code, then made an Enes-specific exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It focused on parser flow, AST dump, token handling, and the difference between Part 1 parsing and Part 2 semantics.}
-\field{Accepted}{I accepted the code-grounded explanation style because it forced me to connect written claims to actual files such as \code{lexer.c}, \code{parser.c}, \code{ast.c}, and \code{error.c}.}
-\field{Rejected / modified}{I had to push the AI beyond a report summary by asking it to read the PDFs and then the code. A report-only explanation would not prepare me for project-specific exam questions.}
-\field{Errors caught}{The danger was over-explaining future type-checking behavior while studying a Part 1 parser submission. I detected that by checking which features were actually implemented at that point.}
-\field{Reflection}{This session showed me that AI tutoring is only useful when it is tied to the repository. For the exam I need to explain code details, not only repeat clean report sentences.}
-\sessionlog{Local Codex session \code{019e205b-c8c4-7563-801c-edd132cd1675}, May 13, 2026.}
+\begin{journalentry}
+Entry \# & 3 of 9 \\ \hline
+Date & 2026-05-13 \\ \hline
+Phase & Exam Preparation / Understanding \\ \hline
+AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
+Goal & Prepare for the personalized written exam by studying the actual submitted PDFs and C code. \\ \hline
+Prompt & ``I need to be ready for the Part 1 exam and I need you to teach me everything about my submission like I know nothing about it. I'm Enes btw in case you need to read according to that.'' \\ \hline
+Response (key part) & Codex read the submitted PDFs and code, then made an Enes-specific exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It focused on parser flow, AST dump, token handling, and the difference between Part 1 parsing and Part 2 semantics. \\ \hline
+Accepted & I accepted the code-grounded explanation style because it forced me to connect written claims to actual files such as \code{lexer.c}, \code{parser.c}, \code{ast.c}, and \code{error.c}. \\ \hline
+Rejected / modified & I had to push the AI beyond a report summary by asking it to read the PDFs and then the code. A report-only explanation would not prepare me for project-specific exam questions. \\ \hline
+Errors you caught & The danger was over-explaining future type-checking behavior while studying a Part 1 parser submission. I detected that by checking which features were actually implemented at that point. \\ \hline
+Reflection & This session showed me that AI tutoring is only useful when it is tied to the repository. For the exam I need to explain code details, not only repeat clean report sentences. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-\section{Part 2 Entry 4 of 8}
-\field{Date}{2026-05-19}
-\field{Phase}{Design / Operational Semantics}
-\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
-\field{Goal}{Revise D1 Section 4.4 so it used Sebesta-style operational semantics instead of only formal-looking rules.}
-\prompt{``The Semantics needs to be like Sebesta style as you can see through the book's 3.5 section.''}
-\field{Response key part}{The response described operational semantics using abstract-machine operations such as \code{evaluate(E)}, \code{formula\_elements(F)}, \code{reaction\_atoms(R)}, and \code{semantic\_error(M)}. It rewrote formula iteration and reaction balance checking as lower-level state changes.}
-\field{Accepted}{I kept the abstract-machine style because it matched Sebesta's idea of explaining meaning through execution effects. It also fit the interpreter I expected to build in D2.}
-\field{Rejected / modified}{The first output was too vague about iteration order, loop scope, empty formulas, energy type checking, and whether reaction field checks were semantic or syntactic. I did not paste it directly into D1.}
-\field{Errors caught}{The AI used \code{formula\_elements(F)} like a set without defining an order. That is a real semantics gap, because interpreter behavior should be deterministic. I caught it by reviewing the output against the D3 molar-mass loop.}
-\field{Reflection}{The AI gave the right general shape, but not enough precision. In semantics, missing details like scope lifetime or iteration order can become implementation bugs later.}
-\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
+\begin{journalentry}
+Entry \# & 4 of 9 \\ \hline
+Date & 2026-05-19 \\ \hline
+Phase & Design / Operational Semantics \\ \hline
+AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Goal & Write operational semantics for two non-trivial ANS chemistry DSL constructs: formula iteration and reaction balance checking. \\ \hline
+Prompt & ``We're doing Part 2 of our CSE341 language project. For D1 section 4.4, we need to write operational semantics for two non-trivial ANS constructs. Our language is a chemistry DSL. Can you help us write the semantics section for: 1. looping over a formula, like for (let element in formula) 2. checking whether a reaction is balanced with check = balanced'' \\ \hline
+Response (key part) & The response drafted a D1-ready operational semantics section using environments $\Gamma$, $\rho$, and $\sigma$. It defined formula values such as $H_2O \Downarrow \{ H \mapsto 2, O \mapsto 1 \}$, gave a formal loop rule for \code{for (let element in e) B}, and defined \code{check = balanced} by comparing \code{atoms(R) = atoms(P)}. It also stated that \code{check = balanced} ``does not try to repair or auto-balance the reaction.'' \\ \hline
+Accepted & I accepted the formal semantics breakdown of formula iteration and reaction balance checking. Specifically, we kept the environment definitions ($\Gamma$, $\rho$, $\sigma$) and the idea of mapping formulas to element-to-count maps. \\ \hline
+Rejected / modified & I rejected the inference-rule format because the course requires Sebesta-style operational semantics (which uses an abstract machine and state changes). We also modified the looping definition because iterating over a formula literal directly was too simple; we needed to generalize the loop to expressions that evaluate to formulas. \\ \hline
+Errors you caught & The AI's initial rules assumed a static set of elements in the formula and didn't define iteration order or local variable scope cleanup, which would cause name shadowing bugs in our interpreter. \\ \hline
+Reflection & I learned that formal logic-style operational semantics are clean but hard to map directly to an interpreter implementation in C. Switching to Sebesta-style operational semantics makes the translation to C code much more natural. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-\section{Part 2 Entry 5 of 8}
-\field{Date}{2026-05-19}
-\field{Phase}{Design Review / Semantics}
-\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
-\field{Goal}{Ask AI to review the revised 4.4 section like an instructor and identify remaining implementation risks.}
-\prompt{``Can you check my 4.4 Semantics section like my teacher would? I just want to know if it fits Sebesta-style operational semantics, if anything is unclear or too long, and if it says anything that would be hard to implement in D2. Please don't rewrite everything unless needed, just tell me what to fix.''}
-\field{Response key part}{The response said the section mostly fit Sebesta-style operational semantics, but recommended moving helper operations out of the main constructs, clarifying empty formula behavior, stating that field checks are semantic checks, and separating runtime execution from pre-execution validation.}
-\field{Accepted}{I accepted the critique that 4.4 needed clearer helper-operation boundaries and better distinction between semantic checking and runtime interpretation.}
-\field{Rejected / modified}{I rejected the idea that every helper deserved a full subsection. That made the section too long for D1, so the final version compressed helper operations while keeping the important checks.}
-\field{Errors caught}{The review exposed a design problem I had not written clearly enough: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field.}
-\field{Reflection}{This session was useful because the AI acted more like a reviewer than a writer. That helped me keep my own wording while still finding missing rules.}
-\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
+\begin{journalentry}
+Entry \# & 5 of 9 \\ \hline
+Date & 2026-05-19 \\ \hline
+Phase & Design / Operational Semantics \\ \hline
+AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Goal & Revise the ANS operational semantics section so it follows Sebesta Section 3.5 style more closely. \\ \hline
+Prompt & ``The Semantics needs to be like Sebesta Style as you can see through the books 3.5 section'' \\ \hline
+Response (key part) & The response described operational semantics using abstract-machine operations such as \code{evaluate(E)}, \code{formula\_elements(F)}, \code{reaction\_atoms(R)}, and \code{semantic\_error(M)}. It rewrote formula iteration and reaction balance checking as lower-level state changes. \\ \hline
+Accepted & I kept the abstract-machine style because it matched Sebesta's idea of explaining meaning through execution effects. It also fit the interpreter I expected to build in D2. \\ \hline
+Rejected / modified & The first output was too vague about iteration order, loop scope, empty formulas, energy type checking, and whether reaction field checks were semantic or syntactic. I did not paste it directly into D1. \\ \hline
+Errors you caught & The AI used \code{formula\_elements(F)} like a set without defining an order. That is a real semantics gap, because interpreter behavior should be deterministic. I caught it by reviewing the output against the D3 molar-mass loop. \\ \hline
+Reflection & The AI gave the right general shape, but not enough precision. In semantics, missing details like scope lifetime or iteration order can become implementation bugs later. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-\section{Part 2 Entry 6 of 8, Experiment E2}
-\field{Date}{2026-05-19}
-\field{Phase}{Type System}
-\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
-\field{Goal}{Document the type-equivalence decision for ANS using Sebesta Chapter 6, including name/kind equivalence for domain records and structural equivalence for lists.}
-\prompt{``Next section! Can you help draft D1 Section 4.5: Type System for our chemistry language? Here are our rules: it is strongly typed and checked statically before execution; no implicit coercion; primitives are Number, String, Char, Bool; domain types are Quantity, Element, Compound, Formula, and Reaction. Can you explain our type categories and type-equivalence rules, like lists having to be homogeneous, using Sebesta's definitions?''}
-\field{Response key part}{The response described primitives, domain types, and constructed \code{List<T>} types. It stated that ANS has no automatic conversion and that \code{List<T>} is equivalent to \code{List<U>} only if the element types are equivalent.}
-\field{Accepted}{I kept the strong static typing, no-coercion rule, and homogeneous \code{List<T>} decision. For E2, I used the output to separate two cases: domain record-like values such as \code{Compound} use kind/name-style equivalence, while parameterized lists use structural equivalence over the element type.}
-\field{Rejected / modified}{The response did not clearly distinguish record-like domain objects from list constructors. I rewrote that part because saying only ``structural equivalence'' could imply that two compounds are different types based on their internal fields, which is not the ANS rule.}
-\field{Errors caught}{The mistake was mixing up chemistry record structure with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape.}
-\field{Reflection}{E2 helped me understand why Sebesta's type-equivalence terms matter. Without a precise rule, the checker could become too strict for compounds or too weak for lists.}
-\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
+\begin{journalentry}
+Entry \# & 6 of 9 \\ \hline
+Date & 2026-05-19 \\ \hline
+Phase & Design Review / Semantics \\ \hline
+AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Goal & Ask AI to review the revised 4.4 section like an instructor and identify remaining implementation risks. \\ \hline
+Prompt & ``Can you check my 4.4 Semantics section like my teacher would? I just want to know if it fits Sebesta-style operational semantics, if anything is unclear or too long, and if it says anything that would be hard to implement in D2. Please don't rewrite everything unless needed, just tell me what to fix.'' \\ \hline
+Response (key part) & The response said the section mostly fit Sebesta-style operational semantics, but recommended moving helper operations out of the main constructs, clarifying empty formula behavior, stating that field checks are semantic checks, and separating runtime execution from pre-execution validation. \\ \hline
+Accepted & I accepted the critique that 4.4 needed clearer helper-operation boundaries and better distinction between semantic checking and runtime interpretation. \\ \hline
+Rejected / modified & I rejected the idea that every helper deserved a full subsection. That made the section too long for D1, so the final version compressed helper operations while keeping the important checks. \\ \hline
+Errors you caught & The review exposed a design problem I had not written clearly enough: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field. \\ \hline
+Reflection & This session was useful because the AI acted more like a reviewer than a writer. That helped me keep my own wording while still finding missing rules. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-\section{Part 2 Entry 7 of 8}
-\field{Date}{2026-05-20}
-\field{Phase}{Expressions / Assignment}
-\field{AI tool}{ChatGPT web app, GPT-5.5 Thinking}
-\field{Goal}{Draft D1 Section 4.7 using Sebesta Chapter 7 concepts and then correct it against the grammar and checker.}
-\prompt{``Can you help me write D1 section 4.7 for our ANS language? It needs to be about expressions and assignment using Sebesta Ch. 7. Our grammar has comparison operators, + - * /, unary -, function calls, indexing, and member access. Assignment is a statement, not an expression, and function calls cannot be assignment targets.''}
-\field{Response key part}{The response covered expression forms, precedence, associativity, operand evaluation order, static type rules, function calls, member access, indexing, assignment statements, and augmented assignment. Key ideas were that grammar structure defines precedence, operands evaluate left-to-right, and assignment is not an expression.}
-\field{Accepted}{I kept the precedence/associativity explanation, left-to-right operand evaluation, and assignment-as-statement rule because they directly map to the parser and interpreter.}
-\field{Rejected / modified}{The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned.}
-\field{Errors caught}{The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable.}
-\field{Reflection}{This made me more careful about the difference between syntax and storage. An expression can parse correctly and still not be writable.}
-\sessionlog{\url{https://chatgpt.com/g/g-p-69f85c6705f08191ac4f2f56826649bf-ans/project} (ChatGPT Project history proof; may require ChatGPT login.)}
+\begin{journalentry}
+Entry \# & 7 of 9 [EXPERIMENT E2] \\ \hline
+Date & 2026-05-19 \\ \hline
+Phase & Type System \\ \hline
+AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Goal & Document the type-equivalence decision for ANS using Sebesta Chapter 6, including name/kind equivalence for domain records and structural equivalence for lists. \\ \hline
+Prompt & ``Next section! Can you help draft D1 Section 4.5: Type System for our chemistry language? Here are our rules: it is strongly typed and checked statically before execution; no implicit coercion; primitives are Number, String, Char, Bool; domain types are Quantity, Element, Compound, Formula, and Reaction. Can you explain our type categories and type-equivalence rules, like lists having to be homogeneous, using Sebesta's definitions?'' \\ \hline
+Response (key part) & The response described primitives, domain types, and constructed \code{List<T>} types. It stated that ANS has no automatic conversion and that \code{List<T>} is equivalent to \code{List<U>} only if the element types are equivalent. \\ \hline
+Accepted & I kept the strong static typing, no-coercion rule, and homogeneous \code{List<T>} decision. For E2, I used the output to separate two cases: domain record-like values such as \code{Compound} use kind/name-style equivalence, while parameterized lists use structural equivalence over the element type. \\ \hline
+Rejected / modified & The response did not clearly distinguish record-like domain objects from list constructors. I rewrote that part because saying only ``structural equivalence'' could imply that two compounds are different types based on their internal fields, which is not the ANS rule. \\ \hline
+Errors you caught & The mistake was mixing up chemistry record structure with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape. \\ \hline
+Reflection & E2 helped me understand why Sebesta's type-equivalence terms matter. Without a precise rule, the checker could become too strict for compounds or too weak for lists. \\ \hline
+\end{journalentry}
 
-% =====================================================================
-% =====================================================================
-\section{Part 2 Entry 8 of 8}
-\field{Date}{2026-05-22}
-\field{Phase}{Submission Audit / Enes Individual Files}
-\field{AI tool}{OpenAI Codex, GPT-5 coding agent}
-\field{Goal}{Check the almost-final submission folder and make Enes's individual Part 2 upload complete without editing Hamza's files.}
-\prompt{``The current structures and files for the project are almost the final ones, so check deeply and tell me for the submission what things are left and if anything is wrong that needs fixing. Then create a detailed plan for me Enes, make it ready, and do not touch Hamza's stuff.''}
-\field{Response key part}{Codex found that Enes's submission folder had only \code{220104004931\_D1\_P2.pdf}; Enes \code{D4\_P2} and \code{D5\_P2} were missing. It also found the D1 PDF was 13 pages while the handout limit was 8--12 pages.}
-\field{Accepted}{I accepted the strict boundary: only Enes D1/D4/D5 and Enes's submission folder should change. The shared pair package and Hamza's individual documents stay outside this fix.}
-\field{Rejected / modified}{I did not allow a broad ``fix everything'' pass, because that could modify Hamza's upload folder or shared pair artifacts without permission.}
-\field{Errors caught}{The audit caught a packaging-level issue that would not appear from reading D1 or D2 alone: Enes's Teams upload set was incomplete even though the shared project files looked mostly ready.}
-\field{Reflection}{This final session reminded me that submission readiness is file-specific. A deliverable can be technically good but still not ready if my student folder does not contain the correct PDFs.}
-\field{Session log}{Current Codex session, 2026-05-22, in \path{/Users/enesteve/Desktop/Coding/university/cse341/ans}.}
+\begin{journalentry}
+Entry \# & 8 of 9 \\ \hline
+Date & 2026-05-20 \\ \hline
+Phase & Expressions / Assignment \\ \hline
+AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Goal & Draft D1 Section 4.7 using Sebesta Chapter 7 concepts and then correct it against the grammar and checker. \\ \hline
+Prompt & ``Can you help me write D1 section 4.7 for our ANS language? It needs to be about expressions and assignment using Sebesta Ch. 7. Our grammar has comparison operators, + - * /, unary -, function calls, indexing, and member access. Assignment is a statement, not an expression, and function calls cannot be assignment targets.'' \\ \hline
+Response (key part) & The response covered expression forms, precedence, associativity, operand evaluation order, static type rules, function calls, member access, indexing, assignment statements, and augmented assignment. Key ideas were that grammar structure defines precedence, operands evaluate left-to-right, and assignment is not an expression. \\ \hline
+Accepted & I kept the precedence/associativity explanation, left-to-right operand evaluation, and assignment-as-statement rule because they directly map to the parser and interpreter. \\ \hline
+Rejected / modified & The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned. \\ \hline
+Errors you caught & The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable. \\ \hline
+Reflection & This made me more careful about the difference between syntax and storage. An expression can parse correctly and still not be writable. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 9 of 9 \\ \hline
+Date & 2026-05-22 \\ \hline
+Phase & Submission Audit / Enes Individual Files \\ \hline
+AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
+Goal & Check the almost-final submission folder and make Enes's individual Part 2 upload complete without editing Hamza's files. \\ \hline
+Prompt & ``The current structures and files for the project are almost the final ones, so check deeply and tell me for the submission what things are left and if anything is wrong that needs fixing. Then create a detailed plan for me Enes, make it ready, and do not touch Hamza's stuff.'' \\ \hline
+Response (key part) & Codex found that Enes's submission folder had only \code{220104004931\_D1\_P2.pdf}; Enes \code{D4\_P2} and \code{D5\_P2} were missing. It also found the D1 PDF was 13 pages while the handout limit was 8--12 pages. \\ \hline
+Accepted & I accepted the strict boundary: only Enes D1/D4/D5 and Enes's submission folder should change. The shared pair package and Hamza's individual documents stay outside this fix. \\ \hline
+Rejected / modified & I did not allow a broad ``fix everything'' pass, because that could modify Hamza's upload folder or shared pair artifacts without permission. \\ \hline
+Errors you caught & The audit caught a packaging-level issue that would not appear from reading D1 or D2 alone: Enes's Teams upload set was incomplete even though the shared project files looked mostly ready. \\ \hline
+Reflection & This final session reminded me that submission readiness is file-specific. A deliverable can be technically good but still not ready if my student folder does not contain the correct PDFs. \\ \hline
+\end{journalentry}
 
 \end{document}

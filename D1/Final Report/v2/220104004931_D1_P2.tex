@@ -361,62 +361,6 @@ The grammar also separates assignment targets from general expressions. Function
 valid expressions, but they are not valid assignment targets. That keeps a line such as
 \code{f(x) = 3} invalid instead of forcing the language to define assignment to a function result.
 
-\section{4.6\quad Names, Binding, Scope, and Lifetime}
-
-\textbf{Identifiers.} A legal identifier matches \code{[a-z\_][A-Za-z0-9\_]*}. ANS is
-case-sensitive. This is also how the language separates names from chemistry notation:
-\code{water} is an identifier, but \code{H2O} and \code{CO2} are formula literals. The hard
-reserved words are \code{let}, \code{function}, \code{return}, \code{for}, \code{in}, \code{if},
-\code{elif}, \code{else}, and \code{print}. Chemistry words such as \code{compound} and
-\code{reaction} are contextual.
-
-\textbf{Binding times.} Most reliability-related bindings happen before execution. The lexer
-binds lexemes to token categories. The parser binds names to declaration forms and parameters
-to optional type annotations. The later semantic phase binds compounds and reactions to their
-declarations, validates formulas, and checks \code{check = balanced}. Runtime binding is still used
-for argument values, local storage, loop iteration values, and ordinary variable values.
-
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}p{4.1cm}p{3.2cm}Y@{}}
-\toprule
-\textbf{Binding} & \textbf{When} & \textbf{Example} \\
-\midrule
-Lexeme to token category & Lex time & \code{water} is an identifier, \code{H2O} is a formula. \\
-Identifier to declaration & Compile time & \code{mass} resolves by static scope. \\
-Parameter to declared type & Compile time & \code{compound c} marks \code{c} as a compound parameter. \\
-Reaction balance decision & Compile time & \code{check = balanced} asks for atom-count validation. \\
-Parameter to argument value & Run time & \code{molar\_mass(water)} binds \code{c} to \code{water}. \\
-Local variable to storage & Run time & \code{let mass = 0.0} allocates during the call. \\
-\bottomrule
-\end{tabularx}}
-
-\textbf{Scope.} ANS uses static scoping. A name is resolved by looking in the current block and
-then outward in the source text. I chose this because chemistry calculations should not depend
-on who called a function. If lookup were dynamic, a local name in the caller could silently change
-what \code{molar\_mass} or \code{compute\_yield} means.
-
-For example, if a caller had a local variable named \code{water}, dynamic scoping could make a
-function read that caller's binding instead of the compound declaration the function was written
-against. That would be confusing in any language, but in a chemistry DSL it is especially bad
-because the same expression could refer to a different compound depending on the call chain.
-
-{\footnotesize
-\begin{tabularx}{\linewidth}{@{}p{4.2cm}p{3.1cm}Y@{}}
-\toprule
-\textbf{Entity} & \textbf{Lifetime} & \textbf{Reason} \\
-\midrule
-Top-level elements, compounds, reactions & Static & They describe the program's chemistry model. \\
-Top-level \code{let} variables & Static & They live for the whole run. \\
-Function parameters & Stack-dynamic & Each call gets its own arguments. \\
-Local \code{let} variables & Stack-dynamic & They disappear when the block exits. \\
-\code{for} loop variable & Stack-dynamic & It belongs only to the loop body. \\
-Lists and chemistry objects & Implicit heap-dynamic & The runtime manages them. ANS has no \code{new}, \code{delete}, or pointers. \\
-\bottomrule
-\end{tabularx}}
-
-This lifetime design follows the reliability goal. The programmer works with formulas and
-reactions, not manual memory management.
-
 \newpage
 \section{4.4\quad Operational Semantics}
 
@@ -594,6 +538,64 @@ Initialisation & Always at declaration via \code{[ $\ldots$ ]}. Empty literal \c
 
 \textbf{Formula as associative array (Sebesta \S6.6).} \code{formula[element]} maps an element key to its atom count --- the only ANS type where an indexing operator returns a Number from a chemistry collection. \code{for (let e in formula)} iterates keys in first-appearance order.
 
+\newpage
+\section{4.6\quad Names, Binding, Scope, and Lifetime}
+
+\textbf{Identifiers.} A legal identifier matches \code{[a-z\_][A-Za-z0-9\_]*}. ANS is
+case-sensitive. This is also how the language separates names from chemistry notation:
+\code{water} is an identifier, but \code{H2O} and \code{CO2} are formula literals. The hard
+reserved words are \code{let}, \code{function}, \code{return}, \code{for}, \code{in}, \code{if},
+\code{elif}, \code{else}, and \code{print}. Chemistry words such as \code{compound} and
+\code{reaction} are contextual.
+
+\textbf{Binding times.} Most reliability-related bindings happen before execution. The lexer
+binds lexemes to token categories. The parser binds names to declaration forms and parameters
+to optional type annotations. The later semantic phase binds compounds and reactions to their
+declarations, validates formulas, and checks \code{check = balanced}. Runtime binding is still used
+for argument values, local storage, loop iteration values, and ordinary variable values.
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{4.1cm}p{3.2cm}Y@{}}
+\toprule
+\textbf{Binding} & \textbf{When} & \textbf{Example} \\
+\midrule
+Lexeme to token category & Lex time & \code{water} is an identifier, \code{H2O} is a formula. \\
+Identifier to declaration & Compile time & \code{mass} resolves by static scope. \\
+Parameter to declared type & Compile time & \code{compound c} marks \code{c} as a compound parameter. \\
+Reaction balance decision & Compile time & \code{check = balanced} asks for atom-count validation. \\
+Parameter to argument value & Run time & \code{molar\_mass(water)} binds \code{c} to \code{water}. \\
+Local variable to storage & Run time & \code{let mass = 0.0} allocates during the call. \\
+\bottomrule
+\end{tabularx}}
+
+\textbf{Scope.} ANS uses static scoping. A name is resolved by looking in the current block and
+then outward in the source text. I chose this because chemistry calculations should not depend
+on who called a function. If lookup were dynamic, a local name in the caller could silently change
+what \code{molar\_mass} or \code{compute\_yield} means.
+
+For example, if a caller had a local variable named \code{water}, dynamic scoping could make a
+function read that caller's binding instead of the compound declaration the function was written
+against. That would be confusing in any language, but in a chemistry DSL it is especially bad
+because the same expression could refer to a different compound depending on the call chain.
+
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{4.2cm}p{3.1cm}Y@{}}
+\toprule
+\textbf{Entity} & \textbf{Lifetime} & \textbf{Reason} \\
+\midrule
+Top-level elements, compounds, reactions & Static & They describe the program's chemistry model. \\
+Top-level \code{let} variables & Static & They live for the whole run. \\
+Function parameters & Stack-dynamic & Each call gets its own arguments. \\
+Local \code{let} variables & Stack-dynamic & They disappear when the block exits. \\
+\code{for} loop variable & Stack-dynamic & It belongs only to the loop body. \\
+Lists and chemistry objects & Implicit heap-dynamic & The runtime manages them. ANS has no \code{new}, \code{delete}, or pointers. \\
+\bottomrule
+\end{tabularx}}
+
+This lifetime design follows the reliability goal. The programmer works with formulas and
+reactions, not manual memory management.
+
+\newpage
 \section{4.7\quad Expressions and Assignment}
 \textit{Citing Sebesta Ch.\,7.}
 
