@@ -128,6 +128,24 @@ static int comp_is_declared(const char *name) {
     return comp_formula_for(name) != NULL;
 }
 
+static const char *comp_name_for_formula(const char *formula_text) {
+    FormulaVal *target = formula_parse(formula_text);
+    const char *matched = NULL;
+
+    for (int i = 0; i < ck_n_comps; i++) {
+        FormulaVal *candidate = formula_parse(ck_comp_formula[i]);
+        if (formula_equal(target, candidate)) {
+            matched = ck_comp_name[i];
+            formula_free(candidate);
+            break;
+        }
+        formula_free(candidate);
+    }
+
+    formula_free(target);
+    return matched;
+}
+
 static int rxn_is_declared(const char *name) {
     for (int i = 0; i < ck_n_rxns; i++)
         if (strcmp(ck_rxn_name[i], name) == 0) return 1;
@@ -236,8 +254,17 @@ static const char *check_call(const AstNode *call, TypeEnv *tenv) {
 
     /* Built-in mol() */
     if (strcmp(callee, "mol") == 0) {
-        if (n_args != 1)
+        if (n_args != 1) {
             error_at(call->line, 0, "mol() expects 1 argument, got %d", n_args);
+            return "number";
+        }
+        const char *arg_type = check_expr(call->children[1], tenv);
+        if (strcmp(arg_type, "number") != 0 &&
+            strcmp(arg_type, "quantity") != 0 &&
+            strcmp(arg_type, "unknown") != 0) {
+            error_at(call->children[1]->line, 0,
+                "mol() expects number or quantity, got %s", arg_type);
+        }
         return "number";
     }
 
@@ -615,10 +642,15 @@ static void check_reaction_decl(const AstNode *decl) {
             for (int j = 0; j < rxn_reactants->n_children; j++) {
                 const AstNode *term = rxn_reactants->children[j];
                 const AstNode *sp = term->n_children == 2 ? term->children[1] : term->children[0];
-                if (sp->kind == ND_FORMULA)
+                if (sp->kind == ND_FORMULA) {
                     check_formula_symbols(sp->text, sp->line);
-                else if (sp->kind == ND_IDENT && !comp_is_declared(sp->text))
+                    if (!comp_name_for_formula(sp->text))
+                        error_at(sp->line, 0,
+                            "reaction species formula '%s' must match a declared compound",
+                            sp->text);
+                } else if (sp->kind == ND_IDENT && !comp_is_declared(sp->text)) {
                     error_at(sp->line, 0, "unknown compound '%s' in reaction", sp->text);
+                }
             }
         } else if (strcmp(key, "products") == 0) {
             has_products++;
@@ -626,10 +658,15 @@ static void check_reaction_decl(const AstNode *decl) {
             for (int j = 0; j < rxn_products->n_children; j++) {
                 const AstNode *term = rxn_products->children[j];
                 const AstNode *sp = term->n_children == 2 ? term->children[1] : term->children[0];
-                if (sp->kind == ND_FORMULA)
+                if (sp->kind == ND_FORMULA) {
                     check_formula_symbols(sp->text, sp->line);
-                else if (sp->kind == ND_IDENT && !comp_is_declared(sp->text))
+                    if (!comp_name_for_formula(sp->text))
+                        error_at(sp->line, 0,
+                            "reaction species formula '%s' must match a declared compound",
+                            sp->text);
+                } else if (sp->kind == ND_IDENT && !comp_is_declared(sp->text)) {
                     error_at(sp->line, 0, "unknown compound '%s' in reaction", sp->text);
+                }
             }
         } else if (strcmp(key, "check") == 0) {
             has_check++;

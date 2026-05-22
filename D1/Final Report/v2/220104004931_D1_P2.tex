@@ -343,15 +343,15 @@ R = evaluate(collection)
 if type(R) is reaction_side:
     for each term T in R, left to right:
         iter_scope = new_scope(current_scope)
-        bind variable in iter_scope to T.species
-            (Compound when species is a compound name or a formula that
-             matches a declared compound; Formula value otherwise)
+        if T.species does not resolve to a declared Compound:
+            semantic_error("reaction species must name a compound")
+        bind variable in iter_scope to the resolved Compound value
         execute body using iter_scope
         destroy iter_scope
     end
 \end{lstlisting}
 
-Iterating over the reactants of \code{CH4 + 2*O2} (with \code{methane} and \code{oxygen} declared) yields \code{methane} first, then \code{oxygen}. Coefficients are not exposed via the loop variable; they are accessible via \code{reaction\_side[compound]}.
+Iterating over the reactants of \code{CH4 + 2*O2} (with \code{methane} and \code{oxygen} declared) yields \code{methane} first, then \code{oxygen}, because formula-literal species must resolve to declared compounds before execution. Unresolved formulas are semantic errors. Coefficients are accessible via \code{reaction\_side[compound]}.
 
 \textbf{Scoping.}\; Both forms create a fresh nested scope per iteration. Inner declarations vanish at scope destruction. Assignment to an outer variable updates it through the static-scope chain.
 
@@ -390,7 +390,7 @@ if NOT atom_maps_equal(left_atoms, right_atoms):
 bind N -> Reaction(N, R, P, D, energy_value, balanced=true)
 \end{lstlisting}
 
-\textbf{Species formula} (\code{species\_formula(S)}): if \code{S} is a formula literal, \code{parse\_formula(S)}; if \code{S} is an identifier and names a declared compound, return that compound's formula; otherwise \code{semantic\_error}.
+\textbf{Species formula} (\code{species\_formula(S)}): if \code{S} is a formula literal, parse it and require it to match a declared compound; if \code{S} is an identifier, require it to name a declared compound and return that compound's formula; otherwise \code{semantic\_error}.
 
 \textbf{Atom maps}: \code{reaction\_atoms} accumulates $\mathrm{coeff}_i \times \mathrm{parse\_formula(species}_i)$ across all terms. Scalar multiplication multiplies every count; addition merges keys (missing $= 0$). For combustion:
 
@@ -431,15 +431,15 @@ Boolean  & \textit{no literal}     & Produced by comparison operators; consumed 
 \item \textbf{ReactionSide} --- the type of \code{.reactants} and \code{.products} fields; a list of (coefficient, species) terms. Not a declarable type annotation.
 \end{itemize}
 
-\subsection{Strong Typing (Sebesta \S6.12)}
+\subsection{Strong Typing (Sebesta \S6.14)}
 
-ANS is \textbf{strongly typed}: every type error is detected at compile time. Typed parameters are checked at call sites; every formula symbol must resolve to a declared element; every \code{check = balanced} reaction must conserve atoms; each \code{let} binding fixes its variable's type from the right-hand side; every list literal is checked for homogeneity. There are no silent dimension or kind conversions --- a Quantity is not addable to a Number, a Compound is not implicitly a Formula.
+ANS is \textbf{strongly typed}: every type error is detected at compile time. Typed parameters and built-in calls such as \code{mol(...)} are checked at call sites; every formula symbol must resolve to a declared element; reaction-side formulas must resolve to declared compounds; every \code{check = balanced} reaction must conserve atoms; each \code{let} binding fixes its variable's type from the right-hand side; every list literal is checked for homogeneity. There are no silent dimension or kind conversions --- a Quantity is not addable to a Number, a Compound is not implicitly a Formula.
 
 \subsection{Implicit Type Coercion (Sebesta \S7.4)}
 
 ANS performs \textbf{no implicit coercions}. Integer-shaped literals (\code{20} vs.\ \code{20.0}) are the same Number value; there is no second numeric type to convert from. Stoichiometric coefficients (\code{2} in \code{2*O2}) are plain Numbers used in atom-map arithmetic. Explicitly rejected: Number $\leftrightarrow$ String, Character $\leftrightarrow$ String, Element $\leftrightarrow$ Formula, Quantity $\leftrightarrow$ Quantity across different units (\code{5 g} $\not\to$ \code{5 kg}). Each rejection eliminates a class of chemistry-calculation bug.
 
-\subsection{Type Equivalence (Sebesta \S6.14)}
+\subsection{Type Equivalence (Sebesta \S6.15)}
 
 ANS uses three rules:
 \begin{enumerate}[leftmargin=1.5em,itemsep=2pt]
@@ -514,7 +514,6 @@ List/compound/reaction values & Implicit heap-dynamic & No \code{new}/\code{dele
 ANS has no explicit-heap-dynamic storage, eliminating use-after-free and dangling-pointer errors by design.
 
 % =====================================================================
-\newpage
 \section{4.7\quad Expressions and Assignment}
 \textit{Citing Sebesta Ch.\,7.}
 
@@ -556,7 +555,7 @@ Assignment is a \textbf{statement}, not an expression. \code{mass = 18.0;} updat
 
 These are the five decisions from sections 4.5--4.7 that I think matter most, explained using Sebesta Ch.\,5--7 terminology.
 
-\textbf{1. Static strong typing with no implicit coercion} (Sebesta \S6.12, \S7.4). Chemistry calculations depend on matching the right kinds of values: a Number, Formula, Compound, and Quantity are not interchangeable. \code{5 g + 2 mol} is rejected instead of guessed. This supports Sebesta's \emph{reliability} criterion because mistakes show up before execution. The trade-off is lower convenience: programmers must match types and units explicitly instead of relying on automatic conversion.
+\textbf{1. Static strong typing with no implicit coercion} (Sebesta \S6.14, \S7.4). Chemistry calculations depend on matching the right kinds of values: a Number, Formula, Compound, and Quantity are not interchangeable. \code{5 g + 2 mol} is rejected instead of guessed. This supports Sebesta's \emph{reliability} criterion because mistakes show up before execution. The trade-off is lower convenience: programmers must match types and units explicitly instead of relying on automatic conversion.
 
 \textbf{2. Quantities with units as a domain type} (Sebesta \S6.2). A value such as \code{890.3 kJ/mol} is not just a plain number; it is an energy quantity with a specific unit. Keeping the unit inside the type makes reaction code easier to read and lets the type checker reject unit mistakes at compile time. The trade-off is higher implementation cost --- the lexer, parser, checker, and interpreter all have to preserve unit information --- and slightly more writing effort, because units must be written explicitly.
 

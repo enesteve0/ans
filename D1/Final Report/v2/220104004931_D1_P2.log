@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  22 MAY 2026 20:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  22 MAY 2026 21:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -708,20 +708,20 @@ Underfull \hbox (badness 2662) in paragraph at lines 512--512
 []|\T1/lmr/m/n/10.95 (+20) Top-level el-e-
  []
 
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                \hskip 10.95pt
+(hyperref)                replaced by space on input line 517.
+
+
+Package hyperref Warning: The anchor of a bookmark and its parent's must not
+(hyperref)                be the same. Added a new anchor on input line 520.
+
 [9]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \hskip 10.95pt
-(hyperref)                replaced by space on input line 518.
-
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 521.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                \hskip 10.95pt
-(hyperref)                replaced by space on input line 555.
+(hyperref)                replaced by space on input line 554.
 
 [10] [11] (./220104004931_D1_P2.aux)
  ***********
@@ -729,14 +729,14 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `220104004931_D1_P2.out' has not changed.
-(rerunfilecheck)             Checksum: DF0496A74A32D9E32EB3155EBD107B02;5522.
+(rerunfilecheck)             Checksum: ABC5995C5BFE472D44CBB540390AA758;5522.
  )
 Here is how much of TeX's memory you used:
  16061 strings out of 469006
- 254040 string characters out of 5454814
+ 254042 string characters out of 5454814
  1325113 words of memory out of 5000000
- 44223 multiletter control sequences out of 15000+600000
- 692270 words of font info for 150 fonts, out of 8000000 for 9000
+ 44221 multiletter control sequences out of 15000+600000
+ 692364 words of font info for 151 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  75i,12n,83p,1015b,2019s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></u
@@ -754,7 +754,7 @@ c/lm/lmtk10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/lm/
 lmtt10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/lm/lmtt8
 .pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/lm/lmtti10.pfb
 >
-Output written on 220104004931_D1_P2.pdf (11 pages, 339312 bytes).
+Output written on 220104004931_D1_P2.pdf (11 pages, 339470 bytes).
 PDF statistics:
  455 PDF objects out of 1000 (max. 8388607)
  404 compressed objects within 5 object streams

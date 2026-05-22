@@ -1,0 +1,2619 @@
+
+=========================================
+--- SEBESTA PAGE 8 (Target: ch7_expressions) ---
+=========================================
+
+Chapter Outlines
+Chapter 1 begins with a rationale for studying programming languages. It then 
+discusses the criteria used for evaluating programming languages and language 
+constructs. The primary influences on language design, common design trade-
+offs, and the basic approaches to implementation are also examined.
+Chapter 2 outlines the evolution of the languages that are discussed in 
+this book. Although no attempt is made to describe any language completely, 
+the origins, purposes, and contributions of each are discussed. This historical 
+overview is valuable, because it provides the background necessary to under -
+standing the practical and theoretical basis for contemporary language design. 
+It also motivates further study of language design and evaluation. Because none 
+of the remainder of the book depends on Chapter 2, it can be read on its own, 
+independent of the other chapters.
+Chapter 3 describes the primary formal method for describing the syntax 
+of programming language—BNF . This is followed by a description of attribute 
+grammars, which describe both the syntax and static semantics of languages. 
+The difficult task of semantic description is then explored, including brief 
+introductions to the three most common methods: operational, denotational, 
+and axiomatic semantics.
+Chapter 4 introduces lexical and syntax analysis. This chapter is targeted to 
+those Computer Science departments that no longer require a compiler design 
+course in their curricula. Similar to Chapter 2, this chapter stands alone and 
+can be studied independently of the rest of the book, except for Chapter 3, on 
+which it depends.
+Chapters 5 through 14 describe in detail the design issues for the primary 
+constructs of programming languages. In each case, the design choices for sev-
+eral example languages are presented and evaluated. Specifically, Chapter 5 
+covers the many characteristics of variables, Chapter 6  covers data types, and 
+Chapter 7 explains expressions and assignment statements. Chapter 8 describes 
+control statements, and Chapters 9 and 10 discuss subprograms and their imple-
+mentation. Chapter 11 examines data abstraction facilities. Chapter 12 provides 
+an in-depth discussion of language features that support object-oriented pro-
+gramming (inheritance and dynamic method binding), Chapter 13 discusses 
+concurrent program units, and Chapter 14 is about exception handling, along 
+with a brief discussion of event handling.
+Chapters 15 and 16 describe two of the most important alternative program-
+ming paradigms: functional programming and logic programming. However, 
+some of the data structures and control constructs of functional programming 
+languages are discussed in Chapters 6 and 8. Chapter 15 presents an introduc-
+tion to Scheme, including descriptions of some of its primitive functions, special 
+viii
+ Preface
+A01_SEBE8029_12_SE_FM.indd   8 1/9/18   6:14 PM
+=========================================
+--- SEBESTA PAGE 18 (Target: ch7_expressions) ---
+=========================================
+
+xviii      Contents
+ Chapter 7 Expressions and Assignment Statements  301
+ 7.1 Introduction .......................................................................................302
+ 7.2 Arithmetic Expressions ......................................................................302
+ 7.3 Overloaded Operators .......................................................................311
+ 7.4 T ype Conversions ..............................................................................313
+History Note .............................................................................................315
+ 7.5 Relational and Boolean Expressions .................................................316
+History Note .............................................................................................316
+ 7.6 Short-Circuit Evaluation ...................................................................318
+ 7.7 Assignment Statements .....................................................................319
+History Note .............................................................................................323
+ 7.8 Mixed-Mode Assignment ..................................................................324
+Summary • Review Questions • Problem Set • Programming Exercises  ....324
+ Chapter 8 Statement-Level Control Structures  329
+ 8.1 Introduction .......................................................................................330
+ 8.2 Selection Statements .........................................................................332
+ 8.3 Iterative Statements ...........................................................................343
+ 8.4 Unconditional Branching ..................................................................355
+History Note .............................................................................................356
+ 8.5 Guarded Commands .........................................................................356
+ 8.6 Conclusions .......................................................................................359
+Summary • Review Questions • Problem Set • Programming Exercises  ....360
+ Chapter 9 Subprograms  365
+ 9.1 Introduction .......................................................................................366
+ 9.2 Fundamentals of Subprograms .........................................................366
+ 9.3 Design Issues for Subprograms .........................................................374
+ 9.4 Local Referencing Environments .....................................................375
+ 9.5 Parameter-Passing Methods..............................................................376
+History Note .............................................................................................384
+A01_SEBE8029_12_SE_FM.indd   18 1/9/18   6:14 PM
+=========================================
+--- SEBESTA PAGE 37 (Target: ch7_expressions) ---
+=========================================
+
+1.3 Language Evaluation Criteria      13
+1.3.2 Writability
+Writability is a measure of how easily a language can be used to create programs 
+for a chosen problem domain. Most of the language characteristics that affect 
+readability also affect writability. This follows directly from the fact that the 
+process of writing a program requires the programmer frequently to reread the 
+part of the program that is already written.
+As is the case with readability, writability must be considered in the context 
+of the target problem domain of a language. It simply is not fair to compare 
+the writability of two languages in the realm of a particular application when 
+one was designed for that application and the other was not. For example, the 
+writabilities of Visual BASIC (VB) (Halvorson, 2013) and C are dramatically 
+different for creating a program that has a graphical user interface (GUI), for 
+which VB is ideal. Their writabilities are also quite different for writing systems 
+programs, such as an operating system, for which C was designed.
+The following subsections describe the most important characteristics 
+influencing the writability of a language.
+1.3.2.1 Simplicity and Orthogonality
+If a language has a large number of different constructs, some programmers 
+who use the language might not be familiar with all of them. This situation 
+can lead to a misuse of some features and a disuse of others that may be either 
+more elegant or more efficient, or both, than those that are used. It may even 
+be possible, as noted by Hoare (1973), to use unknown features accidentally, 
+with bizarre results. Therefore, a smaller number of primitive constructs and 
+a consistent set of rules for combining them (that is, orthogonality) is much 
+better than simply having a large number of primitives. A programmer can 
+design a solution to a complex problem after learning only a simple set of 
+primitive constructs.
+On the other hand, too much orthogonality can be a detriment to writ-
+ability. Errors in programs can go undetected when nearly any combination of 
+primitives is legal. This can lead to code absurdities that cannot be discovered 
+by the compiler.
+1.3.2.2 Expressivity
+Expressivity in a language can refer to several different characteristics. In a 
+language such as APL (Gilman and Rose, 1983), it means that there are very 
+powerful operators that allow a great deal of computation to be accomplished 
+with a very small program. More commonly, it means that a language has rel-
+atively convenient, rather than cumbersome, ways of specifying computations. 
+For example, in C, the notation 
+count++ is more convenient and shorter than 
+count = count + 1. Also, the and then Boolean operator in Ada is a conve-
+nient way of specifying short-circuit evaluation of a Boolean expression. The 
+inclusion of the 
+for statement in Java makes writing counting loops easier than 
+with the use of while, which is also possible. All of these increase the writability 
+of a language.
+M01_SEBE8029_12_SE_C01.indd   13 1/5/18   11:10 PM
+=========================================
+--- SEBESTA PAGE 96 (Target: ch7_expressions) ---
+=========================================
+
+72      Chapter 2   Evolution of the Major Programming Languages
+2.11.2 Language Overview
+One important result of orthogonality in ALGOL 68 was its inclusion of 
+user-defined data types. Earlier languages, such as Fortran, included only a 
+few basic data structures. PL/I included a larger number of data structures, 
+which made it harder to learn and difficult to implement, but it still could not 
+provide an appropriate data structure for every need.
+The approach of ALGOL 68 to data structures was to provide a few prim-
+itive types and structures and allow the user to combine those primitives to 
+define a large number of different structures. This provision for user-defined 
+data types was carried over to some extent into all of the major imperative 
+languages designed since then. User-defined data types are valuable because 
+they allow the user to design data abstractions that fit particular problems very 
+closely. All aspects of data types are discussed in Chapter 6.
+As another first in the area of data types, ALGOL 68 introduced the 
+kind of dynamic arrays that will be termed implicit heap-dynamic in Chapter 5. 
+A dynamic array is one in which the declaration does not specify subscript 
+bounds. Assignments to a dynamic array cause allocation of required storage. 
+In ALGOL 68, dynamic arrays are called 
+flex arrays.
+2.11.3 Evaluation
+ALGOL 68 includes a significant number of features that had not been previ-
+ously used. Its use of orthogonality, which some may argue was overdone, was 
+nevertheless revolutionary.
+ALGOL 68 repeated one of the sins of ALGOL 60, however, and it was an 
+important factor in its limited popularity. The language was described using an 
+elegant and concise but also unknown metalanguage. Before one could read the 
+language-describing document (van Wijngaarden et al., 1969), he or she had 
+to learn the new metalanguage, called van Wijngaarden grammars, which were 
+far more complex than BNF . T o make matters worse, the designers invented 
+a collection of words to explain the grammar and the language. For example, 
+keywords were called indicants, substring extraction was called trimming, and 
+the process of a subprogram execution was called a coercion of deproceduring, 
+which might be meek, firm, or something else.
+It is natural to contrast the design of PL/I with that of ALGOL 68, because 
+they appeared only a few years apart. ALGOL 68 achieved writability by the 
+principle of orthogonality: a few primitive concepts and the unrestricted use 
+of a few combining mechanisms. PL/I achieved writability by including a large 
+number of fixed constructs. ALGOL 68 extended the elegant simplicity of 
+ALGOL 60, whereas PL/I simply threw together the features of several lan-
+guages to attain its goals. Of course, it must be remembered that the goal 
+of PL/I was to provide a unified tool for a broad class of problems, whereas 
+ALGOL 68 was targeted to a single class: scientific applications.
+PL/I achieved far greater acceptance than ALGOL 68, due largely to IBM’s 
+promotional efforts and the problems of understanding and implementing 
+M02_SEBE8029_12_SE_C02.indd   72 1/5/18   11:11 PM
+=========================================
+--- SEBESTA PAGE 112 (Target: ch7_expressions) ---
+=========================================
+
+88      Chapter 2   Evolution of the Major Programming Languages
+Among the features of Swift are a tuple data type, an option type  (variables 
+of this type can have a special no-value value), protocols (similar to Java 
+ interfaces), two categories of types, class and struct, which support refer -
+ence types and value types, as in C#, generic types, no pointers, a safer switch 
+ construct, in which the default is to not fall through to the next option, and all 
+statement collections, including a single statement, must be enclosed in braces 
+in all control constructs.
+Statements need not be terminated with semicolons, unless there are two 
+or more statements on the same line. T ypes of data need not be declared, as 
+type inferencing is used. Unlike C and C++, assignment statements do not 
+return a value, so using 
+x = 0  is not legal in a Boolean expression. This 
+eliminates a common error in C and C++ programs, in which x = 0 is typed 
+instead of x == 0 . Heap allocated objects are automatically reclaimed, using 
+reference counters.
+Swift programs can interact with Objective-C code and Swift uses the same 
+libraries as that language. Swift is already the tenth most popular programming 
+language, according to the TIOBE Community Report.
+2.16.5 Another Related Language: Delphi
+Delphi (Lischner, 2000) is a hybrid language, similar to C++ and  Objective-C, 
+in that it was created by adding object-oriented support, among other things, 
+to an existing imperative language, in this case Pascal. Apple designed an 
+object-oriented version of Pascal, named Object Pascal, but subsequently 
+dropped the project. Borland, which had developed T urbo Pascal for 
+ Windows, 
+also designed an object-oriented version of Pascal, based on T urbo Pascal, also 
+named Object Pascal. For several reasons, Borland renamed Object Pascal 
+as Delphi. The first product with that name, which included an integrated 
+development environment (IDE), was released in 1995. Some consider the 
+IDE to be Delphi and the underlying programming language to be Object 
+Pascal. Other suppliers of similar products continue to refer to the language 
+as Object Pascal.
+Many of the differences between C++ and Delphi are a result of the prede-
+cessor language and the surrounding programming cultures from which they 
+are derived. Because C is a powerful but potentially unsafe language, C++ also 
+fits that description, at least in the areas of array subscript range checking, 
+pointer arithmetic, and its numerous type coercions. Similarly, because Pascal 
+is more elegant and safer than C, Delphi is more elegant and safer than C++. 
+Delphi is also less complex than C++. For example, Delphi does not include 
+user-defined operator overloading, generic subprograms, and parameterized 
+classes, all of which are part of C++.
+Delphi was designed by Anders Hejlsberg, who had previously developed 
+the T urbo Pascal system. Hejlsberg, who moved to Microsoft in 1996, was the 
+lead designer of C#.
+M02_SEBE8029_12_SE_C02.indd   88 1/5/18   11:11 PM
+=========================================
+--- SEBESTA PAGE 114 (Target: ch7_expressions) ---
+=========================================
+
+90      Chapter 2   Evolution of the Major Programming Languages
+they are not, although many C++ users build wrapper classes for arrays to add 
+features like index range checking, which is implicit in Java.
+Java does not have pointers, but its reference types provide some of the 
+capabilities of pointers. These references are used to point to class instances. 
+All objects are allocated on the heap. References are always implicitly deref-
+erenced, when necessary. So they behave more like ordinary scalar variables.
+Java has a primitive Boolean type named 
+boolean, used mainly for the 
+control expressions of its control statements (such as if and while). Unlike C 
+and C++, arithmetic expressions cannot be used for control expressions.
+One significant difference between Java and many of its predecessors that 
+support object-oriented programming, including C++, is that it is not possi-
+ble to write stand-alone subprograms in Java. All Java subprograms are meth-
+ods and are defined in classes. Furthermore, methods can be called through a 
+class or object only. One consequence of this is that while C++ supports both 
+procedural and object-oriented programming, Java supports object-oriented 
+programming only.
+Another important difference between C++ and Java is that C++ supports 
+multiple inheritance directly in its class definitions. Java supports only single 
+inheritance of classes, although some of the benefits of multiple inheritance can 
+be gained by using its interface construct.
+Among the C++ constructs that were not copied into Java are structs and 
+unions.
+Java includes a relatively simple form of concurrency control through its 
+synchronized modifier, which can appear on methods and blocks. In either 
+case, it causes a lock to be attached. The lock ensures mutually exclusive access 
+or execution. In Java, it is relatively easy to create concurrent processes, which 
+in Java are called threads.
+Java uses implicit storage deallocation for its objects, often called garbage 
+collection. This frees the programmer from needing to delete objects explicitly 
+when they are no longer needed. Programs written in languages that do not 
+have garbage collection often suffer from what is sometimes called memory 
+leakage, which means that storage is allocated but never deallocated. This can 
+obviously lead to eventual depletion of all available storage. Object deallocation 
+is discussed in detail in Chapter 6.
+Unlike C and C++, Java includes assignment type coercions (implicit type 
+conversions) only if they are widening (from a “smaller” type to a “larger” type). 
+So 
+int to float coercions are done across the assignment operator, but float 
+to int coercions are not.
+2.17.3 Evaluation
+The designers of Java did well at trimming the excess and/or unsafe features 
+of C++. For example, the elimination of half of the assignment coercions 
+that are done in C++ was clearly a step toward higher reliability. Index range 
+checking of array accesses also makes the language safer. The addition of 
+M02_SEBE8029_12_SE_C02.indd   90 1/5/18   11:11 PM
+=========================================
+--- SEBESTA PAGE 134 (Target: ch7_expressions) ---
+=========================================
+
+110      Chapter 3   Describing Syntax and Semantics
+T
+his chapter begins by defining the terms syntax and semantics. Then, a detailed 
+discussion of the most common method of describing syntax, context-free 
+grammars (also known as Backus-Naur Form), is presented. Included in this 
+ discussion are derivations, parse trees, ambiguity, descriptions of operator precedence 
+and associativity, and extended Backus-Naur Form. Attribute grammars, which can be 
+used to describe both the syntax and static semantics of programming languages, are 
+discussed next. In the last section, three formal methods of describing semantics—
+operational, axiomatic, and denotational semantics—are introduced. Because of the 
+inherent complexity of the semantics description methods, our discussion of them is 
+brief. One could easily write an entire book on just one of the three (as several authors 
+have).
+3.1 Introduction
+The task of providing a concise yet understandable description of a program-
+ming language is difficult but essential to the language’s success. ALGOL 60 
+and ALGOL 68 were first presented using concise formal descriptions; in both 
+cases, however, the descriptions were not easily understandable, partly because 
+each used a new notation. The levels of acceptance of both languages suffered 
+as a result. On the other hand, some languages have suffered the problem of 
+having many slightly different dialects, a result of a simple but informal and 
+imprecise definition.
+One of the problems in describing a language is the diversity of the 
+ people 
+who must understand the description. Among these are initial evaluators, 
+implementors, and users. Most new programming languages are subjected to a 
+period of scrutiny by potential users, often people within the organization that 
+employs the language’s designer, before their designs are completed. These are 
+the initial evaluators. The success of this feedback cycle depends heavily on the 
+clarity of the description.
+Programming language implementors obviously must be able to deter -
+mine how the expressions, statements, and program units of a language are 
+formed, and also their intended effect when executed. The difficulty of the 
+implementors’ job is, in part, determined by the completeness and precision of 
+the language description.
+Finally, language users must be able to determine how to encode software 
+solutions by referring to a language reference manual. T extbooks and courses 
+enter into this process, but language manuals are usually the only authoritative 
+printed information source about a language.
+The study of programming languages, like the study of natural languages, 
+can be divided into examinations of syntax and semantics. The syntax of a 
+programming language is the form of its expressions, statements, and 
+ program 
+units. Its semantics is the meaning of those expressions, statements, and 
+ program units. For example, the syntax of a Java while statement is
+while (boolean_expr) statement
+M03_SEBE8029_12_SE_C03.indd   110 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 139 (Target: ch7_expressions) ---
+=========================================
+
+3.3 Formal Methods of Describing Syntax      115
+by the symbol |, meaning logical OR. For example, a Java if statement can be 
+described with the rules
+<if_stmt> S  if ( <logic_expr> ) <stmt>
+<if_stmt> S  if ( <logic_expr> ) <stmt> else <stmt>
+or with the rule
+<if_stmt> 
+S  if ( <logic_expr> ) <stmt>
+         | if ( <logic_expr> ) <stmt> else <stmt>
+In these rules, <stmt> represents either a single statement or a compound 
+statement.
+Although BNF is simple, it is sufficiently powerful to describe nearly all 
+of the syntax of programming languages. In particular, it can describe lists of 
+similar constructs, the order in which different constructs must appear, and 
+nested structures to any depth, and even imply operator precedence and oper-
+ator associativity.
+3.3.1.4 Describing Lists
+Variable-length lists in mathematics are often written using an ellipsis ( . . . );  
+1, 2, . . . is an example. BNF does not include the ellipsis, so an alternative 
+method is required for describing lists of syntactic elements in programming 
+languages (for example, a list of identifiers appearing on a data declaration 
+statement). For BNF , the alternative is recursion. A rule is recursive if its 
+LHS appears in its RHS. The following rules illustrate how recursion is used 
+to describe lists:
+<ident_list> 
+S  identifier
+           |  identifier, <ident_list>
+This defines <ident_list> as either a single token (identifier) or an identifier 
+followed by a comma and another instance of <ident_list>. Recursion is used 
+to describe lists in many of the example grammars in the remainder of this 
+chapter.
+3.3.1.5 Grammars and Derivations
+A grammar is a generative device for defining languages. The sentences of the 
+language are generated through a sequence of applications of the rules, begin-
+ning with a special nonterminal of the grammar called the start symbol. This 
+sequence of rule applications is called a derivation. In a grammar for a com-
+plete programming language, the start symbol represents a complete program 
+and is often named <program>. The simple grammar shown in Example 3.1 is 
+used to illustrate derivations.
+M03_SEBE8029_12_SE_C03.indd   115 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 143 (Target: ch7_expressions) ---
+=========================================
+
+3.3 Formal Methods of Describing Syntax      119
+Example 3.2. Rather than allowing the parse tree of an expression to grow only 
+on the right, this grammar allows growth on both the left and the right.
+Syntactic ambiguity of language structures is a problem because compilers 
+often base the semantics of those structures on their syntactic form. Specifically, 
+the compiler chooses the code to be generated for a statement by examining its 
+parse tree. If a language structure has more than one parse tree, then the mean-
+ing of the structure cannot be determined uniquely. This problem is discussed 
+in two specific examples in the following subsections.
+There are several other characteristics of a grammar that are sometimes 
+useful in determining whether a grammar is ambiguous.
+1 They include the 
+following: (1) if the grammar generates a sentence with more than one leftmost 
+derivation and (2) if the grammar generates a sentence with more than one 
+rightmost derivation.
+Some parsing algorithms can be based on ambiguous grammars. When 
+such a parser encounters an ambiguous construct, it uses nongrammatical infor-
+mation provided by the designer to construct the correct parse tree. In many 
+cases, an ambiguous grammar can be rewritten to be unambiguous but still 
+generate the desired language.
+3.3.1.8 Operator Precedence
+When an expression includes two different operators, for example, x + y * z, 
+one obvious semantic issue is the order of evaluation of the two operators (for 
+example, in this expression is it add and then multiply, or vice versa?). This 
+semantic question can be answered by assigning different precedence levels to 
+operators. For example, if 
+* has been assigned higher precedence than + (by 
+the language designer), multiplication will be done first, regardless of the order 
+of appearance of the two operators in the expression.
+ 1. Note that it is mathematically impossible to determine whether an arbitrary grammar is 
+ambiguous.
+Figure 3.2
+Two distinct parse trees 
+for the same sentence,  
+A = B + C * A
+<assign>
+<id>
+A
+C
+B
+= <expr>
+<expr>
+<id>
++ <expr>
+<id>
+A
+<id>
+*<expr> <expr>
+<assign>
+<id>
+A
+B
+= <expr>
+<expr> * <expr>
+<id>
+C
+<id> A
+<id>+<expr> <expr>
+M03_SEBE8029_12_SE_C03.indd   119 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 160 (Target: ch7_expressions) ---
+=========================================
+
+136      Chapter 3   Describing Syntax and Semantics
+C Statement Meaning
+for (expr1; expr2; expr3) {
+ . . .
+}
+   expr1;
+loop: if expr2 == 0 goto out
+   . . .
+   expr3;
+   goto loop
+out: . . .
+The human reader of such a description is the virtual computer and is assumed 
+to be able to “execute” the instructions in the definition correctly and recognize 
+the effects of the “execution.”
+The intermediate language and its associated virtual machine used for for-
+mal operational semantics descriptions are often highly abstract. The interme-
+diate language is meant to be convenient for the virtual machine, rather than 
+for human readers. For our purposes, however, a more human-oriented inter-
+mediate language could be used. As such an example, consider the following 
+list of statements, which would be adequate for describing the semantics of the 
+simple control statements of a typical programming language:
+ident 
+= var
+ident = ident + 1
+ident = ident – 1
+goto label
+if var relop var goto label
+In these statements, relop is one of the relational operators from the set {=, 
+<>, >, <, <=, <=} , ident is an identifier, and var is either an identifier or 
+a constant. These statements are all simple and therefore easy to understand 
+and implement.
+A slight generalization of these three assignment statements allows more 
+general arithmetic expressions and assignment statements to be described. The 
+new statements are
+ident 
+= var bin_op var
+ident = un_op var
+where bin_op is a binary arithmetic operator and un_op is a unary operator. Mul-
+tiple arithmetic data types and automatic type conversions, of course, complicate 
+this generalization. Adding just a few more relatively simple instructions would 
+allow the semantics of arrays, records, pointers, and subprograms to be described.
+In Chapter 8, the semantics of various control statements are described 
+using this intermediate language.
+3.5.1.2 Evaluation
+The first and most significant use of formal operational semantics was to 
+describe the semantics of PL/I (Wegner, 1972). That particular abstract 
+machine and the translation rules for PL/I were together named the Vienna 
+Definition Language (VDL), after the city where IBM designed it.
+M03_SEBE8029_12_SE_C03.indd   136 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 310 (Target: ch7_expressions) ---
+=========================================
+
+286      Chapter 6   Data Types
+T o determine whether a variable has a normal value, it can be tested against 
+null, as in
+int? x;
+. . .
+if(x == null)
+   Console.WriteLine("x has no value");
+else
+   Console.WriteLine("The value of x is: {0}", x);
+Swift’s optional types are similar to those of C#, except that the nonvalue is 
+named nil, instead of null. The Swift version of the above code is:
+var Int? x;
+. . .
+if
+  x  ==  nil
+    print("x has no value")
+else
+  
+  print("The value of x is: \(x)")
+6.13 Type Checking
+For our discussion of type checking, the concept of operands and operators 
+is generalized to include subprograms and assignment statements. Subpro-
+grams will be thought of as operators whose operands are their parameters. 
+The assignment symbol will be thought of as a binary operator, with its target 
+variable and its expression being the operands.
+Type checking is the activity of ensuring that the operands of an operator are 
+of compatible types. A compatible type is one that either is legal for the operator 
+or is allowed under language rules to be implicitly converted by compiler-
+ generated 
+code (or the interpreter) to a legal type. This automatic conversion is called a 
+coercion. For example, if an 
+int variable and a float variable are added in Java, 
+the value of the int variable is coerced to float and a floating-point add is done.
+A type error is the application of an operator to an operand of an inappro-
+priate type. For example, in the original version of C, if an int value was passed 
+to a function that expected a float value, a type error would occur (because 
+compilers for that language did not check the types of parameters).
+If all bindings of variables to types are static in a language, then type check-
+ing can nearly always be done statically. Dynamic type binding requires type 
+checking at run time, which is called dynamic type checking.
+Some languages, such as JavaScript and PHP , because of their dynamic 
+type binding, allow only dynamic type checking. It is better to detect errors 
+at compile time than at run time, because the earlier correction is usually less 
+costly. The penalty for static checking is reduced programmer flexibility. Fewer 
+shortcuts and tricks are possible. Such techniques, though, are now generally 
+recognized to be error prone and detrimental to readability.
+M06_SEBE8029_12_SE_C06.indd   286 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 311 (Target: ch7_expressions) ---
+=========================================
+
+6.14 Strong Typing     287
+T ype checking is complicated when a language allows a memory cell to 
+store values of different types at different times during execution. Such memory 
+cells can be created with C and C++ unions and the discriminated unions of 
+ML, Haskell, and F#. In these cases, type checking, if done, must be dynamic 
+and requires the run-time system to maintain the type of the current value of 
+such memory cells. So, even though all variables are statically bound to types 
+in languages such as C++, not all type errors can be detected by static type 
+checking.
+6.14 Strong Typing
+One of the ideas in language design that became prominent in the so-called 
+structured-programming revolution of the 1970s was strong typing. Strong 
+typing is widely acknowledged as being a highly valuable language charac-
+teristic. Unfortunately, it is often loosely defined, and it is sometimes used in 
+computing literature without being defined at all.
+A programming language is strongly typed if type errors are always 
+detected. This requires that the types of all operands can be determined, either 
+at compile time or at run time. The importance of strong typing lies in its abil-
+ity to detect all misuses of variables that result in type errors. A strongly typed 
+language also allows the detection, at run time, of uses of the incorrect type 
+values in variables that can store values of more than one type.
+C and C++ are not strongly typed languages because both include union 
+types, which are not type checked.
+ML is strongly typed, even though the types of some function parameters 
+may not be known at compile time. F# is strongly typed.
+Java and C#, although they are based on C++, are nearly strongly typed. 
+T ypes can be explicitly cast, which could result in a type error. However, there 
+are no implicit ways type errors can go undetected.
+The coercion rules of a language have an important effect on the value of 
+type checking. For example, expressions are strongly typed in Java. However, 
+an arithmetic operator with one floating-point operand and one integer oper-
+and is legal. The value of the integer operand is coerced to floating-point, and 
+a floating-point operation takes place. This is what is usually intended by the 
+programmer. However, the coercion also results in a loss of one of the benefits 
+of strong typing—error detection. For example, suppose a program had the 
+int variables a and b and the float variable d. Now, if a programmer meant 
+to type a + b, but mistakenly typed a + d, the error would not be detected 
+by the compiler. The value of a would simply be coerced to float. So, the 
+value of strong typing is weakened by coercion. Languages with a great deal 
+of coercion, like C, and C++, are less reliable than those with no coercion, 
+such as ML and F#. Java and C# have half as many assignment type coercions 
+as C++, so their error detection is better than that of C++, but still not nearly 
+as effective as that of ML and F#. The issue of coercion is examined in detail 
+in Chapter 7.
+M06_SEBE8029_12_SE_C06.indd   287 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 312 (Target: ch7_expressions) ---
+=========================================
+
+288      Chapter 6   Data Types
+6.15 Type Equivalence
+The idea of type compatibility was defined when the issue of type checking 
+was introduced. The compatibility rules dictate the types of operands that are 
+acceptable for each of the operators and thereby specify the possible type errors 
+of the language.
+9 The rules are called compatibility because in some cases the 
+type of an operand can be implicitly converted by the compiler or run-time 
+system to make it acceptable for the operator.
+The type compatibility rules are simple and rigid for the predefined scalar 
+types. However, in the cases of structured types, such as arrays and records 
+and some user-defined types, the rules are more complex. Coercion of these 
+types is rare, so the issue is not type compatibility, but type equivalence. That 
+is, two types are equivalent if an operand of one type in an expression can be 
+substituted for one of the other type, without coercion. T ype equivalence is a 
+strict form of type compatibility—compatibility without coercion. The central 
+issue here is how type equivalence is defined.
+The design of the type equivalence rules of a language is important, 
+because it influences the design of the data types and the operations provided 
+for values of those types. With the types discussed here, there are very few pre-
+defined operations. Perhaps the most important result of two variables being 
+of equivalent types is that either one can have its value assigned to the other.
+There are two approaches to defining type equivalence: name type equiva-
+lence and structure type equivalence. Name type equivalence means that two 
+variables have equivalent types if they are defined either in the same declaration 
+or in declarations that use the same type name. Structure type equivalence 
+means that two variables have equivalent types if their types have identical 
+structures. There are some variations of these two approaches, and many lan-
+guages use combinations of them.
+Name type equivalence is easy to implement but is more restrictive. Under 
+a strict interpretation, a variable whose type is a subrange of the integers would 
+not be equivalent to an integer type variable. For example, supposing Ada used 
+strict name type equivalence, consider the following Ada code:
+type Indextype is 1..100;
+count : Integer;
+index : Indextype;
+The types of the variables count and index would not be equivalent; count 
+could not be assigned to index or vice versa.
+Another problem with name type equivalence arises when a structured or 
+user-defined type is passed among subprograms through parameters. Such a 
+type must be defined only once, globally. A subprogram cannot state the type 
+ 9. T ype compatibility is also an issue in the relationship between the actual parameters in a sub-
+program call and the formal parameters of the subprogram definition. This issue is  discussed 
+in Chapter 9.
+M06_SEBE8029_12_SE_C06.indd   288 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 315 (Target: ch7_expressions) ---
+=========================================
+
+6.15 Type Equivalence     291
+creates two anonymous types, one for C and one for D, which are not equiv-
+alent. This declaration is actually treated as if it were the following two 
+declarations:
+C : array (1..10) of Integer;
+D : array (1..10) of Integer;
+Note that Ada’s form of name type equivalence is more restrictive than the 
+name type equivalence that is defined at the beginning of this section. If we 
+had written instead
+type List_10 is array (1..10) of Integer;
+C, D : List_10;
+then the types of C and D would be equivalent.
+Name type equivalence works well for Ada, in part because all types, except 
+anonymous arrays, are required to have type names (and anonymous types are 
+given internal names by the compiler).
+T ype equivalence rules for Ada are more rigid than those for languages 
+that have many coercions among types. For example, the two operands of an 
+addition operator in Java can have virtually any combination of numeric types 
+in the language. One of the operands will simply be coerced to the type of 
+the other. But in Ada, there are no coercions of the operands of an arithmetic 
+operator.
+C uses both name and structure type equivalence. Every 
+struct, enum, 
+and union declaration creates a new type that is not equivalent to any other 
+type. So, name type equivalence is used for structure, enumeration, and union 
+types. Other nonscalar types use structure type equivalence. Array types are 
+equivalent if they have the same type components. Also, if an array type has a 
+constant size, it is equivalent either to other arrays with the same constant size 
+or to with those without a constant size. Note that 
+typedef in C and C++ does 
+not introduce a new type; it simply defines a new name for an existing type. 
+So, any type defined with 
+typedef is type equivalent to its parent type. One 
+exception to C using name type equivalence for structures, enumerations, and 
+unions is if two structures, enumerations, or unions are defined in different 
+files, in which case structural type equivalence is used. This is a loophole in the 
+name type equivalence rule to allow equivalence of structures, enumerations, 
+and unions that are defined in different files.
+C++ is like C except there is no exception for structures and unions defined 
+in different files.
+In languages that do not allow users to define and name types, such as 
+Fortran and COBOL, name equivalence obviously cannot be used.
+Object-oriented languages such as Java and C++ bring another kind of 
+type compatibility issue with them. The issue is object compatibility and its 
+relationship to the inheritance hierarchy, which is discussed in Chapter 12.
+T ype compatibility in expressions is discussed in Chapter 7; type compat-
+ibility for subprogram parameters is discussed in Chapter 9.
+M06_SEBE8029_12_SE_C06.indd   291 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 320 (Target: ch7_expressions) ---
+=========================================
+
+296      Chapter 6   Data Types
+11. How does JavaScript support sparse arrays?
+12. What languages support negative subscripts?
+13. What languages support array slices with stepsizes?
+14. What is an aggregate constant?
+15. Define row major order and column major order.
+16. What is an access function for an array?
+17. What are the required entries in a Java array descriptor, and when must 
+they be stored (at compile time or run time)?
+18. What is the structure of an associative array?
+19. What is the purpose of level numbers in COBOL records?
+20. Define fully qualified and elliptical references to fields in records.
+21. What is the primary difference between a record and a tuple?
+22. Are the tuples of Python mutable?
+23. What is the purpose of an F# tuple pattern?
+24. In what primarily imperative language do lists serve as arrays?
+25. What is the action of the Scheme function CAR?
+26. What is the action of the F# function tl?
+27. In what way does Scheme’s CDR function modify its parameter?
+28. On what are Python’s list comprehensions based?
+29. Define union, free union, and discriminated union.
+30. Are the unions of F# discriminated?
+31. What are the design issues for pointer types?
+32. What are the two common problems with pointers?
+33. Why are the pointers of most languages restricted to pointing at a single 
+type variable?
+34.
+ What is a C++ reference type, and what is its common use?
+35. Why are reference variables in C++ better than pointers for formal 
+parameters?
+36.
+ What advantages do Java and C# reference type variables have over the 
+pointers in other languages?
+37.
+ Describe the lazy and eager approaches to reclaiming garbage.
+38. Why wouldn’t arithmetic on Java and C# references make sense?
+39. What is a compatible type?
+40. Define type error.
+41. Define strongly typed.
+42. Why is Java not strongly typed?
+43. What is a nonconverting cast?
+44. What languages have no type coercions?
+M06_SEBE8029_12_SE_C06.indd   296 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 322 (Target: ch7_expressions) ---
+=========================================
+
+298      Chapter 6   Data Types
+14. What are the arguments for and against Java’s implicit heap storage 
+recovery, when compared with the explicit heap storage recovery 
+required in C++? Consider real-time systems.
+15.
+ What are the arguments for the inclusion of enumeration types in C#, 
+although they were not in the first few versions of Java?
+16.
+ What would you expect to be the level of use of pointers in C#? How 
+often will they be used when it is not absolutely necessary?
+17.
+ Make two lists of applications of matrices, one for those that require 
+jagged matrices and one for those that require rectangular matrices. 
+Now, argue whether just jagged, just rectangular, or both should be 
+included in a programming language.
+18.
+ Compare the string manipulation capabilities of the class libraries of 
+C++, Java, and C#.
+19.
+ Look up the definition of strongly typed as given in Gehani (1983) and 
+compare it with the definition given in this chapter. How do they differ?
+20.
+ In what way is static type checking better than dynamic type checking?
+21. Explain how coercion rules can weaken the beneficial effect of strong 
+typing.
+PROGRAMMING EXERCISES
+1. Design a set of simple test programs to determine the type compatibility 
+rules of a C compiler to which you have access. Write a report of your 
+findings.
+2.
+ Determine whether some C compiler to which you have access 
+implements the 
+free function.
+3. Write a program that does matrix multiplication in some language that 
+does subscript range checking and for which you can obtain an assembly 
+language or machine language version from the compiler. Determine 
+the number of instructions required for the subscript range checking 
+and compare it with the total number of instructions for the matrix 
+multiplication process.
+4.
+ If you have access to a compiler in which the user can specify whether 
+subscript range checking is desired, write a program that does a large 
+number of matrix accesses and time their execution. Run the program 
+with subscript range checking and without it, and compare the times.
+5.
+ Write a simple program in C++ to investigate the safety of its 
+enumeration types. Include at least 10 different operations on 
+enumeration types to determine what incorrect or just silly things are 
+M06_SEBE8029_12_SE_C06.indd   298 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 325 (Target: ch7_expressions) ---
+=========================================
+
+301
+ 7.1 Introduction
+ 7.2 Arithmetic Expressions
+ 7.3 Overloaded Operators
+ 7.4 Type Conversions
+ 7.5 Relational and Boolean Expressions
+ 7.6 Short-Circuit Evaluation
+ 7.7 Assignment Statements
+ 7.8 Mixed-Mode Assignment
+7 
+Expressions and 
+ Assignment Statements
+M07_SEBE8029_12_SE_C07.indd   301 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 326 (Target: ch7_expressions) ---
+=========================================
+
+302      Chapter 7   Expressions and  Assignment Statements
+A
+s the title indicates, the topic of this chapter is expressions and assignment 
+statements. The semantics rules that determine the order of evaluation of 
+operators in expressions are discussed first. This is followed by an explanation 
+of a potential problem with operand evaluation order when functions can have side 
+effects. Overloaded operators, both predefined and user defined, are then discussed, 
+along with their effects on the expressions in programs. Next, mixed-mode expressions 
+are described and evaluated. This leads to the definition and evaluation of widening 
+and narrowing type conversions, both implicit and explicit. Relational and Boolean 
+expressions are then discussed, including the process of short-circuit evaluation. 
+Finally, the assignment statement, from its simplest form to all of its variations, is 
+ covered, including assignments as expressions and mixed-mode assignments.
+Character string pattern-matching expressions were covered as a part of the 
+ material on character strings in Chapter 6, so they are not mentioned in this chapter.
+7.1 Introduction
+Expressions are the fundamental means of specifying computations in a pro-
+gramming language. It is crucial for a programmer to understand both the 
+syntax and semantics of expressions of the language he or she uses. A formal 
+mechanism (BNF) for describing the syntax of expressions was introduced in 
+Chapter 3. In this chapter, the semantics of expressions are discussed.
+T o understand expression evaluation, it is necessary to be familiar with the 
+orders of operator and operand evaluation. The operator evaluation order of 
+expressions is dictated by the associativity and precedence rules of the language. 
+Although the value of an expression sometimes depends on it, the order of oper-
+and evaluation in expressions is often unstated by language designers. This allows 
+implementors to choose the order, which leads to the possibility of programs 
+producing different results in different implementations. Other issues in expres-
+sion semantics are type mismatches, coercions, and short-circuit evaluation.
+The essence of the imperative programming languages is the dominant 
+role of assignment statements. The purpose of these statements is to cause the 
+side effect of changing the values of variables, or the state, of the program. So 
+an integral part of all imperative languages is the concept of variables whose 
+values change during program execution.
+Functional languages use variables of a different sort, such as the param-
+eters of functions. These languages also have declaration statements that bind 
+values to names. These declarations are similar to assignment statements, but 
+do not have side effects.
+7.2 Arithmetic Expressions
+Automatic evaluation of arithmetic expressions similar to those found in math-
+ematics, science, and engineering was one of the primary goals of the first 
+high-level programming languages. Most of the characteristics of arithmetic 
+M07_SEBE8029_12_SE_C07.indd   302 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 327 (Target: ch7_expressions) ---
+=========================================
+
+7.2 Arithmetic Expressions     303
+expressions in programming languages were inherited from conventions that 
+had evolved in mathematics. In programming languages, arithmetic expressions 
+consist of operators, operands, parentheses, and function calls. An operator 
+can be unary, meaning it has a single operand, binary, meaning it has two 
+operands, or ternary, meaning it has three operands.
+In most programming languages, binary operators are infix, which means 
+they appear between their operands. One exception is Perl, which has some 
+operators that are prefix, which means they precede their operands. In Scheme 
+and Lisp, all operators are prefix. Most unary operators are prefix, but the 
+++ 
+and -- operators of C-based languages can be either prefix or postfix.
+The purpose of an arithmetic expression is to specify an arithmetic com-
+putation. An implementation of such a computation must cause two actions: 
+fetching the operands, usually from memory, and executing arithmetic opera-
+tions on those operands. In the following sections, we investigate the common 
+design details of arithmetic expressions.
+Following are the primary design issues for arithmetic expressions, all of 
+which are discussed in this section:
+•
+ What are the operator precedence rules?
+• What are the operator associativity rules?
+• What is the order of operand evaluation?
+• Are there restrictions on operand evaluation side effects?
+• Does the language allow user-defined operator overloading?
+• What type mixing is allowed in expressions?
+7.2.1 Operator Evaluation Order
+The operator precedence and associativity rules of a language dictate the order 
+of evaluation of its operators.
+7.2.1.1 Precedence
+The value of an expression depends at least in part on the order of evaluation 
+of the operators in the expression. Consider the following expression:
+a + b * c
+Suppose the variables a, b, and c have the values 3, 4, and 5, respectively. If 
+evaluated left to right (the addition first and then the multiplication), the result 
+is 
+35. If evaluated right to left, the result is 23.
+Instead of simply evaluating the operators in an expression from left to 
+right or right to left, mathematicians long ago developed the concept of plac-
+ing operators in a hierarchy of evaluation priorities and basing the evaluation 
+order of expressions partly on this hierarchy. For example, in mathematics, 
+multiplication is considered to be of higher priority than addition, perhaps due 
+to its higher level of complexity. If that convention were applied in the previous 
+M07_SEBE8029_12_SE_C07.indd   303 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 328 (Target: ch7_expressions) ---
+=========================================
+
+304      Chapter 7   Expressions and  Assignment Statements
+example expression, as would be the case in most programming languages, the 
+multiplication would be done first.
+The operator precedence rules for expression evaluation partially define 
+the order in which the operators of different precedence levels are evaluated. 
+The operator precedence rules for expressions are based on the hierarchy of 
+operator priorities, as seen by the language designer. The operator precedence 
+rules of the common imperative languages are nearly all the same, because 
+they are based on those of mathematics. In these languages, exponentiation 
+has the highest precedence (when it is provided by the language), followed by 
+multiplication and division on the same level, followed by binary addition and 
+subtraction on the same level.
+Many languages also include unary versions of addition and subtraction. 
+Unary addition is called the identity operator because it usually has no asso-
+ciated operation and thus has no effect on its operand. Ellis and Stroustrup 
+(1990, p. 56), speaking about C++, call it a historical accident and correctly 
+label it useless. Unary minus, of course, changes the sign of its operand. In Java 
+and C#, unary minus also causes the implicit conversion of 
+short and byte 
+operands to int type.
+In all of the common imperative languages, the unary minus operator can 
+appear in an expression either at the beginning or anywhere inside the expres-
+sion, as long as it is parenthesized to prevent it from being next to another 
+operator. For example,
+a + (- b) * c
+is legal, but
+a + - b * c
+usually is not.
+Next, consider the following expressions:
+- a / b
+- a * b
+- a ** b
+In the first two cases, the relative precedence of the unary minus operator and the 
+binary operator is irrelevant—the order of evaluation of the two operators has 
+no effect on the value of the expression. In the last case, however, it does matter.
+Of the common programming languages, only Fortran, Ruby, Visual 
+Basic, and Ada have the exponentiation operator. In all four, exponentiation 
+has higher precedence than unary minus, so
+- A ** B
+is equivalent to
+-(A ** B)
+M07_SEBE8029_12_SE_C07.indd   304 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 337 (Target: ch7_expressions) ---
+=========================================
+
+7.4 Type Conversions     313
+C++ has a few operators that cannot be overloaded. Among these are the 
+class or structure member operator (.) and the scope resolution operator (::). 
+Interestingly, operator overloading was one of the C++ features that was not 
+copied into Java. However, it did reappear in C#.
+The implementation of user-defined operator overloading is discussed in 
+Chapter 9.
+7.4 Type Conversions
+T ype conversions are either narrowing or widening. A narrowing conversion 
+converts a value to a type that cannot store even approximations of all of the 
+values of the original type. For example, converting a 
+double to a float in Java 
+is a narrowing conversion, because the range of double is much larger than that 
+of float. A widening conversion converts a value to a type that can include 
+at least approximations of all of the values of the original type. For example, 
+converting an 
+int to a float in Java is a widening conversion. Widening con-
+versions are nearly always safe, meaning that the approximate magnitude of the 
+converted value is maintained. Narrowing conversions are not always safe—
+sometimes the magnitude of the converted value is changed in the process. For 
+example, if the floating-point value 1.3E25 is converted to an integer in a Java 
+program, the result will not be in any way related to the original value.
+Although widening conversions are usually safe, they can result in reduced 
+accuracy. In many language implementations, although integer-to-floating-
+point conversions are widening conversions, some precision may be lost. For 
+example, in many cases, integers are stored in 32 bits, which allows at least 9 
+decimal digits of precision. But floating-point values are also stored in 32 bits, 
+with only about seven decimal digits of precision (because of the space used for 
+the exponent). So, integer-to-floating-point widening can result in the loss of 
+two digits of precision.
+Coercions of nonprimitive types are, of course, more complex.  In  
+Chapter 5, the complications of assignment compatibility of array and record 
+types were discussed. There is also the question of what parameter types and 
+return types of a method allow it to override a method in a superclass—only 
+when the types are the same, or also some other situations. That issue, as well 
+as the concept of subclasses as subtypes, are discussed in Chapter 12.
+T ype conversions can be either explicit or implicit. The following two 
+subsections discuss these kinds of type conversions.
+7.4.1 Coercion in Expressions
+One of the design decisions concerning arithmetic expressions is whether 
+an operator can have operands of different types. Languages that allow such 
+expressions, which are called mixed-mode expressions, must define conven-
+tions for implicit operand type conversions because computers do not have 
+binary operations that take operands of different types. Recall that in Chapter 5,  
+M07_SEBE8029_12_SE_C07.indd   313 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 338 (Target: ch7_expressions) ---
+=========================================
+
+314      Chapter 7   Expressions and  Assignment Statements
+coercion was defined as an implicit type conversion that is initiated by the 
+compiler or runtime system. T ype conversions explicitly requested by the pro-
+grammer are referred to as explicit conversions, or casts, not coercions.
+Although some operator symbols may be overloaded, we assume that a 
+computer system, either in hardware or in some level of software simulation, 
+has an operation for each operand type and operator defined in the lan-
+guage.
+6 For overloaded operators in a language that uses static type binding, 
+the compiler chooses the correct type of operation on the basis of the types 
+of the operands. When the two operands of an operator are not of the same 
+type and that is legal in the language, the compiler must choose one of them 
+to be coerced and generate the code for that coercion. In the following 
+discussion, the coercion design choices of several common languages are 
+examined.
+Language designers are not in agreement on the issue of coercions in arith-
+metic expressions. Those against a broad range of coercions are concerned 
+with the reliability problems that can result from such coercions, because they 
+reduce the benefits of type checking. Those who would rather include a wide 
+range of coercions are more concerned with the loss in flexibility that results 
+from restrictions. The issue is whether programmers should need to be con-
+cerned with this category of errors or whether the compiler should detect them.
+As a simple illustration of the problem, consider the following Java code:
+int a;
+float b, c, d;
+. . .
+d = b * a;
+Assume that the second operand of the multiplication operator was supposed 
+to be c, but because of a keying error it was typed as a. Because mixed-mode 
+expressions are legal in Java, the compiler would not detect this as an error. It 
+would simply insert code to coerce the value of the 
+int operand, a, to float. 
+If mixed-mode expressions were not legal in Java, this keying error would have 
+been detected by the compiler as a type error.
+Because error detection is reduced when mixed-mode expressions are 
+allowed, F#, Ada, and ML do not allow them. For example, they do not allow 
+mixing of integer and floating-point operands in expressions.
+In most of the other common languages, there are no restrictions on 
+mixed-mode arithmetic expressions.
+The C-based languages have integer types that are smaller than the 
+int 
+type. In Java, these are byte and short. Operands of all of these types are 
+coerced to int whenever virtually any operator is applied to them. So, while 
+data can be stored in variables of these types, it cannot be manipulated before 
+conversion to a larger type. For example, consider the following Java code:
+ 6. This assumption is not true for many languages. An example is given later in this section.
+M07_SEBE8029_12_SE_C07.indd   314 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 339 (Target: ch7_expressions) ---
+=========================================
+
+7.4 Type Conversions     315
+byte  a, b, c;
+. . .
+a = b + c;
+The values of b and c are coerced to int and an int addition 
+is performed. Then, the sum is converted to byte and put in a. 
+Given the large size of the memories of contemporary comput-
+ers, there is little incentive to use byte and short, unless a large 
+number of them must be stored.
+7.4.2 Explicit Type Conversion
+Most languages provide some capability for doing explicit conver-
+sions, both widening and narrowing. In some cases, warning mes-
+sages are produced when an explicit narrowing conversion results 
+in a significant change to the value of the object being converted.
+In the C-based languages, explicit type conversions are 
+called casts. T o specify a cast, the desired type is placed in paren-
+theses just before the expression to be converted, as in
+(int)angle
+One of the reasons for the parentheses around the type name 
+in these conversions is that the first of these languages, C, has 
+several two-word type names, such as 
+long int.
+In ML and F#, the casts have the syntax of function calls. 
+For example, in F# we could have the following:
+float(sum)
+7.4.3 Errors in Expressions
+A number of errors can occur during expression evaluation. If the language 
+requires type checking, either static or dynamic, then operand type errors 
+cannot occur. The errors that can occur because of coercions of operands in 
+expressions have already been discussed. The other kinds of errors are due to 
+the limitations of computer arithmetic and the inherent limitations of arith-
+metic. The most common error occurs when the result of an operation cannot 
+be represented in the memory cell where it must be stored. This is called 
+overflow or underflow, depending on whether the result was too large or 
+too small. One limitation of arithmetic is that division by zero is disallowed. 
+Of course, the fact that it is not mathematically allowed does not prevent a 
+program from attempting to do it.
+Floating-point overflow, underflow, and division by zero are examples 
+of run-time errors, which are sometimes called exceptions.  Language facil-
+ities that allow programs to detect and deal with exceptions are discussed in 
+Chapter 14.
+history note
+As a more extreme example of 
+the dangers and costs of too 
+much coercion, consider PL/I’s 
+efforts to achieve flexibility in 
+expressions. In PL/I, a char-
+acter string variable can be 
+the operand of an arithmetic 
+operator with an integer as the 
+other operand. At run time, the 
+string is scanned for a numeric 
+value. If the value happens 
+to contain a decimal point, 
+the value is assumed to be of 
+ floating-point type, the other 
+operand is coerced to floating 
+point, and the resulting operation 
+is 
+ floating-point. This coercion 
+policy is very expensive, because 
+both the type check and the con-
+version must be done at run time. 
+It also eliminates the possibility 
+of detecting programmer errors 
+in expressions, because a binary 
+operator can combine an oper-
+and of any type with an operand 
+of virtually any other type.
+M07_SEBE8029_12_SE_C07.indd   315 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 340 (Target: ch7_expressions) ---
+=========================================
+
+316      Chapter 7   Expressions and  Assignment Statements
+7.5 Relational and Boolean Expressions
+In addition to arithmetic expressions, programming languages support rela-
+tional and Boolean expressions.
+7.5.1 Relational Expressions
+A relational operator is an operator that compares the values of its two operands. 
+A relational expression has two operands and one relational operator. The value 
+of a relational expression is Boolean, except when Boolean is not a type included 
+in the language. The relational operators are often overloaded for a variety of 
+types. The operation that determines the truth or falsehood of a 
+relational expression depends on the operand types. It can be simple, 
+as for integer operands, or complex, as for character string operands. 
+T ypically, the types of the operands that can be used for relational 
+operators are numeric types, strings, and enumeration types.
+The syntax of the relational operators for equality and 
+inequality differs among some programming languages. For 
+example, for inequality, the C-based languages use 
+!=, Fortran 
+95+ uses .NE. or <>, and ML and F# use <>.
+JavaScript and PHP have two additional relational operators, 
+=== and !==. These are similar to their relatives, == and !=, but prevent their 
+operands from being coerced. For example, the expression
+"7" == 7
+is true in JavaScript, because when a string and a number are the operands of a 
+relational operator, the string is coerced to a number. However,
+"7" === 7
+is false, because no coercion is done on the operands of this operator.
+Ruby uses == for the equality relational operator that uses coercions, and 
+eql? for equality with no coercions. Ruby uses === only in the when clause of 
+its case statement, as discussed in Chapter 8.
+The relational operators always have lower precedence than the arithmetic 
+operators, so that in expressions such as
+a + 1 > 2 * b
+the arithmetic expressions are evaluated first.
+7.5.2 Boolean Expressions
+Boolean expressions consist of Boolean variables, Boolean constants, relational 
+expressions, and Boolean operators. The operators usually include those for 
+the AND, OR, and NOT operations, and sometimes for exclusive OR and 
+history note
+The Fortran I designers used 
+English abbreviations for the 
+relational operators because the 
+symbols 
+> and < were not on 
+the card punches at the time of 
+ Fortran I’s design (mid-1950s).
+M07_SEBE8029_12_SE_C07.indd   316 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 342 (Target: ch7_expressions) ---
+=========================================
+
+318      Chapter 7   Expressions and  Assignment Statements
+When the nonarithmetic operators of the C-based languages are included, 
+there are more than 40 operators and at least 14 different levels of precedence. 
+This is clear evidence of the richness of the collections of operators and the 
+complexity of expressions possible in these languages.
+Readability dictates that a language should include a Boolean type, as 
+was stated in Chapter 6,  rather than simply using numeric types in Boolean 
+expressions. Some error detection is lost in the use of numeric types for Bool-
+ean operands, because any numeric expression, whether intended or not, is a 
+legal operand to a Boolean operator. In the other imperative languages, any 
+non-Boolean expression used as an operand of a Boolean operator is detected 
+as an error.
+7.6 Short-Circuit Evaluation
+A short-circuit evaluation of an expression is one in which the result is deter-
+mined without evaluating all of the operands and/or operators. For example, 
+the value of the arithmetic expression
+(13 * a) * (b / 13 - 1)
+is independent of the value of (b / 13 - 1) if a is 0, because 0 * x = 0 for 
+any x. So, when a is 0, there is no need to evaluate (b / 13 - 1) or perform 
+the second multiplication. However, in arithmetic expressions, this shortcut is 
+not easily detected during execution, so it is never taken.
+The value of the Boolean expression
+(a >= 0) && (b < 10)
+is independent of the second relational expression if a < 0, because the expres-
+sion (FALSE && (b < 10)) is FALSE for all values of b. So, when a is less than 
+zero, there is no need to evaluate b, the constant 10, the second relational 
+expression, or the && operation. Unlike the case of arithmetic expressions, this 
+shortcut easily can be discovered during execution.
+T o illustrate a potential problem with non-short-circuit evaluation of 
+Boolean expressions, suppose Java did not use short-circuit evaluation. A table 
+lookup loop could be written using the 
+while statement. One simple version of 
+Java code for such a lookup, assuming that list, which has listlen elements, 
+is the array to be searched and key is the searched-for value, is
+index = 0;
+while ((index < listlen) && (list[index] != key))
+  index = index + 1;
+If evaluation is not short-circuit, both relational expressions in the Boolean 
+expression of the while statement are evaluated, regardless of the value of the 
+M07_SEBE8029_12_SE_C07.indd   318 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 343 (Target: ch7_expressions) ---
+=========================================
+
+7.7 Assignment Statements     319
+first. Thus, if key is not in list, the program will terminate with a subscript 
+out-of-range exception. The same iteration that has index == listlen will 
+reference list[listlen] , which causes the indexing error because list is 
+declared to have listlen-1 as an upper-bound subscript value.
+If a language provides short-circuit evaluation of Boolean expressions and 
+it is used, this is not a problem. In the preceding example, a short-circuit eval-
+uation scheme would evaluate the first operand of the AND operator, but it 
+would skip the second operand if the first operand is false.
+A language that provides short-circuit evaluations of Boolean expressions 
+and also has side effects in expressions allows subtle errors to occur. Suppose 
+that short-circuit evaluation is used on an expression and part of the expression 
+that contains a side effect is not evaluated; then the side effect will occur only in 
+complete evaluations of the whole expression. If program correctness depends 
+on the side effect, short-circuit evaluation can result in a serious error. For 
+example, consider the Java expression
+(a > b) || ((b++) / 3)
+In this expression, b is changed (in the second arithmetic expression) only 
+when a <= b . If the programmer assumed b would be changed every time 
+this expression is evaluated during execution (and the program’s correctness 
+depends on it), the program will fail.
+In the C-based languages, the usual AND and OR operators, 
+&& and ||, 
+respectively, are short-circuit. However, these languages also have bitwise AND 
+and OR operators, 
+& and |, respectively, that can be used on Boolean-valued 
+operands and are not short-circuit. Of course, the bitwise operators are only 
+equivalent to the usual Boolean operators if all operands are restricted to being 
+either 
+0 (for false) or 1 (for true).
+All of the logical operators of Ruby, Perl, ML, F#, and Python are short-  
+circuit evaluated.
+7.7 Assignment Statements
+As we have previously stated, the assignment statement is one of the central 
+constructs in imperative languages. It provides the mechanism by which the 
+user can dynamically change the bindings of values to variables. In the follow-
+ing section, the simplest form of assignment is discussed. Subsequent sections 
+describe a variety of alternatives.
+7.7.1 Simple Assignments
+Nearly all programming languages currently being used use the equal sign for 
+the assignment operator. All of these must use something different from an 
+equal sign for the equality relational operator to avoid confusion with their 
+assignment operator.
+M07_SEBE8029_12_SE_C07.indd   319 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 348 (Target: ch7_expressions) ---
+=========================================
+
+324      Chapter 7   Expressions and  Assignment Statements
+whereas val does not. In fact, val declarations are often nested in let con-
+structs in ML. let and val are further discussed in Chapter 15.
+7.8 Mixed-Mode Assignment
+Mixed-mode expressions were discussed in Section 7.4.1. Frequently, assign-
+ment statements also are mixed mode. The design question is: Does the type 
+of the expression have to be the same as the type of the variable being assigned, 
+or can coercion be used in some cases of type mismatch?
+C, C++, and Perl use coercion rules for mixed-mode assignment that are 
+similar to those they use for mixed-mode expressions; that is, many of the 
+possible type mixes are legal, with coercion freely applied.
+7
+In a clear departure from C++, Java and C# allow mixed-mode assignment 
+only if the required coercion is widening.8 So, an int value can be assigned to a 
+float variable, but not vice versa. Disallowing half of the possible mixed-mode 
+assignments is a simple but effective way to increase the reliability of Java and 
+C#, relative to C and C++.
+Of course, in functional languages, where assignments are just used to 
+name values, there is no such thing as a mixed-mode assignment.
+SUMMARY
+Expressions consist of constants, variables, parentheses, function calls, and 
+operators. Assignment statements include target variables, assignment oper -
+ators, and expressions.
+The semantics of an expression is determined in large part by the order of 
+evaluation of operators. The associativity and precedence rules for operators 
+in the expressions of a language determine the order of operator evaluation 
+in those expressions. Operand evaluation order is important if functional side 
+effects are possible. T ype conversions can be widening or narrowing. Some 
+narrowing conversions produce erroneous values. Implicit type conversions, 
+or coercions, in expressions are common, although they eliminate the error-
+ 
+detection benefit of type checking, thus lowering reliability.
+Assignment statements have appeared in a wide variety of forms, including 
+conditional targets, assigning operators, and list assignments.
+ 7. Note that in Python and Ruby, types are associated with objects, not variables, so there is no 
+such thing as mixed-mode assignment in those languages.
+ 8. Not quite true: If an integer literal, which the compiler by default assigns the type int, is 
+assigned to a char, byte, or short variable and the literal is in the range of the type of the 
+variable, the int value is coerced to the type of the variable in a narrowing conversion. This 
+narrowing conversion cannot result in an error.
+M07_SEBE8029_12_SE_C07.indd   324 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 349 (Target: ch7_expressions) ---
+=========================================
+
+Problem Set     325
+REVIEW QUESTIONS
+1. Define operator precedence and operator associativity.
+2. What is a ternary operator?
+3. What is a prefix operator?
+4. What operator usually has right associativity?
+5. What is a nonassociative operator?
+6. What associativity rules are used by APL?
+7. What is the difference between the way operators are implemented in 
+C++ and Ruby?
+8. Define functional side effect.
+9. What is a coercion?
+10. What is a conditional expression?
+11. What is an overloaded operator?
+12. Define narrowing and widening conversions.
+13. In JavaScript, what is the difference between == and ===?
+14. What is a mixed-mode expression?
+15. What is referential transparency?
+16. What are the advantages of referential transparency?
+17. How does operand evaluation order interact with functional side effects?
+18. What is short-circuit evaluation?
+19. Name a language that always does short-circuit evaluation of Boolean 
+expressions. Name one that never does it.
+20.
+ How does C support relational and Boolean expressions?
+21. What is the purpose of a compound assignment operator?
+22. What is the associativity of C’s unary arithmetic operators?
+23. What is one possible disadvantage of treating the assignment operator as 
+if it were an arithmetic operator?
+24.
+ What two languages include multiple assignments?
+25. What mixed-mode assignments are allowed in Java?
+26. What mixed-mode assignments are allowed in ML?
+27. What is a cast?
+PROBLEM SET
+1. When might you want the compiler to ignore type differences in an 
+expression?
+2.
+ State your own arguments for and against allowing mixed-mode arithmetic 
+expressions.
+M07_SEBE8029_12_SE_C07.indd   325 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 350 (Target: ch7_expressions) ---
+=========================================
+
+326      Chapter 7   Expressions and  Assignment Statements
+3. Do you think the elimination of overloaded operators in your favorite 
+language would be beneficial? Why or why not?
+4. Would it be a good idea to eliminate all operator precedence rules and 
+require parentheses to show the desired precedence in expressions? Why 
+or why not?
+5.
+ Should C’s assigning operations (for example, + = ) be included in other 
+languages (that do not already have them)? Why or why not?
+6. Should C’ s single-operand assignment forms (for example, ++count) be 
+included in other languages (that do not already have them)? Why or 
+why not?
+7.
+ Describe a situation in which the add operator in a programming 
+language would not be commutative.
+8.
+ Describe a situation in which the add operator in a programming 
+language would not be associative.
+9.
+ Assume the following rules of associativity and precedence for expressions:
+Precedence Highest *, /, not
++, -, &, mod
+- (unary)
+=, / =, 6, 6 =, 7 =, 7
+and
+Lowest or, xor
+Associativity Left to right
+Show the order of evaluation of the following expressions by 
+parenthesizing all subexpressions and placing a superscript on the right 
+parenthesis to indicate order. For example, for the expression
+a + b * c + d
+the order of evaluation would be represented as
+((a + (b * c)1)2  + d)3 
+a. a * b - 1 + c
+b. a * (b - 1) / c mod d
+c. (a - b) / c & (d * e / a - 3)
+d. -a or c = d and e
+e. a > b xor c or d <= 17
+f. -a + b
+10. Show the order of evaluation of the expressions of Problem 9, 
+assuming that there are no precedence rules and all operators associate 
+right to left.
+M07_SEBE8029_12_SE_C07.indd   326 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 351 (Target: ch7_expressions) ---
+=========================================
+
+Problem Set     327
+11. Write a BNF description of the precedence and associativity rules 
+defined for the expressions in Problem 9. Assume the only operands are 
+the names 
+a,b,c,d, and e.
+12. Using the grammar of Problem 11, draw parse trees for the expressions 
+of Problem 9.
+13.
+ Let the function fun be defined as
+int fun(int* k) {
+ *k += 4;
+ return 3 * (*k) - 1;
+ }
+Suppose fun is used in a program as follows:
+void  main() {
+  int i = 10, j = 10, sum1, sum2;
+  sum1 = (i / 2) + fun(&i);
+  sum2 = fun(&j) + (j / 2);
+}
+What are the values of sum1 and sum2
+a. operands in the expressions are evaluated left to right?
+b. operands in the expressions are evaluated right to left?
+14. What is your primary argument against (or for) the operator precedence 
+rules of APL?
+15. Explain why it is difficult to eliminate functional side effects in C.
+16. For some language of your choice, make up a list of operator symbols 
+that could be used to eliminate all operator overloading.
+17.
+ Determine whether the narrowing explicit type conversions in two 
+languages you know provide error messages when a converted value loses 
+its usefulness.
+18.
+ Should an optimizing compiler for C or C++ be allowed to 
+change the order of subexpressions in a Boolean expression? Why or 
+why not?
+19.
+ Consider the following C program:
+int fun(int *i) {
+  *i += 5;
+  return  4;
+}
+void main() {
+  int x = 3;
+  x = x + fun(&x);
+  }
+M07_SEBE8029_12_SE_C07.indd   327 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 352 (Target: ch7_expressions) ---
+=========================================
+
+328      Chapter 7   Expressions and  Assignment Statements
+What is the value of x after the assignment statement in main, assuming
+a. operands are evaluated left to right.
+b. operands are evaluated right to left.
+20. Why does Java specify that operands in expressions are all evaluated in 
+left-to-right order?
+21. Explain how the coercion rules of a language affect its error detection.
+PROGRAMMING EXERCISES
+1. Run the code given in Problem 13 (in the Problem Set) on some system 
+that supports C to determine the values of 
+sum1 and sum2. Explain the 
+results.
+2. Rewrite the program of Programming Exercise 1 in C++, Java, and C#, 
+run them, and compare the results.
+3.
+ Write a test program in your favorite language that determines and 
+outputs the precedence and associativity of its arithmetic and Boolean 
+operators.
+4.
+ Write a Java program that exposes Java’s rule for operand evaluation 
+order when one of the operands is a method call.
+5.
+ Repeat Programming Exercise 4 with C++.
+6. Repeat Programming Exercise 4 with C#.
+7. Write a program in either C++, Java, or C# that illustrates the order of 
+evaluation of expressions used as actual parameters to a method.
+8.
+ Write a C program that has the following statements:
+int  a, b;
+a = 10;
+b = a + fun();
+printf("With the function call on the right, ");
+printf(" b is: %d\n", b);
+a = 10;
+b = fun() + a;
+printf("With the function call on the left, ");
+printf(" b is: %d\n", b);
+and define fun to add 10 to a. Explain the results.
+9. Write a program in either Java, C++, or C# that performs a large number 
+of floating-point operations and an equal number of integer operations 
+and compare the time required.M07_SEBE8029_12_SE_C07.indd   328 1/5/18   10:43 PM
+=========================================
+--- SEBESTA PAGE 410 (Target: ch7_expressions) ---
+=========================================
+
+386      Chapter 9   Subprograms
+representations of these two are very different. sub1 cannot produce a correct 
+result given an integer actual parameter value if it expects a floating-point value.
+Early programming languages, such as Fortran 77 and the original version 
+of C, did not require parameter type checking; most later languages require 
+it. However, the relatively recent languages Perl, JavaScript, and PHP do not.
+C and C++ require some special discussion in the matter of parameter type 
+checking. In the original C, neither the number of parameters nor their types 
+were checked. In C89, the formal parameters of functions can be defined in 
+two ways. They can be defined as in the original C; that is, the names of the 
+parameters are listed in parentheses and the type declarations for them follow, 
+as in the following function:
+double sin(x)
+  double x;
+  { . . . }
+Using this form avoids type checking, thereby allowing calls such as
+double value;
+int count;
+. . .
+value = sin(count);
+to be legal, although they are never correct.
+The alternative to the original C definition approach is called the proto-
+type method, in which the formal parameter types are included in the list, as in
+double sin(double x)
+ { . . . }
+If this version of sin is called with the same call, that is, with the following, it 
+is also legal:
+value = sin(count);
+The type of the actual parameter ( int) is checked against that of the formal 
+parameter (double). Although they do not match, int is coercible to double 
+(it is a widening coercion), so the conversion is done. If the conversion is not 
+possible (for example, if the actual parameter had been an array) or if the num-
+ber of parameters is wrong, then a semantics error is detected. So in C89, the 
+user chooses whether parameters are to be type checked.
+In C99 and C++, all functions must have their formal parameters in proto-
+type form. However, type checking can be avoided for some of the parameters 
+by replacing the last part of the parameter list with an ellipsis, as in
+int  printf(const char* format_string, . . .);
+A call to printf must include at least one parameter, a pointer to a literal 
+character string. Beyond that, anything (including nothing) is legal. The way 
+M09_SEBE8029_12_SE_C09.indd   386 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 411 (Target: ch7_expressions) ---
+=========================================
+
+9.5 Parameter-Passing Methods     387
+printf determines whether there are additional parameters is by the pres-
+ence of format codes in the string parameter. For example, the format code 
+for integer output is %d. This appears as part of the string, as in the following:
+printf("The sum is %d\n", sum);
+The % tells the printf function that there is one more parameter.
+There is one more interesting issue with actual to formal parameter coer-
+cions when primitives can be passed by reference, as in C#. Suppose a call to a 
+method passes a 
+float value to a double formal parameter. If this parameter is 
+passed by value, the float value is coerced to double and there is no problem. 
+This particular coercion is very useful, for it allows a library to provide double 
+versions of subprograms that can be used for both 
+float and double values. 
+However, suppose the parameter is passed by reference. When the value of 
+the 
+double formal parameter is returned to the float actual parameter in the 
+caller, the value will overflow its location. T o avoid this problem, C# requires 
+the type of a 
+ref actual parameter to match exactly the type of its correspond-
+ing formal parameter (no coercion is allowed).
+In Python and Ruby, there is no type checking of parameters, because typ-
+ing in these languages is a different concept. Objects have types, but variables 
+do not, so formal parameters are typeless. This disallows the very idea of type 
+checking parameters.
+9.5.6 Multidimensional Arrays as Parameters
+The storage-mapping functions that are used to map the index values of ref-
+erences to elements of multidimensional arrays to addresses in memory were 
+discussed at length in Chapter 6. In some languages, such as C and C++, when a 
+multidimensional array is passed as a parameter to a subprogram, the compiler 
+must be able to build the mapping function for that array while seeing only 
+the text of the subprogram (not the calling subprogram). This is true because 
+the subprograms can be compiled separately from the programs that call them. 
+Consider the problem of passing a matrix to a function in C. Multidimensional 
+arrays in C are really arrays of arrays, and they are stored in row major order. 
+Following is a storage-mapping function for row major order for matrices when 
+the lower bound of all indices is 0 and the element size is 1:
+address 
+(mat[i, j]) = address(mat[0,0]) + i *
+                                         number_of_columns + j
+Notice that this mapping function needs the number of columns but not the 
+number of rows. Therefore, in C and C++, when a matrix is passed as a param-
+eter, the formal parameter must include the number of columns in the second 
+pair of brackets. This is illustrated in the following skeletal C program:
+void fun(int matrix[][10]) {
+ . . . }
+void main() {
+M09_SEBE8029_12_SE_C09.indd   387 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 422 (Target: ch7_expressions) ---
+=========================================
+
+398      Chapter 9   Subprograms
+an overloaded subprogram must have a unique protocol; that is, it must be 
+different from the others in the number, order, or types of its parameters, and 
+possibly in its return type. The meaning of a call to an overloaded subpro-
+gram is determined by the actual parameter list and/or possibly the type of the 
+returned value. Although it is not necessary, overloaded subprograms usually 
+implement the same process.
+C++, Java, and C# include predefined overloaded subprograms. For exam-
+ple, many classes in C++, Java, and C# have overloaded constructors. Because 
+each version of an overloaded subprogram has a unique parameter profile, the 
+compiler can disambiguate occurrences of calls to them by the different type 
+parameters. Unfortunately, it is not that simple. Parameter coercions, when 
+allowed, complicate the disambiguation process enormously. Simply stated, the 
+issue is that if no method’s parameter profile matches the number and types of 
+the actual parameters in a method call, but two or more methods have param-
+eter profiles that can be matched through coercions, which method should be 
+called? For a language designer to answer this question, he or she must decide 
+how to rank all of the different coercions, so that the compiler can choose 
+the method that “best” matches the call. This can be a complicated task. T o 
+understand the level of complexity of this process, we suggest the reader refer 
+to the rules for disambiguation of method calls used in C++ (Stroustrup, 1997).
+Because C++, Java, and C# allow mixed-mode expressions, the return type is 
+irrelevant to disambiguation of overloaded functions (or methods). The context 
+of the call does not allow the determination of the return type. For example, if a 
+C++ program has two functions named 
+fun and both take an int parameter but 
+one returns an int and one returns a float, the program would not compile, 
+because the compiler could not determine which version of fun should be used.
+Users are also allowed to write multiple versions of subprograms with the 
+same name in Java, C++, C#, and F#. Once again, in C++, Java, and C# the most 
+common user-defined overloaded methods are constructors.
+Overloaded subprograms that have default parameters can lead to ambig-
+uous subprogram calls. For example, consider the following C++ code:
+void fun(float b = 0.0);
+void fun();
+  . . .
+  fun();
+The call is ambiguous and will cause a compilation error.
+9.10 Generic Subprograms
+Software reuse can be an important contributor to software productivity. One 
+way to increase the reusability of software is to lessen the need to create dif-
+ferent subprograms that implement the same algorithm on different types of 
+data. For example, a programmer should not need to write four different sort 
+subprograms to sort four arrays that differ only in element type.
+M09_SEBE8029_12_SE_C09.indd   398 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 428 (Target: ch7_expressions) ---
+=========================================
+
+404      Chapter 9   Subprograms
+Functions can be defined to have generic parameters, as in the following 
+example:
+let printPair (x: 'a) (y: 'a) =
+   printfn "%A %A" x y;;
+The %A format specification is for any type. The apostrophe in front of the 
+type named a specifies it to be a generic type. 9  This function definition 
+works (with generic parameters) because no type-constrained operation is 
+included. Arithmetic operators are examples of type-constrained operations. 
+For example, consider the following function definition:
+let adder x y = x + y;;
+T ype inferencing sets the type of x and y and the return value to int. Because 
+there is no type coercion in F#, the following call is illegal:
+adder 2.5 3.6;;
+Even if the type of the parameters were set to be generic, the + operator would 
+cause the types of x and y to be int.
+The generic type could also be specified explicitly in angle brackets, as in 
+the following:
+let printPair2<'T> x y =
+    printfn "%A %A" x y;;
+This function must be called with a type,10  as in the following:
+printPair2<float> 3.5 2.4;;
+Because of type inferencing and the lack of type coercions, F# generic 
+functions are far less useful, especially for numeric computations, than those 
+of C+ +, Java 5.0+, and C# 2005+.
+9.11 User-Defined Overloaded Operators
+Operators can be overloaded by the user in Ada, C++, Python, and Ruby. Sup-
+pose that a Python class is developed to support complex numbers and arith-
+metic operations on them. A complex number can be represented with two 
+floating-point values. The 
+Complex class would have members for these two 
+ 9.  There is nothing special about a—it could be any legal identifier. By convention, lowercase 
+letters at the beginning of the alphabet are used.
+ 10.  Convention explicitly states that generic types are named with uppercase letters starting at T .
+M09_SEBE8029_12_SE_C09.indd   404 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 533 (Target: ch7_expressions) ---
+=========================================
+
+12.4 Support for Object-Oriented Programming in Specific Languages      509
+it is little wonder that the commercial use of C++ is far more widespread than 
+that of Smalltalk. There are other factors in this difference, but efficiency is 
+clearly a strong argument in favor of C++. Of course, all of the compiled lan-
+guages that support object-oriented programming run approximately 10 times 
+faster than Smalltalk.
+12.4.3 Java
+Because Java’s design of classes, inheritance, and methods is similar to that of 
+C++, in this section we focus only on those areas in which Java differs from C++.
+12.4.3.1 General Characteristics
+As with C++, Java supports both objects and nonobject data. However, in Java, 
+only values of the primitive scalar types (Boolean, character, and the numeric 
+types) are not objects. Java’s enumerations and arrays are objects. The reason 
+Java has nonobjects is efficiency.
+In Java 
+5.0+, primitive values are implicitly coerced when they are put in 
+object context. This coercion converts the primitive value to an object of the 
+wrapper class of the primitive value’s type. For example, putting an 
+int value 
+or variable into object context causes the creation of an Integer object with 
+the value of the int primitive. This coercion is called boxing.
+Whereas C++ classes can be defined to have no parent, that is not pos-
+sible in Java. All Java classes must be subclasses of the root class, Object, or 
+some class that is a descendant of Object. One advantage of this is that some 
+commonly needed methods, such as toString and equals, can be defined in 
+Object and inherited and used by all other classes.
+All Java objects are explicit heap dynamic. Most are allocated with the new 
+operator, but there is no explicit deallocation operator. Garbage collection is 
+used for storage reclamation. Like many other language features, although 
+garbage collection avoids some serious problems, such as dangling pointers, 
+it can cause other problems. One such difficulty arises because the garbage 
+collector deallocates, or reclaims the storage occupied by an object, but it does 
+no more. For example, if an object has access to some resource other than heap 
+memory, such as a file or a lock on a shared resource, the garbage collector does 
+not reclaim these. For these situations, Java allows the inclusion of a special 
+method, 
+finalize, which is related to a C++ destructor function.
+A finalize method is implicitly called when the garbage collector is about 
+to reclaim the storage occupied by the object. The problem with finalize is 
+that the time it (and the garbage collector) will run cannot be forced or even 
+predicted. The alternative to using 
+finalize to reclaim resources held by an 
+object about to be garbage collected is to include a method that does the rec-
+lamation. The only problem with this is that all clients of the objects must be 
+aware of this method and remember to call it.
+M12_SEBE8029_12_SE_C12.indd   509 1/5/18   10:54 PM
+=========================================
+--- SEBESTA PAGE 685 (Target: ch7_expressions) ---
+=========================================
+
+15.8 Haskell     661
+cases, the qualifiers are in the form of Boolean expressions and they are called 
+tests. This notation can be used to describe algorithms for doing many things, 
+such as finding permutations of lists and sorting lists. For example, consider the 
+following function, which when given a number 
+n returns a list of all its factors:
+factors n = [ i | i <-  [1..n ‘div‘ 2], n ‘mod‘ i == 0]
+The list comprehension in factors creates a list of numbers, each temporarily 
+bound to the name i, ranging from 1 to n/2, such that n `mod` i is zero. This 
+is indeed a very exacting and short definition of the factors of a given number. 
+The backticks (backward apostrophes) surrounding 
+div and mod are used to 
+specify the infix use of these functions. When they are called in functional 
+notation, as in 
+div n 2, the backticks are not used.
+Next, consider the concision of Haskell illustrated in the following imple-
+mentation of the quicksort algorithm:
+sort [] = []
+sort (h:t) = sort [b | b <- t, b <- h]
+             ++ [h] ++
+             sort [b | b <- t, b > h]
+In this program, the set of list elements that are smaller or equal to the list head 
+are sorted and catenated with the head element, then the set of elements that 
+are greater than the list head are sorted and catenated onto the previous result. 
+This definition of quicksort is significantly shorter and simpler than the same 
+algorithm coded in an imperative language.
+A programming language is strict if it requires all actual parameters to be 
+fully evaluated, which ensures that the value of a function does not depend on 
+the order in which the parameters are evaluated. A language is nonstrict if it 
+does not have the strict requirement. Nonstrict languages can have several 
+distinct advantages over strict languages. First, nonstrict languages are generally 
+more efficient, because some evaluation is avoided.
+11 Second, some interesting 
+capabilities are possible with nonstrict languages that are not possible with strict 
+languages. Among these are infinite lists. Nonstrict languages can use an eval-
+uation form called lazy evaluation, which means that expressions are evaluated 
+only if and when their values are needed.
+Recall that in Scheme the parameters to a function are fully evaluated 
+before the function is called, so it has strict semantics. Lazy evaluation means 
+that an actual parameter is evaluated only when its value is necessary to evaluate 
+the function. So, if a function has two parameters, but on a particular execution 
+of the function the first parameter is not used, the actual parameter passed for 
+that execution will not be evaluated. Furthermore, if only a part of an actual 
+parameter must be evaluated for an execution of the function, the rest is left 
+ 11. Notice how this is related to short-circuit evaluation of Boolean expressions, which is done 
+in some imperative languages.
+M15_SEBE8029_12_SE_C15.indd   661 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 696 (Target: ch7_expressions) ---
+=========================================
+
+672      Chapter 15  Functional Programming Languages
+produce results; rather, they use function applications, conditional expressions, 
+and recursion for execution control and functional forms to construct complex 
+functions. Lisp began as a purely functional language but soon acquired a num-
+ber of imperative-language features added in order to increase its efficiency 
+and ease of use.
+The first version of Lisp grew out of the need for a list-processing lan-
+guage for AI applications. Lisp is still the most widely used language for that 
+application area.
+The first implementation of Lisp was serendipitous: The original version 
+of 
+EVAL was developed solely to demonstrate that a universal Lisp function 
+could be written.
+Because Lisp data and Lisp programs have the same form, it is possible to 
+have a program build another program. The availability of EVAL allows dynam-
+ically constructed programs to be executed immediately.
+Scheme is a relatively simple dialect of Lisp that uses static scoping exclu-
+sively. Like Lisp, Scheme’s primary primitives include functions for construct-
+ing and dismantling lists, functions for conditional expressions, and simple 
+predicates for numbers, symbols, and lists.
+Common Lisp is a Lisp-based language that was designed to include most 
+of the features of the Lisp dialects of the early 1980s. It allows both static- and 
+dynamic-scoped variables and includes many imperative features. Common 
+Lisp uses macros to define some of its functions. Users are allowed to define 
+their own macros. The language includes reader macros, which are also user 
+definable. Reader macros define single-symbol macros.
+ML is a static-scoped and strongly typed functional programming language 
+that uses a syntax that is more closely related to that of an imperative language 
+than to Lisp. It includes a type-inferencing system, exception handling, a vari-
+ety of data structures, and abstract data types.
+ML does not do any type coercions and does not allow function overload-
+ing. Multiple definitions of functions can be defined using pattern matching of 
+the actual parameter form. Currying is the process of replacing a function that 
+takes multiple parameters with one that takes a single parameter and returns a 
+function that takes the other parameters. ML, as well as several other functional 
+languages, supports currying.
+Haskell is similar to ML, except that all expressions in Haskell are eval-
+uated using a lazy method, which allows programs to deal with infinite lists. 
+Haskell also supports list comprehensions, which provide a convenient and 
+familiar syntax for describing sets. Unlike ML and Scheme, Haskell is a pure 
+functional language.
+F# is a .NET programming language that supports functional and imper-
+ative programming, including object-oriented programming. Its functional 
+programming core is based on OCaml, a descendent of ML and Haskell. F# is 
+supported by an elaborate and widely used IDE. It also interoperates with other 
+.NET languages and has access to the .NET class library.
+M15_SEBE8029_12_SE_C15.indd   672 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 751 (Target: ch7_expressions) ---
+=========================================
+
+Index     727
+Antecedents, 144, 147, 683, 690–701
+APES system, 710
+APL (A Programming Language), 13, 21
+origins and characteristics of, 69–70
+Append function, 656
+append operations, 700
+Apple, 87, 88
+Apply-to-all functional forms, 628, 649–650
+Arithmetic expressions, 41, 58, 90, 117, 165, 
+332, 653, 711
+associativity in, 305–307
+characteristics of, 302–303
+coercions in, 313–315
+conditional, 308–309
+design issues for, 303
+grammar for, 175–176, 184, 188
+in Lisp, 308
+mixed-mode, 313, 314
+operand evaluation order in, 309–311
+parentheses in, 307
+precedence in, 303–305
+in Prolog, 711
+purpose of, 303
+referential transparency in, 310–311
+in Ruby, 307–308
+rules of operator evaluation order,  
+305–307
+side effects in, 309–311
+Array types, 99, 250–261
+array initialization in, 254–255
+array operations in, 255–256
+design issues for, 250
+evaluation of, 258
+implementation of, 258–260
+indices and, 251–252
+jagged arrays in, 256
+rectangular arrays in, 256
+slices in, 257
+subscript bindings in, 252–254
+Artificial intelligence (AI). see AI (artificial 
+intelligence)
+ASCII (American Standard Code for 
+Information Interchange), 138, 241, 689
+Assemblies, .NET , 474
+Assertions, 150
+in axiomatic semantics, 143–144
+in Java, 604–605
+Assignment statements, 11, 18, 20, 47, 136, 150, 
+152, 218, 251, 253, 261, 277, 286
+ambiguous grammar for, 118
+attribute grammar for simple, 131
+in axiomatic semantics, 145–147
+compound assignment operators in, 320
+conditional targets and, 320
+in denotational semantics, 141
+as expressions, 322–323
+in functional programming languages, 
+323–324
+grammar for simple, 117–118
+mixed-mode, 324
+multiple, 323
+simple, 319–320
+unary assignment data types in, 321
+Association for Computing Machinery (ACM). 
+see ACM (Association for Computing 
+Machinery)
+Associative arrays
+definition, 261
+implementation of, 262–263
+structure and operations of, 261–263
+Associativity, 127, 176, 181, 302
+of operators, 115, 122–123
+rules of operator evaluation order, 303, 
+305–307
+Atomic propositions, 681–683, 685, 689–690, 
+698, 711
+Atoms, 650
+Lisp, 47, 629–630
+predicate functions for symbolic, 641
+Prolog, 689, 706, 708
+AT&T Bell Laboratories, 455
+Attribute computation functions, 129
+Attribute grammars, 128, 292
+basic concepts of, 129
+computing attribute values in, 132–133
+defined, 129–130
+evaluation of, 133–134
+examples of, 130–132
+intrinsic attributes in, 130
+static semantics and, 128–129
+Z02_SEBE8029_12_SE_IDX.indd   727 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 755 (Target: ch7_expressions) ---
+=========================================
+
+Index     731
+CBL (Common Business Language), 57
+CDE (Solaris Common Desktop  
+Environment), 29
+CDR functions, 639–640, 643–646, 650, 698, 702
+Central processing units (CPUs), 17–18, 418
+CGI (Common Gateway Interface), 94
+chain_offset, 431, 434, 439
+Chambers, Craig, 508
+char arrays, 242, 254
+char type parameters, 400
+Character string types
+in C and C++, 254
+design issues for, 242
+evaluation of, 245
+implementation of, 245–247
+string length options in, 244–245
+string operations in, 242–244
+Character types, 241–242
+Checked exceptions, 601
+Child class, 486
+Chomsky, Noam, 113–114
+Church, Alonzo, 627
+Cii Honeywell/Bull language, 80
+Clark, K. L., 689
+Clarke, L. A., 220
+Class instance record (CIR), 519
+Class methods, 487
+Class variables, 487
+Classes, 486
+abstract, 489
+base, 486
+child, 486
+derived, 486
+of exceptions, 599
+inner, 512
+interlocked, 573, 582
+local nested, 513
+parent, 486
+super, 486
+wrapper, 90
+Clausal form, 683–684
+Clients, 450–453, 456, 459, 472, 476, 487, 503
+Clocksin, W. F ., 705
+CLOS (Common LISP Object System), 653
+Closed accept clause, 557
+Closed-world assumption, 706
+Closures, 405–407
+CML (Concurrent ML), 576, 592
+COBOL, 6, 23
+computerizing business records in, 56–61
+design process for, 57–58
+evaluation of, 58–61
+FLOW-MATIC and, 57
+form of a record declaration, 264
+historical background of, 57
+Coercions, 90, 287, 291
+in arithmetic expressions, 313–315
+of deproceduring, 72
+Colmerauer, Alain, 77, 688
+Column major order, 259
+Common Business Language (CBL), 57
+Common Gateway Interface (CGI), 94
+Common Intermediate Language (CIL), 474, 527
+Common LISP , 49–50, 625, 651–653
+backquote operator (`), 652
+lists in, 268–269
+Common LISP Object System (CLOS), 20, 653
+Communicating Sequential Processes (CSP), 
+356–357, 360, 555
+Communications of the ACM, 53, 624
+Compatible types, 286
+Competition synchronization, 539–541
+in Ada, 557–559
+in Java, 564–565
+with monitors, 549
+need for, 541
+with semaphores, 547–548
+Compiler design, 4, 129, 162, 203
+BNF-based, 55
+Compiler implementation, 23
+Complex data types, 240
+Compound assignment operators, 320
+Compound terms, 681
+Computer architecture, 17–19, 69, 198,  
+535–537, 624
+Concurrency. see also Competition 
+synchronization; Cooperation 
+synchronization
+in Ada, 552–560
+in C# threads, 570–575
+categories of, 537–538
+in Concurrent ML, 576
+Z02_SEBE8029_12_SE_IDX.indd   731 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 759 (Target: ch7_expressions) ---
+=========================================
+
+Index     735
+Explicit type conversions, 315
+Expressions
+assignment statements as, 322–323
+Boolean, 143, 316–318, 661
+in C#, 324, 398
+case, 338–339
+coercion in, 313–315
+conditional, 46, 308–309, 343, 626, 655
+control, 332
+in denotational semantics, 140–141
+errors in, 315
+mixed-mode, 313
+in recursive-descent parsers, 175–180
+relational, 316
+short-circuit evaluation in, 318–319
+unambiguous grammar for, 120
+Expressivity, 13
+Extended accept clause, 556
+Extended BNF (EBNF), 125–127
+eXtensible Stylesheet Language 
+T ransformations (XSL T), 21
+extern qualifiers, 217
+F
+F#, 29, 403–404, 625, 663–666
+generic functions in, 403–404
+generic library classes, 353
+support for concurrency, 577–578
+Fact statements, 689–690
+Farber, J. D., 70
+Fatbars, 357
+Feature multiplicity, 8
+FETCH subprogram, 545
+Fetch-execute cycle, 18, 26
+FGCS (Fifth Generation Computing  
+Systems), 688
+Fibonacci number, 659
+Fields, 264–265
+Fifth Generation Computing Systems  
+(FGCS), 688
+Filter, 656
+Finalization, 593
+finalize methods, 509
+finally clauses, 603–604
+FindAll method, 667
+Finite automata, 165
+Finite mappings, 293
+Firm coercion, 72
+First-order predicate calculus, 681
+Fixed heap-dynamic arrays, 252–253
+Fixed stack-dynamic arrays, 252–253
+flex arrays, 72
+float, 14, 90, 205, 286–289, 313, 324,  
+387, 394
+in C, 472
+in C#, 395, 461, 572
+in C++, 595
+coercions, 90
+in strong typing, 287
+in type checking, 14, 286–287
+in type conversions, 313–315
+float variable, 287
+Floating-point data types, 239, 240, 450
+Floating-point operations, 37, 39–40, 75,  
+287, 306
+FLOW-MATIC, 57
+FLPL (Fortran List Processing Language), 46
+Flynn, Michael J., 536
+for statements, 216
+in C-based languages, 345–347, 352
+in Java, 13, 352
+in Python, 347–348
+foreach statements
+in C#, 99, 254, 353
+of Perl, 360
+Form, 12
+Formal parameters, 368–370
+Fortran, 5, 18, 61, 62, 66, 198
+design process for, 41
+evaluation of, 43–45
+exponentiation in, 306
+High-Performance, 578–580
+historical background of, 40–41, 51, 251, 
+316, 330, 624
+label parameters in, 590
+nested subprograms in, 429
+Read statement, 588–589
+stand-alone statement, 320
+subprograms in, 419
+versions of, 41–43, 67, 211, 263, 373, 386
+Fortran List Processing Language (FLPL), 46
+Forward chaining, 693
+Z02_SEBE8029_12_SE_IDX.indd   735 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 765 (Target: ch7_expressions) ---
+=========================================
+
+Index     741
+in Prolog, 698–703
+in Scheme language, 269
+simple, 47, 630, 643–644, 646
+types of, 268–270
+Liveness, 543
+LiveScript, 94
+LL algorithms, 173
+LL grammar class, 180–183
+Load modules, 25
+Loaders, 420
+Local nested classes, 513
+Local referencing environments, 375–376
+Local variables, 217–219, 376, 426
+Local_offset, 426
+Locks, 569–570
+Locks-and-keys approach, 281
+Logic for Computable Functions (LCF), 50
+Logic programming languages
+applications of, 709–710
+clausal form in, 684, 686, 691
+expert systems and, 709–710
+natural-language processing, 710
+overview of, 686–688
+predicate calculus for, 680–684
+Prolog, 688–708
+relational database management systems 
+and, 709
+resolution construction, 684–685
+theorem-proving in, 684–686
+Logical concurrency, 537
+Logically controlled loops, 348–350
+long integer, 238
+Loop invariants, 149–153
+Loop parameters, 344
+Loop variables, 346
+Loops
+in axiomatic semantics, 149–152
+counter-controlled, 344–348
+logically controlled, 348–350
+user-located, 350–351
+Lost heap-dynamic variables, 276–277
+LR parsers, 186–190
+Lua, 279
+arrays in, 254
+enumeration types of, 249
+L-value, 201
+M
+MAC OS X, 87
+Mark-sweep garbage collection, 283
+Markup languages, defined, 21
+Markup-programming hybrid languages, 100–102
+Massachusetts Institute of T echnology (MIT), 41
+match expressions, 272
+Matching subgoals, 692
+Matching type parameters, 595
+Mathematical functions, 625–628
+Matsumoto, Yukihiro, 97
+Mauchly, John, 38
+McCabe, F . G., 689
+McCarthy, John, 46, 629, 631–632
+McCracken, Daniel, 21
+Meek coercion, 72
+Mellish, C. S., 6, 705
+Member functions, 456, 505
+Memory cells, 198, 200, 202
+Memory leakage, 276–277
+Message interface, 486
+Message protocol, 486
+Message-passing model, 550
+Messages
+binding dynamically, 493, 495
+in object-oriented languages, 486
+passing of, 486, 489, 490, 498, 515,  
+551–552
+Metadata, 522
+MetaLanguage (ML), 50
+Metalanguages, 114
+Metasymbols, 126
+Method calls, 519–512
+Methods, 486
+Microsoft, 65
+.NET computing platform, 86, 98, 163
+Visual Studio .NET by, 29
+Milner, Robin, 50
+MIL-STD 1815, 80
+MIMD (Multiple-Instruction, Multiple-Data) 
+computers, 536
+Minsky, Marvin, 46
+Miranda, 50
+MIT (Massachusetts Institute of T echnology), 41
+AI Project, 46
+LISP at, 46
+Z02_SEBE8029_12_SE_IDX.indd   741 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 767 (Target: ch7_expressions) ---
+=========================================
+
+Index     743
+O
+Object slicing, 493
+Objective-C, 87–88
+Object-oriented constructs, 519–521
+Object-oriented languages, 19, 85, 206, 219, 
+279, 291, 360
+allocation of objects in, 492–493
+deallocation of objects in, 492–493
+design issues in, 489–494
+dynamic binding in, 493
+exclusivity of objects in, 489–490
+initialization of objects in, 494
+multiple inheritance in, 491–492
+nested classes in, 493–494
+single inheritance in, 491–492
+static binding in, 493
+subclasses vs. subtypes in, 490–491
+Object-oriented programming, 3, 20,  
+485, 663
+in C#, 513–515
+in C++, 85–88, 496–509
+inheritance, 485–488
+instance data storage, 519
+in Java, 89–92, 509–513
+message passing in, 551–552
+in Objective-C, 87–88
+in Ruby, 515–518
+in Smalltalk, 83–85, 494–496
+Stroustrup on, 498–499
+support for, 494–518
+Objects, 486
+allocation of, 492–493
+in C++, 497
+of C#, 253
+in concurrency, 559–560
+deallocation of, 492–493
+exclusivity of, 489–490
+initialization of, 494
+in Java, 509
+in Ruby, 516
+OCaml, 50, 205, 484, 625, 658, 663
+Open accept clause, 557
+Operand evaluation order, 309–311
+Operational semantics, 134–137
+evaluation of, 136–137
+natural, 135
+problems with, 135
+process of, 135–136
+structural, 135
+Operator evaluation order, 303–309
+Operator overloading, 8, 98, 311–313
+Operator precedence, 119–122
+Operator precedence rules, 304
+Optimization, 15
+or else statements, 334
+OR operators, 271
+Orthogonality, 9–11
+otherwise, 659
+Out mode parameter passing, 378
+Output functions, 636
+Overflow, 315
+Overloaded operators, 311–313
+Overloaded subprograms, 398
+Overridden methods, 487, 491
+override commands, 487, 514
+P
+Package scope, 476
+Package specification, 552
+Packages, 80, 476–477
+Pairwise disjointness test, 182
+Papert, Seymour, 83
+Paradigms of programming, 498–499
+Parameter profiles, 398
+Parameterized abstract data types
+in C++, 467–468
+in C# 2005, 471
+in Java 5.0, 468–470
+Parameter-passing methods, 376
+of common languages, 383–385
+design considerations in, 389
+examples of, 389–392
+implementation models for, 377–382
+implementation of, 382–383
+semantic models of, 377
+Parameters
+actual, 369
+array formal, 372
+formal, 369
+keyword, 370
+in multidimensional arrays, 387–389
+positional, 370
+Z02_SEBE8029_12_SE_IDX.indd   743 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 768 (Target: ch7_expressions) ---
+=========================================
+
+744      Index
+Parameters (continued)
+for subprograms, 368–372
+subprograms as, 392–394
+type checking, 385–387
+Parametric polymorphism, 399
+params, 99
+Parent class, 486, 491
+differences between subclasses and,  
+486–487
+Parentheses, 307
+Parse trees, 24–25, 117–118
+Parsing, 25, 55, 119
+bottom-up, 173–174, 183–190
+complexity of, 174–175
+introduction to, 171–172
+LL grammar class in, 180–183
+LR parsers for, 186–190
+recursive-descent, 175–180
+shift-reduce algorithms for, 186
+top-down, 172–173
+Partial correctness, 152
+Partial evaluation, 658
+Pascal, 55, 248, 276, 281, 289, 295, 376, 394, 
+549, 577
+Concurrent, 549
+evaluation of, 74–75
+historical background, 73
+T urbo, 98
+Pass-by-assignment, 385
+Pass-by-copy, 380
+Pass-by-name, 381–382
+Pass-by-reference, 380–381
+Pass-by-result, 378–379
+Pass-by-value-result, 379–380
+Passed by value, 378
+pcall constructs, 575
+PDA (Pushdown automaton), 186
+Peripheral processors, 535
+Perl, 92–94, 341, 350
+array assignments, 255
+arrays, 92, 253
+assignment statements in, 322
+associative arrays in, 261
+binary logic operators of, 317
+built-in pattern-matching operations, 244
+clause form, 334
+coercion rules for mixed-mode  
+assignment, 324
+compound assignment operators of, 320
+conditional targets on assignment 
+statements, 320
+dynamic scoping in, 220
+enumeration types of, 249
+expressions in, 303, 309
+foreach statement, 99, 360
+as a general-purpose language, 93
+hashes, 96, 261, 262
+hybrid implementation system, 27
+mixed-mode assignment in, 324
+multiple-source assignment statements  
+in, 323
+nesting selectors in, 334
+origins and characteristics of, 92–94
+passing parameters of, 384
+strings in, 245
+subscripting in, 251
+unary arithmetic operators in, 321
+Unicode in, 241
+as a UNIX utility, 93
+user-located loop control in, 350
+variable names in, 199
+variables in, 93
+Perlis, Alan, 44, 51
+PHP , 6, 26, 29, 217, 386, 670
+access to HTML form data, 96
+built-in pattern-matching operations, 244
+foreach statement, 99
+formal parameters of, 370
+function definitions, 217
+global variables of, 217–218
+origins and characteristics of, 96
+relational operators of, 316
+scalar types of, 339
+switch statement, 339
+type binding in, 205, 286
+variable names in, 199
+Phrases, 185–186
+Physical concurrency, 537
+pipeline operators (| >), 665
+Plankalkül, 36–37
+PL/I, 66–69
+design process, 67
+Z02_SEBE8029_12_SE_IDX.indd   744 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 772 (Target: ch7_expressions) ---
+=========================================
+
+748      Index
+Rule of consequence, 146
+Rules, 114–115, 117, 120
+run methods, 560–561, 570
+Running task, 542
+Run-time stacks, 424
+Russell, Stephen B., 632
+R-value, 202
+S
+Satisfying subgoals, 692
+Scalable algorithms, 535
+Schedulers, 541
+Scheme language, 49
+apply-to-all functional forms in, 649–650
+code-building functions in, 650–651
+control flow in, 637–638
+defining functions in, 634–636
+examples of function definitions in, 643–646
+functional compositions in, 648–649
+functional forms in, 648–650
+interpreter in, 633
+LET, 646–647
+list functions in, 638–641
+lists in, 269
+numeric predicate functions in, 637
+origins of, 633
+output functions in, 636
+predicate functions in, 641–642
+primitive numeric functions in, 633–634
+tail recursive functions in, 647–648
+Schwartz, Jules I., 53
+Scientific applications, 5
+Scope
+blocks for, 213–215
+declaration order for, 215–216
+dynamic scoping, 220–222, 437–441
+global, 217–219
+lifetime and, 222–223
+named constants and, 224–226
+referencing environments and, 223–224
+static scoping, 220
+in subprograms, implementing, 437–441
+Scott, Dana, 142
+Scripting languages, 92–98
+JavaScript, 94–96
+Perl, 92–94
+PHP , 96
+Python, 96
+Ruby, 97–98
+Scripts, 162
+select statements, 555–556
+Selection, 148–149
+Selection statements
+multiple-selection, 336–343
+postconditions in, 148–149
+two-way, 332
+Selector expressions, 336
+Semantic domains, 137
+Semantics. see also Axiomatic semantics; 
+Denotational semantics
+dynamic, 134–155
+introduction to, 110–111
+natural operational, 135
+operational, 134–137
+static, 128–129
+structural operational, 135
+Semaphores, 544–548
+Sentences, 111
+Sentential forms, 116
+Sequences, 147–148
+Sergot, M. J., 710
+Server tasks, 554
+Servlet containers, 101
+Setter methods, 464, 516
+S-expressions, 632
+Shallow access, 439–441
+Shallow binding, 393–394
+SHARE, 51, 53, 67
+Shared inheritance, 491
+Shaw, J. C., 45
+Shift-reduce algorithms, 186
+Short Code, 38–39
+short integer, 238
+Short Range Committee, 58
+Short-circuit evaluation, 318–319
+Side effects, 309–311, 396–397
+SIGPLAN Notices, 80, 103
+SIMD (Single-Instruction, Multiple-Data) 
+computers, 536
+Simon, Herbert, 45
+Simple assignment statements, 130, 687
+Simple functions, 626–627
+Z02_SEBE8029_12_SE_IDX.indd   748 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 774 (Target: ch7_expressions) ---
+=========================================
+
+750      Index
+Subprograms (continued)
+generic, 374, 399–404
+in Java 5.0, 401–403
+local variables in, 375–376
+multidimensional arrays and, 387–389
+nested, 376
+overloaded, 374, 398
+parameter profile of, 368
+parameter-passing methods, 376–392
+parameters as, 392–394
+parameters in, 368–372
+procedures as, 372–373
+protocol of, 368
+user-defined overloaded data types in, 
+404–405
+Subprograms, implementing
+blocks in, 436–437
+calls in, 418
+deep access in, 437–439
+dynamic scoping in, 437–441
+of nested subprograms, 429–435
+with recursion, 427–429
+returns in, 418
+shallow access in, 439–441
+stack-dynamic local variables for, 421–429
+static chaining, 430–435
+without recursion, 425–427
+Subrange types, in Ada, 290
+Subscript bindings, 252–254
+Subscripts, 251
+Substring references, 242
+subtype enumeration type, 290
+Subtype polymorphism, 399
+Subtypes, 293, 490–491
+Sun Microsystems, 89, 94
+Superclass, 486, 500
+Swing GUI components, 609–610
+Symbolic atoms and lists, 641–642
+Symbolic logic, 681
+Synchronization, 536, 539. see also 
+Competition synchronization; 
+Cooperation synchronization
+of CML, 576
+explicit locks as, 569–570
+nonblocking, 569
+of threads, 573–574
+Synchronous message passing, 551–552
+Syntactic domains, 137–139
+Syntax. see also Attribute grammars
+ambiguous grammars in, 118–119
+analysis, 163
+analyzer, 24, 28
+associativity in, 122–123
+BNF and, 113–114, 126
+context-free grammars and, 113, 114
+derivations in, 115–117
+design, 12
+in Extended BNF , 125–127
+fundamentals of, 114–115
+generators in, 112–113
+grammars and, 115–117, 127–128
+if-then-else statements, 308, 342
+of Java, 110, 111
+of JavaScript, 94
+of LISP , 48
+list descriptions in, 115
+of ML, 50
+operator precedence in, 119–122
+parsing and, 117–118
+of Python, 97
+recognizers in, 112, 127–128
+of Ruby, 98
+of Smalltalk, 84, 86
+unambiguous grammars in, 120, 124–125
+Synthesized attributes, 129
+Syracuse University, 684
+System.Object, 98
+Systems programming, 66, 75
+Systems software, 22
+T
+Tail recursive functions, 647–648
+Task(s), 539–544
+concurrent execution of, 543
+descriptors, 544
+heavyweight, 539
+lightweight, 539
+states, 541–542
+termination, 555, 557
+task specifications, 552–553
+T ask termination, 555
+Task-ready queue, 542, 562
+Z02_SEBE8029_12_SE_IDX.indd   750 1/8/18   5:03 PM

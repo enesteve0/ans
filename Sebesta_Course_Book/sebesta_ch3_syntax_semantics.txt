@@ -1,0 +1,2502 @@
+
+=========================================
+--- SEBESTA PAGE 16 (Target: ch3_syntax_semantics) ---
+=========================================
+
+xvi      Contents
+ 2.13 Programming Based on Logic: Prolog ...............................................77
+ 2.14 History’s Largest Design Effort: Ada ..................................................79
+ 2.15 Object-Oriented Programming: Smalltalk .........................................83
+ 2.16 Combining Imperative and Object-Oriented Features: C++ .............85
+ 2.17 An Imperative-Based Object-Oriented Language: Java .....................89
+ 2.18 Scripting Languages ............................................................................92
+ 2.19 The Flagship .NET Language: C# .....................................................98
+ 2.20 Markup-Programming Hybrid Languages .......................................100
+Summary • Bibliographic Notes • Review Questions • Problem Set •  
+Programming Exercises  ...............................................................................102
+ Chapter 3 Describing Syntax and Semantics  109
+ 3.1 Introduction .......................................................................................110
+ 3.2 The General Problem of Describing Syntax ....................................111
+ 3.3 Formal Methods of Describing Syntax .............................................113
+ 3.4 Attribute Grammars ..........................................................................128
+History Note .............................................................................................128
+ 3.5 Describing the Meanings of Programs: Dynamic Semantics ...........134
+History Note .............................................................................................142
+Summary • Bibliographic Notes • Review Questions • Problem Set  ........155
+ Chapter 4 Lexical and Syntax Analysis  161
+ 4.1 Introduction .......................................................................................162
+ 4.2 Lexical Analysis ..................................................................................163
+ 4.3 The Parsing Problem ........................................................................171
+ 4.4 Recursive-Descent Parsing................................................................175
+ 4.5 Bottom-Up Parsing ...........................................................................183
+Summary • Review Questions • Problem Set •  
+Programming Exercises 
+ ...............................................................................191
+ Chapter 5 Names, Bindings, and Scopes  197
+ 5.1 Introduction .......................................................................................198
+ 5.2 Names ................................................................................................199
+A01_SEBE8029_12_SE_FM.indd   16 1/9/18   6:14 PM
+=========================================
+--- SEBESTA PAGE 134 (Target: ch3_syntax_semantics) ---
+=========================================
+
+110      Chapter 3   Describing Syntax and Semantics
+T
+his chapter begins by defining the terms syntax and semantics. Then, a detailed 
+discussion of the most common method of describing syntax, context-free 
+grammars (also known as Backus-Naur Form), is presented. Included in this 
+ discussion are derivations, parse trees, ambiguity, descriptions of operator precedence 
+and associativity, and extended Backus-Naur Form. Attribute grammars, which can be 
+used to describe both the syntax and static semantics of programming languages, are 
+discussed next. In the last section, three formal methods of describing semantics—
+operational, axiomatic, and denotational semantics—are introduced. Because of the 
+inherent complexity of the semantics description methods, our discussion of them is 
+brief. One could easily write an entire book on just one of the three (as several authors 
+have).
+3.1 Introduction
+The task of providing a concise yet understandable description of a program-
+ming language is difficult but essential to the language’s success. ALGOL 60 
+and ALGOL 68 were first presented using concise formal descriptions; in both 
+cases, however, the descriptions were not easily understandable, partly because 
+each used a new notation. The levels of acceptance of both languages suffered 
+as a result. On the other hand, some languages have suffered the problem of 
+having many slightly different dialects, a result of a simple but informal and 
+imprecise definition.
+One of the problems in describing a language is the diversity of the 
+ people 
+who must understand the description. Among these are initial evaluators, 
+implementors, and users. Most new programming languages are subjected to a 
+period of scrutiny by potential users, often people within the organization that 
+employs the language’s designer, before their designs are completed. These are 
+the initial evaluators. The success of this feedback cycle depends heavily on the 
+clarity of the description.
+Programming language implementors obviously must be able to deter -
+mine how the expressions, statements, and program units of a language are 
+formed, and also their intended effect when executed. The difficulty of the 
+implementors’ job is, in part, determined by the completeness and precision of 
+the language description.
+Finally, language users must be able to determine how to encode software 
+solutions by referring to a language reference manual. T extbooks and courses 
+enter into this process, but language manuals are usually the only authoritative 
+printed information source about a language.
+The study of programming languages, like the study of natural languages, 
+can be divided into examinations of syntax and semantics. The syntax of a 
+programming language is the form of its expressions, statements, and 
+ program 
+units. Its semantics is the meaning of those expressions, statements, and 
+ program units. For example, the syntax of a Java while statement is
+while (boolean_expr) statement
+M03_SEBE8029_12_SE_C03.indd   110 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 149 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.3 Formal Methods of Describing Syntax      125
+probably is not what was intended by the author of the construct. We will 
+examine the practical problems associated with this else-association problem 
+in Chapter 8.
+We will now develop an unambiguous grammar that describes this 
+if 
+statement. The rule for if constructs in many languages is that an else clause, 
+when present, is matched with the nearest previous unmatched then clause. 
+Therefore, there cannot be an 
+if statement without an else between a then 
+clause and its matching else. So, for this situation, statements must be distin-
+guished between those that are matched and those that are unmatched, where 
+unmatched statements are 
+else-less ifs and all other statements are matched. 
+The problem with the earlier grammar is that it treats all statements as if they 
+had equal syntactic significance—that is, as if they were all matched.
+T o reflect the different categories of statements, different abstractions, or 
+nonterminals, must be used. The unambiguous grammar based on these ideas 
+follows:
+<stmt> S <matched> 
+| <unmatched>
+<matched> S if (<logic_expr>) <matched> else <matched>
+                     |any non-if statement
+<unmatched> S if (<logic_expr>) <stmt>
+                        |if (<logic_expr>) <matched> else <unmatched>
+There is just one possible parse tree, using this grammar, for the following 
+sentential form:
+if (<logic_expr>) if (<logic_expr>) <stmt> else <stmt>
+3.3.2 Extended BNF
+Because of a few minor inconveniences in BNF , it has been extended in several 
+ways. Most extended versions are called Extended BNF , or simply EBNF , even 
+though they are not all exactly the same. The extensions do not enhance the 
+descriptive power of BNF; they only increase its readability and writability.
+Three extensions are commonly included in the various versions of EBNF . 
+The first of these denotes an optional part of an RHS, which is delimited by 
+brackets. For example, a C 
+if-else statement can be described as
+<if_stmt> S if (<expression>) <statement> [else <statement>]
+Without the use of the brackets, the syntactic description of this statement 
+would require the following two rules:
+<if_stmt> S 
+if (<expression>) <statement>
+                   |if (<expression>) <statement> else <statement>
+The second extension is the use of braces in a RHS to indicate that the enclosed 
+part can be repeated indefinitely or left out altogether. This extension allows 
+lists to be built with a single rule, instead of using recursion and two rules. 
+M03_SEBE8029_12_SE_C03.indd   125 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 150 (Target: ch3_syntax_semantics) ---
+=========================================
+
+126      Chapter 3   Describing Syntax and Semantics
+For example, lists of identifiers separated by commas can be described by the 
+following rule:
+<ident_list> S <identifier> {, <identifier>}
+This is a replacement of the recursion by a form of implied iteration; the part 
+enclosed within braces can be iterated any number of times.
+The third common extension deals with multiple-choice options. When a 
+single element must be chosen from a group, the options are placed in paren-
+theses and separated by the OR operator, 
+|. For example,
+<term> S <term> (* | / | %) <factor>
+In BNF , a description of this <term> would require the following three rules:
+<term> S <term> * <factor>
+              | <term> / <factor>
+              | <term> % <factor>
+The brackets, braces, and parentheses in the EBNF extensions are metasym-
+bols, which means they are notational tools and not terminal symbols in the 
+syntactic entities they help describe. In cases where these metasymbols are 
+also terminal symbols in the language being described, the instances that are 
+terminal symbols can be underlined or quoted. Example 3.5 illustrates the use 
+of braces and multiple choices in an EBNF grammar.
+EXAMPLE 3.5  BNF and EBNF Versions of an Expression Grammar
+BNF:
+     <expr> S <expr>
+ + <term>
+                  | <expr> - <term>
+                  | <term>
+     <term> S <term> * <factor>
+                  | <term> / <factor>
+                  | <factor>
+     <factor> S <exp> ** <factor>
+                        <exp>
+     <exp> S 
+(<expr>)
+                   | id
+EBNF:
+     <expr> S <term> {
+(+ | -) <term>}
+     <term> S <factor> {(* | /) <factor>}
+     <factor> S <exp> { ** <exp>}
+     <exp> S (<expr>)
+                 | id
+M03_SEBE8029_12_SE_C03.indd   126 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 151 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.3 Formal Methods of Describing Syntax      127
+The BNF rule
+<expr> S <expr> + <term>
+clearly specifies—in fact forces—the + operator to be left associative. However, 
+the EBNF version,
+<expr> S <term> 
+{+ <term>}
+does not imply the direction of associativity. This problem is overcome in a 
+syntax analyzer based on an EBNF grammar for expressions by designing the 
+syntax analysis process to enforce the correct associativity. This is discussed 
+further in Chapter 4.
+Some versions of EBNF allow a numeric superscript to be attached to the 
+right brace to indicate an upper limit to the number of times the enclosed part 
+can be repeated. Also, some versions use a plus (
++) superscript to indicate one 
+or more repetitions. For example,
+<compound> S begin <stmt> {<stmt>} end
+and
+<compound> S 
+begin {<stmt>}+ end
+are equivalent.
+In recent years, some variations on BNF and EBNF have appeared. Among 
+these are the following:
+• In place of the arrow, a colon is used and the RHS is placed on the next line.
+• Instead of a vertical bar to separate alternative RHSs, they are simply 
+placed on separate lines.
+• In place of square brackets to indicate something being optional, the sub-
+script opt is used. For example,
+•
+ Constructor Declarator S SimpleName (FormalParameterListopt)
+• Rather than using the | symbol in a parenthesized list of elements to indi-
+cate a choice, the words “one of” are used. For example,
+AssignmentOperator S one of = *= /= %= += -=
+<<= >>= &= ^= |=
+There is a standard for EBNF , ISO/IEC 14977:1996 (1996), but it is rarely 
+used. The standard uses the equal sign (=) instead of an arrow in rules, termi-
+nates each RHS with a semicolon, and requires quotes on all terminal symbols. 
+It also specifies a host of other notational rules.
+3.3.3 Grammars and Recognizers
+Earlier in this chapter, we suggested that there is a close relationship between 
+generation and recognition devices for a given language. In fact, given a 
+ context-free grammar, a recognizer for the language generated by the grammar 
+M03_SEBE8029_12_SE_C03.indd   127 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 158 (Target: ch3_syntax_semantics) ---
+=========================================
+
+134      Chapter 3   Describing Syntax and Semantics
+grammars are a powerful and commonly used tool for compiler writers, who 
+are more interested in the process of producing a compiler than they are in 
+formalism.
+3.5 Describing the Meanings of Programs: Dynamic Semantics
+We now turn to the difficult task of describing the dynamic semantics, or 
+meaning, of the expressions, statements, and program units of a programming 
+language. Because of the power and naturalness of the available notation, 
+describing syntax is a relatively simple matter. On the other hand, no univer -
+sally accepted notation or approach has been devised for dynamic semantics. In 
+this section, we briefly describe several of the methods that have been devel-
+oped. For the remainder of this section, when we use the term semantics, we 
+mean dynamic semantics.
+There are several different reasons underlying the need for a methodology 
+and notation for describing semantics. Programmers obviously need to know 
+precisely what the statements of a language do before they can use them effec-
+tively in their programs. Compiler writers must know exactly what language 
+constructs mean to design implementations for them correctly. If there were a 
+precise semantics specification of a programming language, programs written 
+in the language potentially could be proven correct without testing. Also, com-
+pilers could be shown to produce programs that exhibited exactly the behavior 
+given in the language definition; that is, their correctness could be verified. A 
+complete specification of the syntax and semantics of a programming language 
+could be used by a tool to generate a compiler for the language automatically. 
+Finally, language designers, who would develop the semantic descriptions of 
+their languages, could in the process discover ambiguities and inconsistencies 
+in their designs.
+Software developers and compiler designers typically determine the 
+semantics of programming languages by reading English explanations in lan-
+guage manuals. Because such explanations are often imprecise and incomplete, 
+this approach is clearly unsatisfactory. Due to the lack of complete semantics 
+specifications of programming languages, programs are rarely proven correct 
+without testing, and commercial compilers are never generated automatically 
+from language descriptions.
+Scheme, a functional language described in Chapter 15,  is one of only 
+a few programming languages whose definition includes a formal semantics 
+description. However, the method used is not one described in this chapter, as 
+this chapter is focused on approaches that are suitable for imperative languages.
+3.5.1 Operational Semantics
+The idea behind operational semantics is to describe the meaning of a state-
+ment or program by specifying the effects of running it on a machine. The 
+effects on the machine are viewed as the sequence of changes in its state, where 
+M03_SEBE8029_12_SE_C03.indd   134 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 159 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.5 Describing the Meanings of Programs: Dynamic Semantics     135
+the machine’s state is the collection of the values in its storage. An obvious 
+operational semantics description, then, is given by executing a compiled ver-
+sion of the program on a computer. Most programmers have, on at least one 
+occasion, written a small test program to determine the meaning of some pro-
+gramming language construct, often while learning the language. Essentially, 
+what such a programmer is doing is using operational semantics to determine 
+the meaning of the construct.
+There are several problems with using this approach for complete for -
+mal semantics descriptions. First, the individual steps in the execution of 
+machine language and the resulting changes to the state of the machine are 
+too small and too numerous. Second, the storage of a real computer is too 
+large and complex. There are usually several levels of memory devices, as 
+well as connections to enumerable other computers and memory devices 
+through networks. Therefore, machine languages and real computers are not 
+used for formal operational semantics. Rather, intermediate-level languages 
+and interpreters for idealized computers are designed specifically for the 
+process.
+There are different levels of uses of operational semantics. At the highest 
+level, the interest is in the final result of the execution of a complete program. 
+This is sometimes called natural operational semantics. At the lowest level, 
+operational semantics can be used to determine the precise meaning of a pro-
+gram through an examination of the complete sequence of state changes that 
+occur when the program is executed. This use is sometimes called structural 
+operational semantics.
+3.5.1.1 The Basic Process
+The first step in creating an operational semantics description of a language 
+is to design an appropriate intermediate language, where the primary desired 
+characteristic of the language is clarity. Every construct of the intermediate 
+language must have an obvious and unambiguous meaning. This language is at 
+the intermediate level, because machine language is too low-level to be easily 
+understood and another high-level language is obviously not suitable. If the 
+semantics description is to be used for natural operational semantics, a virtual 
+machine (an interpreter) must be constructed for the intermediate language. 
+The virtual machine can be used to execute either single statements, code 
+segments, or whole programs. The semantics description can be used without 
+a virtual machine if the meaning of a single statement is all that is required. In 
+this use, which is structural operational semantics, the intermediate code can 
+be visually inspected.
+The basic process of operational semantics is not unusual. In fact, the con-
+cept is frequently used in programming textbooks and programming language 
+reference manuals. For example, the semantics of the C 
+for construct can be 
+described in terms of simpler statements, as in
+M03_SEBE8029_12_SE_C03.indd   135 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 160 (Target: ch3_syntax_semantics) ---
+=========================================
+
+136      Chapter 3   Describing Syntax and Semantics
+C Statement Meaning
+for (expr1; expr2; expr3) {
+ . . .
+}
+   expr1;
+loop: if expr2 == 0 goto out
+   . . .
+   expr3;
+   goto loop
+out: . . .
+The human reader of such a description is the virtual computer and is assumed 
+to be able to “execute” the instructions in the definition correctly and recognize 
+the effects of the “execution.”
+The intermediate language and its associated virtual machine used for for-
+mal operational semantics descriptions are often highly abstract. The interme-
+diate language is meant to be convenient for the virtual machine, rather than 
+for human readers. For our purposes, however, a more human-oriented inter-
+mediate language could be used. As such an example, consider the following 
+list of statements, which would be adequate for describing the semantics of the 
+simple control statements of a typical programming language:
+ident 
+= var
+ident = ident + 1
+ident = ident – 1
+goto label
+if var relop var goto label
+In these statements, relop is one of the relational operators from the set {=, 
+<>, >, <, <=, <=} , ident is an identifier, and var is either an identifier or 
+a constant. These statements are all simple and therefore easy to understand 
+and implement.
+A slight generalization of these three assignment statements allows more 
+general arithmetic expressions and assignment statements to be described. The 
+new statements are
+ident 
+= var bin_op var
+ident = un_op var
+where bin_op is a binary arithmetic operator and un_op is a unary operator. Mul-
+tiple arithmetic data types and automatic type conversions, of course, complicate 
+this generalization. Adding just a few more relatively simple instructions would 
+allow the semantics of arrays, records, pointers, and subprograms to be described.
+In Chapter 8, the semantics of various control statements are described 
+using this intermediate language.
+3.5.1.2 Evaluation
+The first and most significant use of formal operational semantics was to 
+describe the semantics of PL/I (Wegner, 1972). That particular abstract 
+machine and the translation rules for PL/I were together named the Vienna 
+Definition Language (VDL), after the city where IBM designed it.
+M03_SEBE8029_12_SE_C03.indd   136 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 161 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.5 Describing the Meanings of Programs: Dynamic Semantics     137
+Operational semantics provides an effective means of describing semantics 
+for language users and language implementors, as long as the descriptions are 
+kept simple and informal. The VDL description of PL/I, unfortunately, is so 
+complex that it serves no practical purpose.
+Operational semantics depends on programming languages of lower 
+levels, not mathematics. The statements of one programming language are 
+described in terms of the statements of a lower-level programming language. 
+This approach can lead to circularities, in which concepts are indirectly defined 
+in terms of themselves. The methods described in the following two sections 
+are much more formal, in the sense that they are based on mathematics and 
+logic, not programming languages.
+3.5.2 Denotational Semantics
+Denotational semantics is the most rigorous and most widely known formal 
+method for describing the meaning of programs. It is solidly based on recursive 
+function theory. A thorough discussion of the use of denotational semantics to 
+describe the semantics of programming languages is necessarily long and com-
+plex. It is our intent to provide the reader with an introduction to the central 
+concepts of denotational semantics, along with a few simple examples that are 
+relevant to programming language specifications.
+The process of constructing a denotational semantics specification for 
+a programming language requires one to define for each language entity 
+both a mathematical object and a function that maps instances of that 
+language entity onto instances of the mathematical object. Because the 
+objects are rigorously defined, they model the exact meaning of their cor -
+responding entities. The idea is based on the fact that there are rigorous 
+ways of manipulating mathematical objects but not programming language 
+constructs. The difficulty with this method lies in creating the objects 
+and the mapping functions. The method is named denotational because the 
+mathematical objects denote the meaning of their corresponding syntactic 
+entities.
+The mapping functions of a denotational semantics programming lan-
+guage specification, like all functions in mathematics, have a domain and a 
+range. The domain is the collection of values that are legitimate parameters 
+to the function; the range is the collection of objects to which the parameters 
+are mapped. In denotational semantics, the domain is called the syntactic 
+domain, because it is syntactic structures that are mapped. The range is called 
+the semantic domain.
+Denotational semantics is related to operational semantics. In oper -
+ational semantics, programming language constructs are translated into 
+simpler programming language constructs, which become the basis of the 
+meaning of the construct. In denotational semantics, programming lan-
+guage constructs are mapped to mathematical objects, either sets or, more 
+often, functions. However, unlike operational semantics, denotational 
+semantics does not model the step-by-step computational processing of 
+programs.
+M03_SEBE8029_12_SE_C03.indd   137 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 162 (Target: ch3_syntax_semantics) ---
+=========================================
+
+138      Chapter 3   Describing Syntax and Semantics
+3.5.2.1 Two Simple Examples
+We use a very simple language construct, character string representations of 
+binary numbers, to introduce the denotational method. The syntax of such 
+binary numbers can be described by the following grammar rules:
+<bin_num> 
+S  '0'
+      | '1'
+      | <bin_num> '0'
+      | <bin_num> '1'
+A parse tree for the example binary number, 110, is shown in Figure 3.9. Notice 
+that we put apostrophes around the syntactic digits to show they are not mathe-
+matical digits. This is similar to the relationship between ASCII coded digits and 
+mathematical digits. When a program reads a number as a string, it must be con-
+verted to a mathematical number before it can be used as a value in the program.
+Figure 3.9
+A parse tree of the 
+binary number 110
+<bin_num>
+<bin_num> '0'
+<bin_num>
+'1'
+'1'
+The syntactic domain of the mapping function for binary numbers is the 
+set of all character string representations of binary numbers. The semantic 
+domain is the set of nonnegative decimal numbers, symbolized by N.
+T o describe the meaning of binary numbers using denotational semantics, 
+we associate the actual meaning (a decimal number) with each rule that has a 
+single terminal symbol as its RHS.
+In our example, decimal numbers must be associated with the first two 
+grammar rules. The other two grammar rules are, in a sense, computational 
+rules, because they combine a terminal symbol, to which an object can be asso-
+ciated, with a nonterminal, which can be expected to represent some construct. 
+Presuming an evaluation that progresses upward in the parse tree, the nonter-
+minal in the right side would already have its meaning attached. So, a syntax 
+rule with a nonterminal as its RHS would require a function that computed 
+the meaning of the LHS, which represents the meaning of the complete RHS.
+The semantic function, named 
+Mbin, maps the syntactic objects, as described 
+in the previous grammar rules, to the objects in N, the set of non-negative dec-
+imal numbers. The function 
+Mbin is defined as follows:
+M03_SEBE8029_12_SE_C03.indd   138 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 163 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.5 Describing the Meanings of Programs: Dynamic Semantics     139
+Mbin ('0') = 0
+Mbin ('1') = 1
+Mbin (<bin_num> '0') = 2 * Mbin (<bin_num>)
+Mbin (<bin_num>'1') = 2 * Mbin (<bin_num>) + 1
+The meanings, or denoted objects (which in this case are decimal numbers), can 
+be attached to the nodes of the parse tree shown on the previous page, yielding 
+the tree in Figure 3.10. This is syntax-directed semantics. Syntactic entities are 
+mapped to mathematical objects with concrete meaning.
+Figure 3.10
+A parse tree with 
+denoted objects for 110
+<bin_num>
+<bin_num> '0'
+<bin_num>
+'1'
+'1'1
+3
+6
+In part because we need it later, we now show a similar example for describ-
+ing the meaning of syntactic decimal literals. In this case, the syntactic domain 
+is the set of character string representations of decimal numbers. The semantic 
+domain is once again the set N.
+<dec_num> S 
+'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7''8'|'9'
+     |<dec_num> ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')
+The denotational mappings for these syntax rules are
+Mdec ('0') = 0, Mdec ('1') = 1, Mdec ('2') = 2, . . ., Mdec ('9') = 9
+Mdec (<dec_num> '0') = 10 * Mdec (<dec_num>)
+Mdec (<dec_num> '1') = 10 * Mdec (<dec_num>) + 1
+. . .
+Mdec (<dec_num> '9') = 10 * Mdec (<dec_num>) + 9
+In the following sections, we present the denotational semantics descrip-
+tions of a few simple constructs. The most important simplifying assumption 
+made here is that both the syntax and static semantics of the constructs are 
+correct. In addition, we assume that only two scalar types are included: integer 
+and Boolean.
+M03_SEBE8029_12_SE_C03.indd   139 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 164 (Target: ch3_syntax_semantics) ---
+=========================================
+
+140      Chapter 3   Describing Syntax and Semantics
+3.5.2.2 The State of a Program
+The denotational semantics of a program could be defined in terms of state 
+changes in an ideal computer. Operational semantics are defined in this way, 
+and denotational semantics are defined in nearly the same way. In a further 
+simplification, however, denotational semantics is defined in terms of only 
+the values of all of the program’s variables. So, denotational semantics uses 
+the state of the program to describe meaning, whereas operational semantics 
+uses the state of a machine. The key difference between operational seman-
+tics and denotational semantics is that state changes in operational semantics 
+are defined by coded algorithms, written in some programming language, 
+whereas in denotational semantics, state changes are defined by mathematical 
+functions.
+Let the state s of a program be represented as a set of ordered pairs, as 
+follows:
+s 
+= {6i1, v1 7, 6i2, v2 7, c, 6in, vn 7}
+Each i is the name of a variable, and the associated v’s are the current values 
+of those variables. Any of the v’s can have the special value undef, which indi-
+cates that its associated variable is currently undefined. Let VARMAP be a 
+function of two parameters: a variable name and the program state. The value 
+of 
+ VARMAP (ij, s) is vj (the value paired with ij in state s). Most semantics 
+mapping functions for programs and program constructs map states to states. 
+These state changes are used to define the meanings of programs and program 
+constructs. Some language constructs—for example, expressions—are mapped 
+to values, not states.
+3.5.2.3 Expressions
+Expressions are fundamental to most programming languages. We assume here 
+that expressions have no side effects. Furthermore, we deal with only very sim-
+ple expressions: The only operators are 
++ and *, and an expression can have at 
+most one operator; the only operands are scalar integer variables and integer 
+literals; there are no parentheses; and the value of an expression is an integer. 
+Following is the BNF description of these expressions:
+<expr> S <dec_num> 
+| <var> | <binary_expr>
+<binary_expr> S <left_expr> <operator> <right_expr>
+<left_expr> S <dec_num> | <var>
+<right_expr> S <dec_num> | <var>
+<operator> S + | *
+The only error we consider in expressions is a variable having an undefined value. 
+Obviously, other errors can occur, but most of them are machine-
+ dependent. 
+Let Z be the set of integers, and let error be the error value. Then Zh {error} 
+is the semantic domain for the denotational specification for our expressions.
+M03_SEBE8029_12_SE_C03.indd   140 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 165 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.5 Describing the Meanings of Programs: Dynamic Semantics     141
+The mapping function for a given expression E and state s follows. T o 
+distinguish between mathematical function definitions and the assignment 
+statements of programming languages, we use the symbol /uni2206 = to define math-
+ematical functions. The implication symbol, =>, used in this definition con-
+nects the form of an operand with its associated case (or switch) construct. 
+Dot notation is used to refer to the child nodes of a node. For example,  
+<binary_expr>.<left_expr> refers to the left child node of <binary_expr>.
+Me(<expr>, s) /uni2206= case <expr> of
+         <dec_num>=> Mdec (<dec_num>, s)
+         <var> =>if VARMAP (<var>, s) == undef
+               then error
+               else VARMAP(<var>, s)
+         <binary_expr> =>
+          if(Me (<binary_expr>.<left_expr>,s) == undef OR
+            Me (<binary_expr>.<right_expr>, s) == undef)
+          then error
+          else if (<binary_expr>.<operator> == '+')
+              then Me (<binary_expr>.<left_expr>, s) +
+                 Me (<binary_expr>.<right_expr>, s)
+              else Me (<binary_expr>.<left_expr>, s) *
+                 Me (<binary_expr>.<right_expr>, s)
+3.5.2.4 Assignment Statements
+An assignment statement is an expression evaluation plus the setting of the 
+target variable to the expression’s value. In this case, the meaning function maps 
+a state to a state. This function can be described with the following:
+Ma (x = E, s) /uni2206= if Me (E, s) == error
+            then error
+            else s' = {<i1, v1/uni2032 >, <i2, v2/uni2032>, . . . , <in, vn/uni2032>}, where
+                for j = 1, 2, . . . , n
+                 if ij == x
+                then vj/uni2032 = Me (E, s)
+                else vj/uni2032 = VARMAP(ij,, s)
+Note that the comparison in the third last line above, ij == x, is of names, not 
+values.
+3.5.2.5 Logical Pretest Loops
+The denotational semantics of a logical pretest loop is deceptively simple. T o 
+expedite the discussion, we assume that there are two other existing mapping 
+functions, 
+Msl and Mb, that map statement lists and states to states and Boolean 
+expressions to Boolean values (or error), respectively. The function is
+M03_SEBE8029_12_SE_C03.indd   141 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 166 (Target: ch3_syntax_semantics) ---
+=========================================
+
+142      Chapter 3   Describing Syntax and Semantics
+M1 (while B do L, s) /uni2206= if Mb (B, s) == undef
+            then error
+            else if Mb (B, s) == false
+              then s
+              else if Msl (L, s) == error
+                 then error
+                 else M1 (while B do L, Msl (L, s))
+The meaning of the loop is simply the value of the program variables after the 
+statements in the loop have been executed the prescribed number of times, 
+assuming there have been no errors. In essence, the loop has been converted 
+from iteration to recursion, where the recursion control is mathematically 
+defined by other recursive state mapping functions. Recursion is easier to 
+describe with mathematical rigor than iteration.
+One significant observation at this point is that this definition, like actual 
+program loops, may compute nothing because of nontermination.
+3.5.2.6 Evaluation
+Objects and functions, such as those used in the earlier constructs, can be defined 
+for the other syntactic entities of programming languages. When a complete sys-
+tem has been defined for a given language, it can be used to determine the meaning 
+of complete programs in that language. This provides a framework 
+for thinking about programming in a highly rigorous way.
+As stated previously, denotational semantics can be used as 
+an aid to language design. For example, statements for which 
+the denotational semantic description is complex and difficult 
+may indicate to the designer that such statements may also be 
+difficult for language users to understand and that an alternative 
+design may be in order.
+Because of the complexity of denotational descriptions, they 
+are of little use to language users. On the other hand, they pro-
+vide an excellent way to describe a language concisely.
+Although the use of denotational semantics is normally 
+attributed to Scott and Strachey (1971), the general denotational 
+approach to language description can be traced to the nineteenth 
+century (Frege, 1892).
+3.5.3 Axiomatic Semantics
+Axiomatic semantics, thus named because it is based on mathematical logic, is 
+the most abstract approach to semantics specification discussed in this chapter. 
+Rather than directly specifying the meaning of a program, axiomatic semantics 
+specifies what can be proven about the program. Recall that one of the possible 
+uses of semantic specifications is to prove the correctness of programs.
+history note
+A significant amount of work 
+has been done on the possibility 
+of using denotational language 
+descriptions to generate compil-
+ers automatically (Jones, 1980; 
+Milos et al., 1984; 
+ Bodwin 
+et al., 1982). These efforts 
+have shown that the method is 
+feasible, but the work has never 
+progressed to the point where it 
+can be used to generate useful 
+compilers.
+M03_SEBE8029_12_SE_C03.indd   142 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 167 (Target: ch3_syntax_semantics) ---
+=========================================
+
+3.5 Describing the Meanings of Programs: Dynamic Semantics     143
+In axiomatic semantics, there is no model of the state of a machine or pro-
+gram or model of state changes that take place when the program is executed. 
+The meaning of a program is based on relationships among program variables 
+and constants, which are the same for every execution of the program.
+Axiomatic semantics has two distinct applications: program verification and 
+program semantics specification. This section focuses on program verification 
+in its description of axiomatic semantics.
+Axiomatic semantics was defined in conjunction with the development of 
+an approach to proving the correctness of programs. Such correctness proofs, 
+when they can be constructed, show that a program performs the computation 
+described by its specification. In a proof, each statement of a program is both 
+preceded and followed by a logical expression that specifies constraints on pro-
+gram variables. These, rather than the entire state of an abstract machine (as 
+with operational semantics), are used to specify the meaning of the statement. 
+The notation used to describe constraints—indeed, the language of axiomatic 
+semantics—is predicate calculus. Although simple Boolean expressions are 
+often adequate to express constraints, in some cases they are not.
+When axiomatic semantics is used to specify formally the meaning of a 
+statement, the meaning is defined by the statement’s effect on assertions about 
+the data affected by the statement.
+3.5.3.1 Assertions
+The logical expressions used in axiomatic semantics are called predicates, or asser-
+tions. An assertion immediately preceding a program statement describes the 
+constraints on the program variables at that point in the program. An assertion 
+immediately following a statement describes the new constraints on those variables 
+(and possibly others) after execution of the statement. These assertions are called 
+the precondition and postcondition, respectively, of the statement. For two adja-
+cent statements, the postcondition of the first serves as the precondition of the 
+second. Developing an axiomatic description or proof of a given program requires 
+that every statement in the program has both a precondition and a postcondition.
+In the following sections, we examine assertions from the point of view 
+that preconditions for statements are computed from given postconditions, 
+although it is possible to consider these in the opposite sense. We assume all 
+variables are integer type. As a simple example, consider the following assign-
+ment statement and postcondition:
+sum = 2 * x + 1 {sum > 1}
+Precondition and postcondition assertions are presented in braces to distin-
+guish them from parts of program statements. One possible precondition for 
+this statement is {
+x > 10}.
+In axiomatic semantics, the meaning of a specific statement is defined by 
+its precondition and its postcondition. In effect, the two assertions specify pre-
+cisely the effect of executing the statement.
+M03_SEBE8029_12_SE_C03.indd   143 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 179 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Summary     155
+produces for P
+{(n + 1) * . . . * n = 1) AND (n >= 0)}
+The left operand of the AND operator is true (because 1 = 1 ) and the right 
+operand is exactly the precondition of the whole code segment, { n >= 0 }. 
+Therefore, the program has been proven to be correct.
+3.5.3.8 Evaluation
+As stated previously, to define the semantics of a complete programming lan-
+guage using the axiomatic method, there must be an axiom or an inference 
+rule for each statement type in the language. Defining axioms or inference 
+rules for some of the statements of programming languages has proven to be 
+a difficult task. An obvious solution to this problem is to design the language 
+with the axiomatic method in mind, so that only statements for which axioms 
+or inference rules can be written are included. Unfortunately, such a language 
+would necessarily leave out some useful and powerful statements.
+Axiomatic semantics is a powerful tool for research into program correct-
+ness proofs, and it provides an excellent framework in which to reason about 
+programs, both during their construction and later. Its usefulness in describing 
+the meaning of programming languages to language users and compiler writers 
+is, however, highly limited.
+SUMMARY
+Backus-Naur Form and context-free grammars are equivalent metalanguages 
+that are well suited for the task of describing the syntax of programming lan-
+guages. Not only are they concise descriptive tools, but also the parse trees 
+that can be associated with their generative actions give graphical evidence of 
+the underlying syntactic structures. Furthermore, they are naturally related to 
+recognition devices for the languages they generate, which leads to the rela-
+tively easy construction of syntax analyzers for compilers for these languages.
+An attribute grammar is a descriptive formalism that can describe both the 
+syntax and static semantics of a language. Attribute grammars are extensions to 
+context-free grammars. An attribute grammar consists of a grammar, a set of 
+attributes, a set of attribute computation functions, and a set of predicates that 
+describe static semantics rules.
+This chapter provides brief introductions to three methods of semantic 
+description: operational, denotational, and axiomatic. Operational semantics is a 
+method of describing the meaning of language constructs in terms of their effects 
+on an ideal machine. In denotational semantics, mathematical objects are used to 
+represent the meanings of language constructs. Language entities are converted to 
+these mathematical objects with recursive functions. Axiomatic semantics, which is 
+based on formal logic, was devised as a tool for proving the correctness of programs.
+M03_SEBE8029_12_SE_C03.indd   155 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 180 (Target: ch3_syntax_semantics) ---
+=========================================
+
+156      Chapter 3   Describing Syntax and Semantics
+BIBLIOGRAPHIC NOTES
+Syntax description using context-free grammars and BNF are thoroughly 
+ discussed in Cleaveland and Uzgalis (1976).
+Research in axiomatic semantics was begun by Floyd (1967) and fur -
+ther developed by Hoare (1969). The semantics of a large part of Pascal was 
+described by Hoare and Wirth (1973) using this method. The parts they did 
+not complete involved functional side effects and goto statements. These were 
+found to be the most difficult to describe.
+The technique of using preconditions and postconditions during the devel-
+opment of programs is described (and advocated) by Dijkstra (1976) and also 
+discussed in detail in Gries (1981).
+Good introductions to denotational semantics can be found in Gordon 
+(1979) and Stoy (1977). Introductions to all of the semantics description methods 
+discussed in this chapter can be found in Marcotty et al. (1976). Another good 
+reference for much of the chapter material is Pagan (1981). The form of the deno-
+tational semantic functions in this chapter is similar to that found in Meyer (1990).
+REVIEW QUESTIONS
+1. Define syntax and semantics.
+2. Who are language descriptions for?
+3. Describe the operation of a general language generator.
+4. Describe the operation of a general language recognizer.
+5. What is the difference between a sentence and a sentential form?
+6. Define a left-recursive grammar rule.
+7. What three extensions are common to most EBNFs?
+8. Distinguish between static and dynamic semantics.
+9. What purpose do predicates serve in an attribute grammar?
+10. What is the difference between a synthesized and an inherited attribute?
+11. How is the order of evaluation of attributes determined for the trees of a 
+given attribute grammar?
+12.
+ What is the primary use of attribute grammars?
+13. Explain the primary uses of a methodology and notation for describing 
+the semantics of programming languages.
+14.
+ Why can machine languages not be used to define statements in 
+operational semantics?
+15.
+ Describe the two levels of uses of operational semantics.
+16. In denotational semantics, what are the syntactic and semantic domains?
+17. What is stored in the state of a program for denotational semantics?
+18. Which semantics approach is most widely known?
+M03_SEBE8029_12_SE_C03.indd   156 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 181 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Problem Set     157
+19. What two things must be defined for each language entity in order to 
+construct a denotational description of the language?
+20. Which part of an inference rule is the antecedent?
+21. What is a predicate transformer function?
+22. What does partial correctness mean for a loop construct?
+23. On what branch of mathematics is axiomatic semantics based?
+24. On what branch of mathematics is denotational semantics based?
+25. What is the problem with using a software pure interpreter for 
+operational semantics?
+26.
+ Explain what the preconditions and postconditions of a given statement 
+mean in axiomatic semantics.
+27.
+ Describe the approach of using axiomatic semantics to prove the 
+correctness of a given program.
+28.
+ Describe the basic concept of denotational semantics.
+29. In what fundamental way do operational semantics and denotational 
+semantics differ?
+PROBLEM SET
+1. The two mathematical models of language description are generation 
+and recognition. Describe how each can define the syntax of a 
+programming language.
+2.
+ Write EBNF descriptions for the following:
+a. A Java class definition header statement
+b. A Java method call statement
+c. A C switch statement
+d. A C union definition
+e. C float literals
+3. Rewrite the BNF of Example 3.4 to give + precedence over * and force + 
+to be right associative.
+4. Rewrite the BNF of Example 3.4 to add the ++ and -- unary operators 
+of Java.
+5. Write a BNF description of the Boolean expressions of Java, including 
+the three operators 
+&&, ||, and ! and the relational expressions.
+6. Using the grammar in Example 3.2, show a parse tree and a leftmost 
+derivation for each of the following statements:
+a. A = A * (B + (C * A))
+b. B = C * (A * C + B)
+c. A = A * (B + (C))
+M03_SEBE8029_12_SE_C03.indd   157 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 183 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Problem Set     159
+13. Write a grammar for the language consisting of strings that have n 
+copies of the letter a followed by the same number of copies of the 
+letter b, where n 
+> 0. For example, the strings ab, aaaabbbb, and 
+aaaaaaaabbbbbbbb are in the language but a, abb, ba, and aaabb are not.
+14. Draw parse trees for the sentences aabb and aaaabbbb, as derived from 
+the grammar of Problem 13.
+15.
+ Convert the BNF of Example 3.1 to EBNF .
+16. Convert the BNF of Example 3.3 to EBNF .
+17. Convert the following EBNF to BNF:
+S S A{bA}
+A S a[b]A
+18. What is the difference between an intrinsic attribute and a nonintrinsic 
+synthesized attribute?
+19.
+ Write an attribute grammar whose BNF basis is that of Example 3.6 in 
+Section 3.4.5 but whose language rules are as follows: Data types cannot 
+be mixed in expressions, but assignment statements need not have the 
+same types on both sides of the assignment operator.
+20.
+ Write an attribute grammar whose base BNF is that of Example 3.2 and 
+whose type rules are the same as for the assignment statement example 
+of Section 3.4.5.
+21.
+ Using the virtual machine instructions given in Section 3.5.1.1, give an 
+operational semantic definition of the following:
+a. Java do-while
+b. Ada for
+c. C++ if-then-else
+d. C for
+e. C switch
+22. Write a denotational semantics mapping function for the following 
+statements:
+a. Ada for
+b. Java do-while
+c. Java Boolean expressions
+d. Java for
+e. C switch
+23. Compute the weakest precondition for each of the following assignment 
+statements and postconditions:
+a. a = 2 * (b - 1) - 1 {a > 0}
+b. b = (c + 10) / 3 {b > 6}
+c. a = a + 2 * b - 1 {a > 1}
+d. x = 2 * y + x - 1 {x > 11}
+M03_SEBE8029_12_SE_C03.indd   159 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 199 (Target: ch3_syntax_semantics) ---
+=========================================
+
+4.4 Recursive-Descent Parsing     175
+of context-free grammars is not adequate to describe all of the syntax of most 
+programming languages.)
+All algorithms used for the syntax analyzers of commercial compilers 
+have complexity O(n), which means the time they take is linearly related to 
+the length of the string to be parsed. This is vastly more efficient than 
+O(n3) 
+algorithms.
+4.4 Recursive-Descent Parsing
+This section introduces the recursive-descent top-down parser implementation 
+process.
+4.4.1 The Recursive-Descent Parsing Process
+A recursive-descent parser is so named because it consists of a collection of 
+subprograms, many of which are recursive, and it produces a parse tree in 
+top-down order. This recursion is a reflection of the nature of programming 
+languages, which include several different kinds of nested structures. For 
+example, statements are often nested in other statements. Also, parentheses in 
+expressions must be properly nested. The syntax of these structures is naturally 
+described with recursive grammar rules.
+EBNF is ideally suited for recursive-descent parsers. Recall from 
+ Chapter 3 
+that the primary EBNF extensions are braces, which specify that what they 
+enclose can appear zero or more times, and brackets, which specify that what 
+they enclose can appear once or not at all. Note that in both cases, the enclosed 
+symbols are optional. Consider the following examples:
+<if_statement> 
+S  if <logic_expr> <statement> [else <statement>]
+<ident_list> S  ident {, ident}
+In the first rule, the else clause of an if statement is optional. In the second, 
+an <ident_list> is an identifier, followed by zero or more repetitions of a comma 
+and an identifier.
+A recursive-descent parser has a subprogram for each nonterminal in its 
+associated grammar. The responsibility of the subprogram associated with a 
+particular nonterminal is as follows: When given an input string, it traces out 
+the parse tree that can be rooted at that nonterminal and whose leaves match 
+the input string. In effect, a recursive-descent parsing subprogram is a parser 
+for the language (set of strings) that is generated by its associated nonterminal.
+Consider the following EBNF description of simple arithmetic expressions:
+<expr> 
+S  <term> {(+ | -) <term>}
+<term> S  <factor> {(* | /) <factor>}
+<factor> S  id | int_constant | ( <expr> )
+M04_SEBE8029_12_SE_C04.indd   175 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 200 (Target: ch3_syntax_semantics) ---
+=========================================
+
+176      Chapter 4   Lexical and Syntax Analysis
+Recall from Chapter 3 that an EBNF grammar for arithmetic expressions, such 
+as this one, does not force any associativity rule. Therefore, when using such a 
+grammar as the basis for a compiler, one must take care to ensure that the code 
+generation process, which is normally driven by syntax analysis, produces code 
+that adheres to the associativity rules of the language. This can be done easily 
+when recursive-descent parsing is used.
+In the following recursive-descent function, 
+expr, the lexical analyzer is 
+the function that is implemented in Section 4.2. It gets the next lexeme and puts 
+its token code in the global variable nextToken. The token codes are defined 
+as named constants, as in Section 4.2.
+A recursive-descent subprogram for a rule with a single RHS is relatively 
+simple. For each terminal symbol in the RHS, that terminal symbol is com-
+pared with 
+nextToken. If they do not match, it is a syntax error. If they match, 
+the lexical analyzer is called to get the next input token. For each nonterminal, 
+the parsing subprogram for that nonterminal is called.
+The recursive-descent subprogram for the first rule in the previous exam-
+ple grammar, written in C, is
+/* expr
+   Parses strings in the language generated by the rule:
+   <expr> -> <term> {(+ | -) <term>}
+   */
+void  expr() {
+  printf("Enter <expr>\n");
+/* Parse the first term */
+  term();
+/* As long as the next token is + or -, get
+   the next token and parse the next term */
+  while  (nextToken == ADD_OP || nextToken == SUB_OP) {
+    lex();
+    term();
+  }
+  printf("Exit <expr>\n");
+}  /* End of function expr */
+Notice that the expr function includes tracing output statements, which are 
+included to produce the example output shown later in this section.
+Recursive-descent parsing subprograms are written with the convention 
+that each one leaves the next token of input in nextToken. So, whenever a pars-
+ing function begins, it assumes that nextToken has the code for the leftmost 
+token of the input that has not yet been used in the parsing process.
+The part of the language that the expr function parses consists of one or 
+more terms, separated by either plus or minus operators. This is the language 
+generated by the nonterminal <expr>. Therefore, first it calls the function 
+that parses terms (
+term). Then it continues to call that function as long as 
+M04_SEBE8029_12_SE_C04.indd   176 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 205 (Target: ch3_syntax_semantics) ---
+=========================================
+
+4.4 Recursive-Descent Parsing     181
+For each nonterminal, A,
+1. Group the A-rules as A S Aa1, /H20841 g /H20841 Aam /H20841 b1 /H20841 b2 /H20841 g /H20841 bn where 
+none of the b’s begins with A
+2. Replace the original A-rules with
+ A Sb1A/uni2032 /H20841 b2A/uni2032 /H20841 g /H20841 bnA/uni2032
+ A/uni2032Sa1A/uni2032 /H20841 a2A/uni2032 /H20841 amA/uni2032 /H20841 e
+Note that e specifies the empty string. A rule that has e as its RHS is called an 
+erasure rule, because its use in a derivation effectively erases its LHS from the 
+sentential form.
+Consider the following example grammar and the application of the above 
+process:
+E S E + T /H20841 T
+TS T  * F /H20841 F
+F S ( E ) + id
+For the E-rules, we have a1 = + T and b = T , so we replace the E-rules with
+ES T  E/uni2032
+E/uni2032S + T E/uni2032 /H20841 e
+For the T-rules, we have a1 = *F and b = F , so we replace the T-rules with
+T S F T/uni2032
+T /uni2032S  * F T/uni2032 /H20841 e
+Because there is no left recursion in the F-rules, they remain the same, so the 
+complete replacement grammar is
+ES T  E/uni2032
+E/uni2032S + T  E/uni2032 /H20841 e
+TS F T/uni2032
+T/uni2032S  * F T/uni2032 /H20841 e
+F S ( E ) /H20841 id
+This grammar generates the same language as the original grammar but is not 
+left recursive.
+As was the case with the expression grammar written using EBNF in 
+Section 4.4.1, this grammar does not specify left associativity of operators. 
+However, it is relatively easy to design the code generation based on this 
+grammar so that the addition and multiplication operators will have left 
+associativity.
+Indirect left recursion poses the same problem as direct left recursion. For 
+example, suppose we have
+A S B a A
+B S A b
+M04_SEBE8029_12_SE_C04.indd   181 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 207 (Target: ch3_syntax_semantics) ---
+=========================================
+
+4.5 Bottom-Up Parsing     183
+The FIRST sets for the RHSs in the A-rules are {a} and {a}, {b} which are clearly 
+not disjoint. So, these rules fail the pairwise disjointness test. In terms of the 
+parser, the subprogram for A could not determine which RHS was being parsed 
+by looking at the next symbol of input, because if it were an a, it could be either 
+RHS. This issue is of course more complex if one or more of the RHSs begin 
+with nonterminals.
+In many cases, a grammar that fails the pairwise disjointness test can be 
+modified so that it will pass the test. For example, consider the rule
+<variable> 
+S  identifier /H20841 identifier [<expression>]
+This states that a <variable> is either an identifier or an identifier followed by 
+an expression in brackets (a subscript). These rules clearly do not pass the pair-
+wise disjointness test, because both RHSs begin with the same terminal, iden-
+tifier. This problem can be alleviated through a process called left factoring.
+We now take an informal look at left factoring. Consider our rules for 
+<variable>. Both RHSs begin with identifier. The parts that follow identifier in 
+the two RHSs are 
+e (the empty string) and [<expression>]. The two rules can 
+be replaced by the following two rules:
+<variable> S  identifier <new>
+<new> Se /H20841  [<expression>]
+It is not difficult to see that together, these two rules generate the same lan-
+guage as the two rules with which we began. However, these two pass the 
+pairwise disjointness test.
+If the grammar is being used as the basis for a recursive-descent parser, an 
+alternative to left factoring is available. With an EBNF extension, the problem 
+disappears in a way that is very similar to the left factoring solution. Consider 
+the original rules above for <variable>. The subscript can be made optional by 
+placing it in square brackets, as in
+<variable> 
+S  identifier [[<expression>]]
+In this rule, the outer brackets are metasymbols that indicate that what is 
+inside is optional. The inner brackets are terminal symbols of the program-
+ming language being described. The point is that we replaced two rules with 
+a single rule that generates the same language but passes the pairwise dis -
+jointness test.
+A formal algorithm for left factoring can be found in Aho et al. (2006). Left 
+factoring cannot solve all pairwise disjointness problems of grammars. In some 
+cases, rules must be rewritten in other ways to eliminate the problem.
+4.5 Bottom-Up Parsing
+This section introduces the general process of bottom-up parsing and includes 
+a description of the LR parsing algorithm.
+M04_SEBE8029_12_SE_C04.indd   183 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 215 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Summary     191
+SUMMARY
+Syntax analysis is a common part of language implementation, regardless of the 
+implementation approach used. Syntax analysis is normally based on a formal 
+syntax description of the language being implemented. A context-free gram-
+mar, which is also called BNF , is the most common approach for describing 
+syntax. The task of syntax analysis is usually divided into two parts: lexical 
+analysis and syntax analysis. There are several reasons for separating lexical 
+analysis—namely, simplicity, efficiency, and portability.
+A lexical analyzer is a pattern matcher that isolates the small-scale parts 
+of a program, which are called lexemes. Lexemes occur in categories, such as 
+integer literals and names. These categories are called tokens. Each token is 
+assigned a numeric code, which along with the lexeme is what the lexical ana-
+lyzer produces. There are three distinct approaches to constructing a lexical 
+analyzer: using a software tool to generate a table for a table-driven analyzer, 
+building such a table by hand, and writing code to implement a state diagram 
+description of the tokens of the language being implemented. The state dia-
+gram for tokens can be reasonably small if character classes are used for tran-
+sitions, rather than having transitions for every possible character from every 
+state node. Also, the state diagram can be simplified by using a table lookup to 
+recognize reserved words.
+Syntax analyzers have two goals: to detect syntax errors in a given program 
+and to produce a parse tree, or possibly only the information required to build 
+such a tree, for a given program. Syntax analyzers are either top-down, mean-
+ing they construct leftmost derivations and a parse tree in top-down order, or 
+bottom-up, in which case they construct the reverse of a rightmost derivation 
+and a parse tree in bottom-up order. Parsers that work for all unambiguous 
+grammars have complexity 
+O(n3). However, parsers used for implementing 
+syntax analyzers for programming languages work on subclasses of unambigu-
+ous grammars and have complexity O(n).
+A recursive-descent parser is an LL parser that is implemented by writing 
+code directly from the grammar of the source language. EBNF is ideal as the 
+basis for recursive-descent parsers. A recursive-descent parser has a subpro-
+gram for each nonterminal in the grammar. The code for a given grammar 
+rule is simple if the rule has a single RHS. The RHS is examined left to right. 
+For each nonterminal, the code calls the associated subprogram for that non-
+terminal, which parses whatever the nonterminal generates. For each terminal, 
+the code compares the terminal with the next token of input. If they match, the 
+code simply calls the lexical analyzer to get the next token. If they do not, the 
+subprogram reports a syntax error. If a rule has more than one RHS, the sub-
+program must first determine which RHS it should parse. It must be possible 
+to make this determination on the basis of the next token of input.
+T wo distinct grammar characteristics prevent the construction of a 
+ recursive- 
+descent parser based on the grammar. One of these is left recursion. The pro-
+cess of eliminating direct left recursion from a grammar is relatively simple. 
+Although we do not cover it, an algorithm exists to remove both direct and 
+M04_SEBE8029_12_SE_C04.indd   191 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 219 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Programming Exercises     195
+Assume you have a lexical analyzer named lex and an error-handling 
+subprogram named error, which is called whenever a syntax error is 
+detected.
+10. Implement and test the LR parsing algorithm given in Section 4.5.3.
+11. Write an EBNF rule that describes the while statement of Java or C++. 
+Write the recursive-descent subprogram in Java or C++ for this rule.
+12. Write an EBNF rule that describes the for statement of Java or C++. 
+Write the recursive-descent subprogram in Java or C++ for this rule.
+M04_SEBE8029_12_SE_C04.indd   195 1/5/18   11:12 PM
+=========================================
+--- SEBESTA PAGE 316 (Target: ch3_syntax_semantics) ---
+=========================================
+
+292      Chapter 6   Data Types
+6.16 Theory and Data Types
+T ype theory is a broad area of study in mathematics, logic, computer science, 
+and philosophy. It began in mathematics in the early 1900s and later became 
+a standard tool in logic. Any general discussion of type theory is necessarily 
+complex, lengthy, and highly abstract. Even when restricted to computer sci-
+ence, type theory includes such diverse and complex subjects as typed lambda 
+calculus, combinators, the metatheory of bounded quantification, existential 
+types, and higher-order polymorphism. All these topics are far beyond the 
+scope of this book.
+In computer science there are two branches of type theory: practical and 
+abstract. The practical branch is concerned with data types in commercial pro-
+gramming languages; the abstract branch primarily focuses on typed lambda 
+calculus, an area of extensive research by theoretical computer scientists over 
+the past half century. This section is restricted to a brief description of some 
+of the mathematical formalisms that underlie data types in programming 
+languages.
+A data type defines a set of values and a collection of operations on those 
+values. A type system is a set of types and the rules that govern their use in 
+programs. Obviously, every typed programming language defines a type system. 
+The formal model of a type system of a programming language consists of a 
+set of types and a collection of functions that define the type rules of the lan-
+guage, which are used to determine the type of any expression. A formal system 
+that describes the rules of a type system, attribute grammars, is introduced in 
+Chapter 3.
+An alternative model to attribute grammars uses a type map and a collection 
+of functions, not associated with grammar rules, that specify the type rules. A 
+type map is similar to the state of a program used in denotational semantics, 
+consisting of a set of ordered pairs, with the first element of each pair being a 
+variable’s name and the second element being its type. A type map is constructed 
+using the type declarations in the program. In a static typed language, the type 
+map need only be maintained during compilation, although it changes as the 
+program is analyzed by the compiler. If any type checking is done dynamically, 
+the type map must be maintained during execution. The concrete version of a 
+type map in a compilation system is the symbol table, constructed primarily by 
+the lexical and syntax analyzers. Dynamic types sometimes are maintained with 
+tags attached to values or objects.
+As stated previously, a data type is a set of values, although in a data type 
+the elements are often ordered. For example, the elements in all enumera -
+tion types are ordered. However, in a mathematical set the elements are not 
+ordered. Despite this difference, set operations can be used on data types to 
+describe new data types. The structured data types of programming languages 
+are defined by type operators, or constructors that correspond to set operations. 
+M06_SEBE8029_12_SE_C06.indd   292 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 366 (Target: ch3_syntax_semantics) ---
+=========================================
+
+342      Chapter 8   Statement-Level Control Structures 
+which is equivalent to the following:
+if count < 10 :
+  bag1 = True
+else :
+  if count < 100 :
+    bag2 = True
+  else :
+    if count < 1000 :
+      bag3 = True
+    else :
+      bag4 = True
+The else-if version (the first) is the more readable of the two. Notice that this 
+example is not easily simulated with a switch statement, because each select-
+able statement is chosen on the basis of a Boolean expression. Therefore, the 
+else-if statement is not a redundant form of 
+switch. In fact, none of the mul-
+tiple selectors in contemporary languages are as general as the if-then-else-if 
+ statement. An operational semantics description of a general selector statement 
+with else-if clauses, in which the E’s are logic expressions and the S’s are state-
+ments, is given here:
+  if E1 goto 1
+  if E2 goto 2
+  . . .
+1: S1
+   goto out
+2: 
+S2
+   goto out
+. . .
+out: . . .
+From this description, we can see the difference between multiple selection 
+structures and else-if statements: In a multiple selection statement, all the E’s 
+would be restricted to comparisons between the value of a single expression 
+and some other values.
+Languages that do not include the else-if statement can use the same con-
+trol structure, with only slightly more typing.
+The Python example if-then-else-if statement above can be written as the 
+Ruby 
+case statement:
+case
+when count < 10 then bag1 = true
+when count < 100 then bag2 = true
+when count < 1000 then bag3 = true
+end 
+Else-if statements are based on the common mathematics statement, the 
+conditional expression.
+M08_SEBE8029_12_SE_C08.indd   342 1/5/18   10:45 PM
+=========================================
+--- SEBESTA PAGE 370 (Target: ch3_syntax_semantics) ---
+=========================================
+
+346      Chapter 8   Statement-Level Control Structures 
+in the for is executed after each execution of the loop body. It is often used 
+to increment the loop counter. An operational semantics description of the C 
+for statement is shown next. Because C expressions can be used as statements, 
+expression evaluations are shown as statements.
+    expression_1
+loop:
+    if expression_2 = 0 goto out
+    [loop body]
+    expression_3
+    goto loop
+out: . . .
+Following is an example of a skeletal C for statement:
+for (count = 1; count <= 10; count++)
+  . . .
+}
+All of the expressions of C’s for are optional. An absent second expression is 
+considered true, so a for without one is potentially an infinite loop. If the first 
+and/or third expressions are absent, no assumptions are made. For example, if 
+the first expression is absent, it simply means that no initialization takes place.
+Note that C’s for need not count. It can easily model counting and logical 
+loop structures, as demonstrated in the next section.
+The C for design choices are the following: There is no explicit loop vari-
+able and no loop parameters. All involved variables can be changed in the loop 
+body. The expressions are evaluated in the order stated previously. Although it 
+can create havoc, it is legal to branch into a C 
+for loop body.
+C’s for is one of the most flexible, because each of the expressions can 
+comprise multiple expressions, which in turn allow multiple loop variables that 
+can be of any type. When multiple expressions are used in a single expression 
+of a 
+for statement, they are separated by commas. All C statements have val-
+ues, and this form of multiple expression is no exception. The value of such a 
+multiple expression is the value of the last component.
+Consider the following 
+for statement:
+for (count1 = 0, count2 = 1.0;
+    count1 <= 10 && count2 <= 100.0;
+    sum = ++count1 + count2, count2 *= 2.5);
+The operational semantics description of this is
+    count1 = 0
+    count2 = 1.0
+loop:
+    if count1 > 10 goto out
+    if count2 > 100.0 goto out
+M08_SEBE8029_12_SE_C08.indd   346 1/5/18   10:45 PM
+=========================================
+--- SEBESTA PAGE 373 (Target: ch3_syntax_semantics) ---
+=========================================
+
+8.3 Iterative Statements     349
+• Should the control be pretest or posttest?
+• Should the logically controlled loop be a special form of a counting loop 
+or a separate statement?
+8.3.2.2 Examples
+The C-based programming languages include both pretest and posttest logically 
+controlled loops that are not special forms of their counter-controlled iterative 
+statements. The pretest and posttest logical loops have the following forms:
+while (control_expression)
+   loop body
+and
+do
+   loop body
+while (control_expression);
+These two statement forms are exemplified by the following C# code segments:
+sum = 0;
+indat = Int32.Parse(Console.ReadLine());
+while (indat >= 0) {
+  sum += indat;
+  indat = Int32.Parse(Console.ReadLine());
+}
+value = Int32.Parse(Console.ReadLine());
+do {
+   value /= 10;
+   digits ++;
+}  while  (value > 0);
+Note that all variables in these examples are integer type. The ReadLine method 
+of the Console object gets a line of text from the keyboard. Int32.Parse finds 
+the number in its string parameter, converts it to int type, and returns it.
+In the pretest version of a logical loop (while), the statement or statement 
+segment is executed as long as the expression evaluates to true. In the posttest 
+version (do), the loop body is executed until the expression evaluates to false. 
+In both cases, the statement can be compound. The operational semantics 
+descriptions of those two statements follow:
+while
+loop:
+   
+if control_expression is false goto out
+   [loop body]
+M08_SEBE8029_12_SE_C08.indd   349 1/5/18   10:45 PM
+=========================================
+--- SEBESTA PAGE 386 (Target: ch3_syntax_semantics) ---
+=========================================
+
+362      Chapter 8   Statement-Level Control Structures 
+3. Compare the set of Ada control statements with those of C# and decide 
+which are better and why.
+4. What are the pros and cons of using unique closing reserved words on 
+compound statements?
+5.
+ What are the arguments, pros and cons, for Python’s use of indentation 
+to specify compound statements in control statements?
+6.
+ Analyze the potential readability problems with using closure reserved 
+words for control statements that are the reverse of the corresponding initial 
+reserved words, such as the 
+case-esac reserved words of ALGOL 68. For 
+example, consider common typing errors such as transposing characters.
+7. Use the Science Citation Index to find an article that refers to Knuth 
+(1974). Read the article and Knuth’s paper and write a paper that 
+summarizes both sides of the goto issue.
+8.
+ In his paper on the goto issue, Knuth (1974) suggests a loop control 
+statement that allows multiple exits. Read the paper and write an 
+operational semantics description of the statement.
+9.
+ What are the arguments both for and against the exclusive use of 
+Boolean expressions in the control statements in Java (as opposed to also 
+allowing arithmetic expressions, as in C++)?
+10.
+ Describe a programming situation in which the else clause in Python’s 
+for statement would be convenient.
+11. Describe three specific programming situations that require a posttest loop.
+12. Speculate as to the reason control can be transferred into a C loop 
+statement.
+PROGRAMMING EXERCISES
+1. Rewrite the following pseudocode segment using a loop structure in the 
+specified languages:
+  k = (j + 13) / 27
+loop:
+  if k > 10 then goto  out
+  k = k + 1
+  i = 3 * k - 1
+  goto  loop
+out: . . . 
+a. C, C++, Java, or C#
+b. Python
+c. Ruby
+M08_SEBE8029_12_SE_C08.indd   362 1/5/18   10:45 PM
+=========================================
+--- SEBESTA PAGE 619 (Target: ch3_syntax_semantics) ---
+=========================================
+
+14.2 Exception Handling in C++     595
+it is enacted for any raised exception if no appropriate handler was found. 
+The formal parameter also can be a naked type specifier, such as float, as in 
+a function prototype. In such a case, the only purpose of the formal parameter 
+is to make the handler uniquely identifiable. When information about the 
+exception is to be passed to the handler, the formal parameter includes a vari-
+able name that is used for that purpose. Because the class of the parameter can 
+be any user-defined class, the parameter can include as many data members as 
+are necessary. Binding exceptions to handlers are discussed in Section 14.3.2.
+In C++, exception handlers can include any C++ code.
+14.2.2 Binding Exceptions to Handlers
+C++ exceptions are raised only by the explicit statement throw, whose general 
+form in EBNF is as follows:
+throw [expression];
+The brackets here are metasymbols used to specify that the expression is 
+optional. A 
+throw without an operand can appear only in a handler. When it 
+appears there, it reraises the exception, which is then handled elsewhere.
+The type of the throw expression selects the particular handler, which of 
+course must have a “matching” type formal parameter. In this case, matching 
+means the following: A handler with a formal parameter of type 
+T, const T, 
+T& (a reference to an object of type T), or const T& matches a throw with an 
+expression of type T. In the case where T is a class, a handler whose parameter 
+is type T or any class that is an ancestor of T matches. There are more compli-
+cated situations in which a throw expression matches a formal parameter, but 
+they are not described here.
+An exception raised in a try clause causes an immediate end to the execu-
+tion of the code in that try clause. The search for a matching handler begins 
+with the handlers that immediately follow the try clause. The matching pro-
+cess is done sequentially on the handlers until a match is found. This means that 
+if any other match precedes an exactly matching handler, the exactly matching 
+handler will not be used. Therefore, handlers for specific exceptions are placed 
+at the top of the list, followed by more generic handlers. The last handler is 
+often one with an ellipsis (
+...) formal parameter, which matches any exception. 
+This would guarantee that all exceptions are caught.
+If an exception is raised in a try clause and there is no matching handler 
+associated with that try clause, the exception is propagated. If the try clause 
+is nested inside another try clause, the exception is propagated to the handlers 
+associated with the outer try clause. If none of the enclosing try clauses yields 
+a matching handler, the exception is propagated to the caller of the function 
+in which it was raised. If the call to the function was not in a 
+try clause, the 
+exception is propagated to that function’s caller. If no matching handler is found 
+in the program through this propagation process, the default handler is called. 
+This handler is further discussed in Section 14.2.4.
+M14_SEBE8029_12_SE_C14.indd   595 1/5/18   11:02 PM
+=========================================
+--- SEBESTA PAGE 652 (Target: ch3_syntax_semantics) ---
+=========================================
+
+628      Chapter 15  Functional Programming Languages
+Apply-to-all is a functional form that takes a single function as a parame-
+ter.1 If applied to a list of parameters, apply-to-all applies its functional param-
+eter to each of the values in the list parameter and collects the results in a list 
+or sequence. Apply-to-all is denoted by a. Consider the following example:
+Let
+h(x) K x*x
+then
+a(h,(2,3,4)) yields (4, 9, 16)
+There are other functional forms, but these two examples illustrate the 
+basic characteristics of all of them.
+15.3 Fundamentals of Functional Programming Languages
+The objective of the design of a functional programming language is to mimic 
+mathematical functions to the greatest extent possible. This results in an 
+approach to problem solving that is fundamentally different from approaches 
+used with imperative languages. In an imperative language, an expression is 
+evaluated and the result is stored in a memory location, which is represented 
+as a variable in a program. This is the purpose of assignment statements. This 
+necessary attention to memory cells, whose values represent the state of the 
+program, results in a relatively low-level programming methodology.
+A program in an assembly language often must also store the results of 
+partial evaluations of expressions. For example, to evaluate
+(x + y)/(a - b)
+the value of (x + y) is computed first. That value must then be stored while 
+(a - b) is evaluated. The compiler handles the storage of intermediate results 
+of expression evaluations in high-level languages. The storage of intermediate 
+results is still required, but the details are hidden from the programmer.
+A purely functional programming language does not use variables or assign-
+ment statements, thus freeing the programmer from concerns related to the 
+memory cells, or state, of the program. Without variables, iterative constructs 
+are not possible, for they are controlled by variables. Repetition must be specified 
+with recursion rather than with iteration. Programs are function definitions and 
+function application specifications, and executions consist of evaluating function 
+applications. Without variables, the execution of a purely functional program has 
+no state in the sense of operational and denotational semantics. The execution 
+of a function always produces the same result when given the same parameters. 
+This characteristic is called referential transparency. It makes the semantics 
+of purely functional languages far simpler than the semantics of the imperative 
+languages (and the functional languages that include imperative features). It also 
+ 1. In programming languages, these are often called map functions.
+M15_SEBE8029_12_SE_C15.indd   628 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 656 (Target: ch3_syntax_semantics) ---
+=========================================
+
+632      Chapter 15  Functional Programming Languages
+The lambda notation described in Section 15.2.1 was chosen to specify 
+function definitions. It had to be modified, however, to allow the binding of 
+functions to names so that functions could be referenced by other functions 
+and by themselves. This name binding was specified by a list consisting of the 
+function name and a list containing the lambda expression, as in
+(function_name (LAMBDA ( param1... paramn) expression))
+If you have had no prior exposure to functional programming, it may seem 
+odd to even consider a nameless function. However, nameless functions are 
+sometimes useful in functional programming (as well as in mathematics and 
+imperative programming). For example, consider a function whose action is 
+to produce a function for immediate application to a parameter list. The pro-
+duced function has no need for a name, for it is applied only at the point of its 
+construction. Such an example is given in Section 15.5.14.
+Lisp functions specified in this new notation were called S-expressions, for 
+symbolic expressions. Eventually, all Lisp structures, both data and code, were 
+called S-expressions. An S-expression can be either a list or an atom. We will 
+usually refer to S-expressions simply as expressions.
+McCarthy successfully developed a universal function that could evaluate 
+any other function. This function was named 
+EVAL and was itself in the form of 
+an expression. T wo of the people in the AI Project, which was developing Lisp, 
+Stephen B. Russell and Daniel J. Edwards, noticed that an implementation of 
+EVAL could serve as a Lisp interpreter, and they promptly constructed such an 
+implementation (McCarthy et al., 1965).
+There were several important results of this quick, easy, and unexpected 
+implementation. First, all early Lisp implementations copied EVAL and were 
+therefore interpretive. Second, the definition of M-notation, which was the 
+planned programming notation for Lisp, was never completed or imple-
+mented, so S-expressions became Lisp’s only notation. The use of the same 
+notation for data and code has important consequences, one of which will be 
+discussed in Section 15.5.14. Third, much of the original language design 
+was effectively frozen, keeping certain odd features in the language, such as 
+the conditional expression form and the use of 
+() for both the empty list and 
+logical false.
+Another feature of early Lisp systems that was apparently accidental was 
+the use of dynamic scoping. Functions were evaluated in the environments 
+of their callers. No one at the time knew much about scoping, and there may 
+have been little thought given to the choice. Dynamic scoping was used for 
+most dialects of Lisp before 1975. Contemporary dialects either use static 
+scoping or allow the programmer to choose between static and dynamic 
+scoping.
+An interpreter for Lisp can be written in Lisp. Such an interpreter, which is 
+not a large program, describes the operational semantics of Lisp, in Lisp. This 
+is vivid evidence of the semantic simplicity of the language.
+M15_SEBE8029_12_SE_C15.indd   632 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 693 (Target: ch3_syntax_semantics) ---
+=========================================
+
+15.11 A Comparison of Functional and Imperative Languages     669
+Following is an example of using times:
+x = times.(3, 4)
+This sets x to 12. The times object can be curried with the following:
+times5 = times.curry.(5)
+This function can be used as in the following:
+x5 = times5.(3)
+This sets x5 to 15.
+15.11 A Comparison of Functional and Imperative Languages
+This section discusses some of the differences between imperative and func-
+tional languages.
+Functional languages can have a very simple syntactic structure. The list 
+structure of Lisp, which is used for both code and data, clearly illustrates this. 
+The syntax of the imperative languages is much more complex. This makes 
+them more difficult to learn and to use.
+The semantics of functional languages is also simpler than that of the 
+imperative languages. For example, in the denotational semantics description 
+of an imperative loop construct given in Section 3.5.2, the loop is converted 
+from an iterative construct to a recursive construct. This conversion is unneces-
+sary in a pure functional language, in which there is no iteration. Furthermore, 
+we assumed there were no expression side effects in all of the denotational 
+semantic descriptions of imperative constructs in Chapter 3. This restriction 
+is unrealistic for imperative languages, because all of the C-based languages 
+include expression side effects. This restriction is not needed for the denota-
+tional descriptions of pure functional languages.
+Some in the functional programming community have claimed that the use 
+of functional programming results in an order-of-magnitude increase in pro-
+ductivity, largely due to functional programs being claimed to be only 10 per-
+cent as large as their imperative counterparts. While such numbers have been 
+actually shown for certain problem areas, for other problem areas, functional 
+programs are more like 25 percent as large as imperative solutions to the same 
+problems (Wadler, 1998). These factors allow proponents of functional pro-
+gramming to claim productivity advantages over imperative programming of 
+4 to 10 times. However, program size alone is not necessarily a good measure 
+of productivity. Certainly not all lines of source code have equal complexity, 
+nor do they take the same amount of time to produce. In fact, because of the 
+necessity of dealing with variables, imperative programs have many trivially 
+simple lines for initializing and making small changes to variables.
+M15_SEBE8029_12_SE_C15.indd   669 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 740 (Target: ch3_syntax_semantics) ---
+=========================================
+
+716      Bibliography
+Backus, J. (1959) “The Syntax and Semantics of the Proposed International Algebraic 
+Language of the Zurich ACM-GAMM Conference.” Proceedings International 
+Conference on Information Processing. UNESCO, Paris, pp. 125–132.
+Backus, J. (1978) “Can Programming Be Liberated from the von Neumann Style? 
+A Functional Style and Its Algebra of Programs.” Commun. ACM, Vol. 21, 
+No. 8, pp. 613–641.
+Backus, J., F . L. Bauer, J. Green, C. Katz, J. McCarthy, P . Naur, A. J. Perlis, H. 
+Rutishauser, K. Samelson, B. Vauquois, J. H. Wegstein, A. van Wijngaarden, and 
+M. Woodger. (1963) “Revised Report on the Algorithmic Language ALGOL 60.” 
+Commun. ACM, Vol. 6, No. 1, pp. 1–17.
+Ben-Ari, M. (1982) Principles of Concurrent Programming. Prentice Hall, Engle-
+wood Cliffs, NJ.
+Birtwistle, G. M., O.-J. Dahl, B. Myhrhaug, and K. Nygaard. (1973) Simula BEGIN. 
+Van Nostrand Reinhold, New Y ork.
+Bodwin, J. M., L. Bradley, K. Kanda, D. Litle, and U. F . Pleban. (1982) “Experience 
+with an Experimental Compiler Generator Based on Denotational Semantics.” 
+ACM SIGPLAN Notices, Vol. 17, No. 6, pp. 216–229.
+Bohm, C., and G. Jacopini. (1966) “Flow Diagrams, T uring Machines, and Languages 
+with Only T wo Formation Rules.” Commun. ACM, Vol. 9, No. 5, pp. 366–371.
+Bolsky, M., and D. Korn. (1995) The New KornShell Command and Programming 
+Language. Prentice Hall, Englewood Cliffs, NJ.
+Booch, G. (1987) Software Engineering with Ada, 2e. Benjamin/Cummings, Red-
+wood City, CA.
+Brinch Hansen, P . (1973) Operating System Principles. Prentice Hall, Englewood 
+Cliffs, NJ.
+Brinch Hansen, P . (1975) “The Programming Language Concurrent-Pascal.” IEEE 
+T ransactions on Software Engineering, Vol. 1, No. 2, pp. 199–207.
+Brinch Hansen, P . (1977) The Architecture of Concurrent Programs. Prentice Hall, 
+Englewood Cliffs, NJ.
+Brinch Hansen, P . (1978) “Distributed Processes: A Concurrent Programming Con-
+cept.” Commun. ACM, Vol. 21, No. 11, pp. 934–941.
+Brown, J. A., S. Pakin, and R. P . Polivka. (1988) APL2 at a Glance. Prentice Hall, 
+Englewood Cliffs, NJ.
+Campione, M., K. Walrath, and A. Huml. (2001) The Java T utorial, 3e. Addison-
+Wesley, Reading, MA.
+Chambers, C., and D. Ungar. (1991) “Making Pure Object-Oriented Languages 
+Practical.” SIGPLAN Notices, Vol. 26, No. 1, pp. 1–15.
+Chomsky, N. (1956) “Three Models for the Description of Language.” IRE T ransac-
+tions on Information Theory, Vol. 2, No. 3, pp. 113–124.
+Chomsky, N. (1959) “On Certain Formal Properties of Grammars.” Information and 
+Control, Vol. 2, No. 2, pp. 137–167.
+Christiansen, T ., B. D. Foy, and L. Wall, with J. Orwant. (2013) Programming Perl, 
+4e. O’Reilly & Associates, Sebastopol, CA.
+Church, A. (1941) Annals of Mathematics Studies. Calculi of Lambda Conversion, 
+Vol. 6. Princeton University Press, Princeton, NJ. Reprinted by Klaus Reprint 
+Corporation, New Y ork, 1965.
+Clark, K. L., and F . G. McCabe. (1984) Micro-PROLOG: Programming in Logic. 
+Prentice Hall, Englewood Cliffs, NJ.
+Clarke, L. A., J. C. Wileden, and A. L. Wolf. (1980) “Nesting in Ada Is for the Birds.” 
+ACM SIGPLAN Notices, Vol. 15, No. 11, pp. 139–145.
+Z01_SEBE8029_12_SE_BIB.indd   716 1/5/18   10:12 PM
+=========================================
+--- SEBESTA PAGE 747 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Bibliography     723
+Sergot, M. J. (1983) “A Query-the-User Facility for Logic Programming.” In Inte-
+grated Interactive Computer Systems, P . Degano and E. Sandewall (eds.). North-
+Holland Publishing, Amsterdam.
+Shaw, C. J. (1963) “A Specification of JOVIAL.” Commun. ACM, Vol. 6, No. 12, 
+pp. 721–736.
+Smith, J. B. (2006) Practical OCaml. Apress, Springer-Verlag, New Y ork.
+Sommerville, I. (2010) Software Engineering, 9e. Addison-Wesley, Reading, MA.
+Steele, G. L., Jr. (1990) Common LISP The Language, 2e. Digital Press, 
+Burlington, MA.
+Stoy, J. E. (1977) Denotational Semantics: The Scott–Strachey Approach to Pro-
+gramming Language Semantics. MIT Press, Cambridge, MA.
+Stroustrup, B. (1983) “Adding Classes to C: An Exercise in Language Evolution.” 
+Software—Practice and Experience, Vol. 13, pp. 139–161.
+Stroustrup, B. (1984) “Data Abstraction in C.” AT&T Bell Laboratories T echnical 
+Journal, Vol. 63, No. 8, pp. 1701–1732.
+Stroustrup, B. (1986) The C++ Programming Language. Addison-Wesley, Read-
+ing, MA.
+Stroustrup, B. (1988) “What Is Object-Oriented Programming?” IEEE Software, 
+May 1988, pp. 10–20.
+Stroustrup, B. (1994) The Design and Evolution of C++. Addison-Wesley, Reading, MA.
+Stroustrup, B. (1997) The C++ Programming Language, 3e. Addison-Wesley, Read-
+ing, MA.
+Sussman, G. J., and G. L. Steele, Jr. (1975) “Scheme: An Interpreter for Extended 
+Lambda Calculus.” MIT AI Memo No. 349 (December 1975).
+Suzuki, N. (1982) “Analysis of Pointer ‘Rotation’.” Commun. ACM, Vol. 25, No. 5, 
+pp. 330–335.
+Syme, D., A. Granicz, and A. Cisternino. (2010) Expert F# 2.0. Apress, Springer-
+Verlag, New Y ork.
+T atroe, K., P . MacIntyre, and R. Lerdorf. (2013) Programming PHP , 3e. O’Reilly 
+Media, Sebastopol, CA.
+T anenbaum, A. S. (2005) Structured Computer Organization, 5e. Prentice Hall, 
+Englewood Cliffs, NJ.
+T eitelbaum, T ., and T . Reps. (1981) “The Cornell Program Synthesizer: A Syntax-
+Directed Programming Environment.” Commun. ACM, Vol. 24, No. 9, 
+pp. 563–573.
+T enenbaum, A. M., Y. Langsam, and M. J. Augenstein. (1990) Data Structures Using 
+C. Prentice Hall, Englewood Cliffs, NJ.
+Thomas, D., A. Hunt, and C. Fowler. (2013) Programming Ruby 1.9 & 2.0: The 
+Pragmatic Programmers Guide (The Facets of Ruby). The Pragmatic Bookshelf, 
+Raleigh, NC.
+Thompson, S. (1999) Haskell: The Craft of Functional Programming, 2e. Addison-
+Wesley, Reading, MA.
+T urner, D. (1986) “An Overview of Miranda.” ACM SIGPLAN Notices, Vol. 21, 
+No. 12, pp. 158–166.
+Ullman, J. D. (1998) Elements of ML Programming. ML97 edition. Prentice Hall, 
+Englewood Cliffs, NJ.
+van Emden, M. H. (1980) “McDermott on Prolog: A Rejoinder.” SIGART Newslet-
+ter, No. 72, August, pp. 19–20.
+van Wijngaarden, A., B. J. Mailloux, J. E. L. Peck, and C. H. A. Koster. (1969) 
+“Report on the Algorithmic Language ALGOL 68.” Numerische Mathematik, 
+Vol. 14, No. 2, pp. 79–218.
+Z01_SEBE8029_12_SE_BIB.indd   723 1/5/18   10:12 PM
+=========================================
+--- SEBESTA PAGE 751 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Index     727
+Antecedents, 144, 147, 683, 690–701
+APES system, 710
+APL (A Programming Language), 13, 21
+origins and characteristics of, 69–70
+Append function, 656
+append operations, 700
+Apple, 87, 88
+Apply-to-all functional forms, 628, 649–650
+Arithmetic expressions, 41, 58, 90, 117, 165, 
+332, 653, 711
+associativity in, 305–307
+characteristics of, 302–303
+coercions in, 313–315
+conditional, 308–309
+design issues for, 303
+grammar for, 175–176, 184, 188
+in Lisp, 308
+mixed-mode, 313, 314
+operand evaluation order in, 309–311
+parentheses in, 307
+precedence in, 303–305
+in Prolog, 711
+purpose of, 303
+referential transparency in, 310–311
+in Ruby, 307–308
+rules of operator evaluation order,  
+305–307
+side effects in, 309–311
+Array types, 99, 250–261
+array initialization in, 254–255
+array operations in, 255–256
+design issues for, 250
+evaluation of, 258
+implementation of, 258–260
+indices and, 251–252
+jagged arrays in, 256
+rectangular arrays in, 256
+slices in, 257
+subscript bindings in, 252–254
+Artificial intelligence (AI). see AI (artificial 
+intelligence)
+ASCII (American Standard Code for 
+Information Interchange), 138, 241, 689
+Assemblies, .NET , 474
+Assertions, 150
+in axiomatic semantics, 143–144
+in Java, 604–605
+Assignment statements, 11, 18, 20, 47, 136, 150, 
+152, 218, 251, 253, 261, 277, 286
+ambiguous grammar for, 118
+attribute grammar for simple, 131
+in axiomatic semantics, 145–147
+compound assignment operators in, 320
+conditional targets and, 320
+in denotational semantics, 141
+as expressions, 322–323
+in functional programming languages, 
+323–324
+grammar for simple, 117–118
+mixed-mode, 324
+multiple, 323
+simple, 319–320
+unary assignment data types in, 321
+Association for Computing Machinery (ACM). 
+see ACM (Association for Computing 
+Machinery)
+Associative arrays
+definition, 261
+implementation of, 262–263
+structure and operations of, 261–263
+Associativity, 127, 176, 181, 302
+of operators, 115, 122–123
+rules of operator evaluation order, 303, 
+305–307
+Atomic propositions, 681–683, 685, 689–690, 
+698, 711
+Atoms, 650
+Lisp, 47, 629–630
+predicate functions for symbolic, 641
+Prolog, 689, 706, 708
+AT&T Bell Laboratories, 455
+Attribute computation functions, 129
+Attribute grammars, 128, 292
+basic concepts of, 129
+computing attribute values in, 132–133
+defined, 129–130
+evaluation of, 133–134
+examples of, 130–132
+intrinsic attributes in, 130
+static semantics and, 128–129
+Z02_SEBE8029_12_SE_IDX.indd   727 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 757 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Index     733
+record, 263–266
+reference, 278–285
+string length options in, 244–245
+string operations in, 242–244
+in terms of precision and range, 239
+theory and, 292–293
+tuple, 266–267
+twos-complement notation, 239
+union, 270–272
+user-defined, 72, 73, 236
+user-defined abstract, 450–451
+Data-based iterators, 360
+Dead task, 542
+Deadlocks, 543
+Deallocation, 207, 492–493
+Decimal data types, 240
+Declaration order, 215–216
+Declarative languages, 680, 686–687
+Decorating parse trees, 132
+Decrement fields, 573
+Deep access, 437–439
+Deep binding, 393
+Deferred reference counting, 282
+Definitions
+of records, 264
+in Scheme program, 634–636
+in subprograms, 367–368
+Delegates, 395–396
+delete operator, 456, 457
+in associative arrays, 261
+C++, 210, 253, 276, 499
+explicit deallocation using, 497
+Delphi, 88, 98, 462
+Denotational semantics, 137–142, 628, 669
+assignment statements in, 141
+evaluation of, 142
+examples of, 138–139
+expressions in, 140–141
+logical pretest loops in, 141–142
+state of programs and, 140
+Department of Defense (DoD), 57, 58,  
+79–80
+Dependents, 54, 55, 79–83
+DEPOSIT subprogram, 545
+Depth-first searches, 694
+Dereferencing pointers, 277
+Derivations, 115–117
+Derived classes, 486, 500–501
+Derived types, 289
+Descriptors, 237
+Design issues
+for abstract data types, 452–453
+for arithmetic expressions, 303
+for array types, 250
+for character string types, 242
+for enumeration types, 247
+for exception handling, 591–594
+for functions, 396–397
+for iterative counter-controlled  
+statements, 345
+for language support for concurrency,  
+543–544, 580
+for logically controlled loop, 348–349
+for multiple selectors, 336–337
+for names, 199
+for object-oriented languages, 489–494
+particular to pointers, 274
+specific to records, 264
+for subprograms, 374
+trade-offs, 21–22
+for two-way selectors, 332
+for union types, 271
+Destructors, 457
+Diamond inheritance, 491
+Dictionaries, 97, 262
+Dijkstra, Edsger, 356
+guarded commands by, 356–359, 551
+on PL/I, 68
+semaphores by, 544
+on synchronization operations, 549
+Direct left recursion, 180
+Discriminated unions, 271
+Disjoint tasks, 539
+dispose, 281
+DLLs (dynamic link libraries), 65, 474
+DO CONCURRENT constructs, 43
+DoD (Department of Defense), 57, 58
+Domain set, 625
+Dot notation, 249, 264
+Double floating-point data types, 239
+do-while statements, 350
+Dynabook, 83
+Z02_SEBE8029_12_SE_IDX.indd   733 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 758 (Target: ch3_syntax_semantics) ---
+=========================================
+
+734      Index
+Dynamic binding, 205, 488–489
+in Ada, 82
+in C#, 514–515
+in C++, 87, 226, 504–507
+in Java, 512
+of messages to methods, 493, 495
+of method calls to methods, 484, 519–521
+in object-oriented programming,  
+488–489, 493
+in Ruby, 517
+in Smalltalk, 495–496
+of subprogram calls, 82
+Dynamic chains, 426
+Dynamic dispatch, 488
+Dynamic languages, 69–70
+Dynamic length strings, 245
+Dynamic link libraries (DLLs), 65, 474
+Dynamic links, 422–423
+Dynamic scoping, 220–222, 437–441, 632
+Dynamic semantics, 129
+axiomatic semantics as, 142–155
+denotational semantics as, 137–142
+operational semantics as, 134–137
+Dynamic type binding, 205–207
+Dynamic type checking, 286
+E
+Eager approach, 282
+EBNF (Extended BNF), 125–127
+ECMA (European Computer Manufacturers 
+Association), 94
+Edinburgh syntax, 689
+Edwards, Daniel J., 632
+Eich, Brendan, 94
+Elaboration, 208
+Elemental operators, Fortran 95+, 198
+Elliptical references, 265
+else-if clause, 341
+Encapsulation constructs
+in C, 472
+in C#, 461–462, 473–474
+in C++, 456, 472–473, 475–476
+introduction to, 471–472
+in Java, 476–477
+naming, 474–478
+in Ruby, 463, 477–478
+entry clauses, 553
+Enumeration constants, 247
+Enumeration types, 247–250, 337
+in C#, 249
+in C++, 248–249
+design issues for, 247–248
+designs, 247–249
+evaluation of, 249–250
+in F#, 249
+in Java 5.0, 249
+in ML, 249
+Environment pointers (EPs), 418
+Epilogue of subprogram linkage, 419
+EPs (Environment pointers), 418
+EQ? function, 641
+Equivalence, 288–291
+Erasure rule, 181
+Errors
+in arithmetic expressions, 315
+European Computer Manufacturers Association 
+(ECMA), 94
+EVAL functions, 632, 635–636, 650–651
+Evaluation environments, 653
+Event handling
+in C#, 613–616
+introduction to, 608–609
+in Java, 609–613
+Event listeners, 610–611
+Events, 591–592, 608–610
+Exception handling
+in Ada, 14
+basic concepts of, 589–591
+in C++, 14, 594–598
+design issues for, 591–594
+introduction to, 588–594
+in Java, 598–605
+in Python, 605–607
+in Ruby, 607–608
+Exceptions, 315
+Exclusivity of objects, 489–490
+Executable images, 25
+Execution efficiency, 670
+Expert systems, 709–710
+Explicit declarations, 204
+Explicit heap-dynamic variables, 209–210
+Explicit locks in, Java 5.0, 569–570
+Z02_SEBE8029_12_SE_IDX.indd   734 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 759 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Index     735
+Explicit type conversions, 315
+Expressions
+assignment statements as, 322–323
+Boolean, 143, 316–318, 661
+in C#, 324, 398
+case, 338–339
+coercion in, 313–315
+conditional, 46, 308–309, 343, 626, 655
+control, 332
+in denotational semantics, 140–141
+errors in, 315
+mixed-mode, 313
+in recursive-descent parsers, 175–180
+relational, 316
+short-circuit evaluation in, 318–319
+unambiguous grammar for, 120
+Expressivity, 13
+Extended accept clause, 556
+Extended BNF (EBNF), 125–127
+eXtensible Stylesheet Language 
+T ransformations (XSL T), 21
+extern qualifiers, 217
+F
+F#, 29, 403–404, 625, 663–666
+generic functions in, 403–404
+generic library classes, 353
+support for concurrency, 577–578
+Fact statements, 689–690
+Farber, J. D., 70
+Fatbars, 357
+Feature multiplicity, 8
+FETCH subprogram, 545
+Fetch-execute cycle, 18, 26
+FGCS (Fifth Generation Computing  
+Systems), 688
+Fibonacci number, 659
+Fields, 264–265
+Fifth Generation Computing Systems  
+(FGCS), 688
+Filter, 656
+Finalization, 593
+finalize methods, 509
+finally clauses, 603–604
+FindAll method, 667
+Finite automata, 165
+Finite mappings, 293
+Firm coercion, 72
+First-order predicate calculus, 681
+Fixed heap-dynamic arrays, 252–253
+Fixed stack-dynamic arrays, 252–253
+flex arrays, 72
+float, 14, 90, 205, 286–289, 313, 324,  
+387, 394
+in C, 472
+in C#, 395, 461, 572
+in C++, 595
+coercions, 90
+in strong typing, 287
+in type checking, 14, 286–287
+in type conversions, 313–315
+float variable, 287
+Floating-point data types, 239, 240, 450
+Floating-point operations, 37, 39–40, 75,  
+287, 306
+FLOW-MATIC, 57
+FLPL (Fortran List Processing Language), 46
+Flynn, Michael J., 536
+for statements, 216
+in C-based languages, 345–347, 352
+in Java, 13, 352
+in Python, 347–348
+foreach statements
+in C#, 99, 254, 353
+of Perl, 360
+Form, 12
+Formal parameters, 368–370
+Fortran, 5, 18, 61, 62, 66, 198
+design process for, 41
+evaluation of, 43–45
+exponentiation in, 306
+High-Performance, 578–580
+historical background of, 40–41, 51, 251, 
+316, 330, 624
+label parameters in, 590
+nested subprograms in, 429
+Read statement, 588–589
+stand-alone statement, 320
+subprograms in, 419
+versions of, 41–43, 67, 211, 263, 373, 386
+Fortran List Processing Language (FLPL), 46
+Forward chaining, 693
+Z02_SEBE8029_12_SE_IDX.indd   735 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 766 (Target: ch3_syntax_semantics) ---
+=========================================
+
+742      Index
+MIT (continued)
+Lisp at, 629, 633
+Scheme language, 49
+Whirlwind computer, 41
+Mixed inheritance, 511
+Mixed-mode assignment statements, 324
+Mixed-mode expressions, 324
+ML (MetaLanguage), 50
+M-notation, 631
+Modules, 477–478
+Monitors, 549–551
+MSDOS.exe, 64
+Multicast delegates, 396
+Multi-LISP (ML), 575, 653–658, 671
+lists in, 269
+Multiparadigm programming, 498
+Multiple assignment statements, 323
+Multiple inheritance, 487, 491–492
+Multiple-Instruction, Multiple-Data (MIMD) 
+computers, 536
+Multiple-selection statements
+design issues for, 336–337
+examples of, 337–340
+implementation of, 340–341
+using if, 341–343
+Multiprocessors, 535–537
+Multithreaded program, 569, 574, 578
+N
+Name type equivalence, 288
+Named constant, 224–226
+Names
+in C#, 199
+in C++, 199–200
+case sensitive, 200
+in C-based languages, 199–200
+design issues for, 199
+forms, 199–200
+in Java, 199, 200
+keywords, 200
+in PHP , 199
+reserved words and, 200
+in Ruby, 199
+special words, 200
+variable, 199, 201
+Narrowing type conversions, 302
+National Physical Laboratory, 67
+Natural operational semantics, 135
+Naur, Peter, 53, 113
+NCC (Norwegian Computing Center), 70
+Negation problem, Prolog, 706–708
+Nested classes
+in C#, 515
+in Java, 512–513
+object-oriented programming, 493–494
+Nested list structures, 47, 630
+Nested subprograms, 376, 429–435
+Nesting classes, 494
+Nesting selectors, 333–336
+nesting_depth, 431
+.NET languages, 27, 29, 98, 353, 474, 527, 574, 
+582, 613, 663
+NetBeans, 29
+Netscape, 94
+Neumann, John von, 17
+new, 458, 492, 509
+for allocation of heap objects, 275
+in C#, 461, 513–514
+in C++, 209–210, 253, 456
+in heap management, 281
+in Java, 469
+in Ruby, 516
+New Programming Language (NPL), 67
+Newell, Allen, 45
+next iterators, 352
+Nil values, 47, 273
+Nonblocking synchronization, 569
+nonlocal, 219
+Nonstrict languages, 661
+Nonterminal symbols, 114
+Norwegian Computing Center (NCC), 70
+NOT operators, 316, 691, 707
+NPL (New Programming Language), 67
+NULL, 642
+Numeric data types, 238
+Numeric predicate functions, 637
+Numeric type
+complex values, 240
+decimal data types, 240–241
+floating-point data types, 239–240
+integer, 238–239
+Nygaard, Kristen, 70
+Z02_SEBE8029_12_SE_IDX.indd   742 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 767 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Index     743
+O
+Object slicing, 493
+Objective-C, 87–88
+Object-oriented constructs, 519–521
+Object-oriented languages, 19, 85, 206, 219, 
+279, 291, 360
+allocation of objects in, 492–493
+deallocation of objects in, 492–493
+design issues in, 489–494
+dynamic binding in, 493
+exclusivity of objects in, 489–490
+initialization of objects in, 494
+multiple inheritance in, 491–492
+nested classes in, 493–494
+single inheritance in, 491–492
+static binding in, 493
+subclasses vs. subtypes in, 490–491
+Object-oriented programming, 3, 20,  
+485, 663
+in C#, 513–515
+in C++, 85–88, 496–509
+inheritance, 485–488
+instance data storage, 519
+in Java, 89–92, 509–513
+message passing in, 551–552
+in Objective-C, 87–88
+in Ruby, 515–518
+in Smalltalk, 83–85, 494–496
+Stroustrup on, 498–499
+support for, 494–518
+Objects, 486
+allocation of, 492–493
+in C++, 497
+of C#, 253
+in concurrency, 559–560
+deallocation of, 492–493
+exclusivity of, 489–490
+initialization of, 494
+in Java, 509
+in Ruby, 516
+OCaml, 50, 205, 484, 625, 658, 663
+Open accept clause, 557
+Operand evaluation order, 309–311
+Operational semantics, 134–137
+evaluation of, 136–137
+natural, 135
+problems with, 135
+process of, 135–136
+structural, 135
+Operator evaluation order, 303–309
+Operator overloading, 8, 98, 311–313
+Operator precedence, 119–122
+Operator precedence rules, 304
+Optimization, 15
+or else statements, 334
+OR operators, 271
+Orthogonality, 9–11
+otherwise, 659
+Out mode parameter passing, 378
+Output functions, 636
+Overflow, 315
+Overloaded operators, 311–313
+Overloaded subprograms, 398
+Overridden methods, 487, 491
+override commands, 487, 514
+P
+Package scope, 476
+Package specification, 552
+Packages, 80, 476–477
+Pairwise disjointness test, 182
+Papert, Seymour, 83
+Paradigms of programming, 498–499
+Parameter profiles, 398
+Parameterized abstract data types
+in C++, 467–468
+in C# 2005, 471
+in Java 5.0, 468–470
+Parameter-passing methods, 376
+of common languages, 383–385
+design considerations in, 389
+examples of, 389–392
+implementation models for, 377–382
+implementation of, 382–383
+semantic models of, 377
+Parameters
+actual, 369
+array formal, 372
+formal, 369
+keyword, 370
+in multidimensional arrays, 387–389
+positional, 370
+Z02_SEBE8029_12_SE_IDX.indd   743 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 772 (Target: ch3_syntax_semantics) ---
+=========================================
+
+748      Index
+Rule of consequence, 146
+Rules, 114–115, 117, 120
+run methods, 560–561, 570
+Running task, 542
+Run-time stacks, 424
+Russell, Stephen B., 632
+R-value, 202
+S
+Satisfying subgoals, 692
+Scalable algorithms, 535
+Schedulers, 541
+Scheme language, 49
+apply-to-all functional forms in, 649–650
+code-building functions in, 650–651
+control flow in, 637–638
+defining functions in, 634–636
+examples of function definitions in, 643–646
+functional compositions in, 648–649
+functional forms in, 648–650
+interpreter in, 633
+LET, 646–647
+list functions in, 638–641
+lists in, 269
+numeric predicate functions in, 637
+origins of, 633
+output functions in, 636
+predicate functions in, 641–642
+primitive numeric functions in, 633–634
+tail recursive functions in, 647–648
+Schwartz, Jules I., 53
+Scientific applications, 5
+Scope
+blocks for, 213–215
+declaration order for, 215–216
+dynamic scoping, 220–222, 437–441
+global, 217–219
+lifetime and, 222–223
+named constants and, 224–226
+referencing environments and, 223–224
+static scoping, 220
+in subprograms, implementing, 437–441
+Scott, Dana, 142
+Scripting languages, 92–98
+JavaScript, 94–96
+Perl, 92–94
+PHP , 96
+Python, 96
+Ruby, 97–98
+Scripts, 162
+select statements, 555–556
+Selection, 148–149
+Selection statements
+multiple-selection, 336–343
+postconditions in, 148–149
+two-way, 332
+Selector expressions, 336
+Semantic domains, 137
+Semantics. see also Axiomatic semantics; 
+Denotational semantics
+dynamic, 134–155
+introduction to, 110–111
+natural operational, 135
+operational, 134–137
+static, 128–129
+structural operational, 135
+Semaphores, 544–548
+Sentences, 111
+Sentential forms, 116
+Sequences, 147–148
+Sergot, M. J., 710
+Server tasks, 554
+Servlet containers, 101
+Setter methods, 464, 516
+S-expressions, 632
+Shallow access, 439–441
+Shallow binding, 393–394
+SHARE, 51, 53, 67
+Shared inheritance, 491
+Shaw, J. C., 45
+Shift-reduce algorithms, 186
+Short Code, 38–39
+short integer, 238
+Short Range Committee, 58
+Short-circuit evaluation, 318–319
+Side effects, 309–311, 396–397
+SIGPLAN Notices, 80, 103
+SIMD (Single-Instruction, Multiple-Data) 
+computers, 536
+Simon, Herbert, 45
+Simple assignment statements, 130, 687
+Simple functions, 626–627
+Z02_SEBE8029_12_SE_IDX.indd   748 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 773 (Target: ch3_syntax_semantics) ---
+=========================================
+
+Index     749
+Simple lists, 630, 643–644
+Simple phrases, 185
+Simplicity, 8–9, 13, 73–75, 163
+SIMULA 67, 19, 384, 453, 485–486, 498, 500
+design process for, 70–71
+language overview of, 71
+support for coroutines in, 71
+Single inheritance, 487, 491–492
+Single-Instruction, Multiple-Data (SIMD) 
+computers, 536
+Single-size cells, 281–282
+sleep methods, 562, 577
+Slices, 242, 257
+Smalltalk, 86, 494–496
+dynamic binding, 495–496
+evaluation of, 496
+general characteristics, 494–495
+inheritance in, 495
+SNOBOL, 69–70
+Solaris Common Desktop Environment  
+(CDE), 29
+Source languages, 23, 26, 41
+special, 50
+Special words, 12
+Speedcoding, 39
+SQL (Structured Query Language), 709
+Stack-dynamic arrays, 54, 252
+Stack-dynamic local variables, 421–429
+Stack-dynamic variables, 208–209
+Stanford University, 73
+start methods, 561
+Start symbols, 115
+State diagrams, 165
+State of programs, 140
+Statement-level concurrency, 535, 538, 578–580
+Statement-level control structures
+counter-controlled loops, 344–348
+for statements, 345–348
+guarded commands by, 356–359
+iterative statements, 343–355
+logically controlled loops, 348
+two-way selection statements, 332
+unconditional branch statement, 355–356
+Static ancestors, 212
+Static arrays, 252
+Static binding, 204–205, 493
+Static chaining, 430–435
+Static length strings, 244
+Static links, 430–431
+static modifiers, 208, 253
+Static parents, 212, 430–431
+Static scoping, 49, 50, 376, 435, 439, 472, 633, 
+652, 653
+Static semantics, 128–129
+Static type bindings, 204–205
+Static variables, 209, 210, 375
+in binding, 207–208
+static_depth, 431
+Steele Jr., Guy L., 338
+Steelman requirements document, 80
+Stepsize, 344
+Stichting Mathematisch Centrum, 96
+Storage bindings, 207–211
+Strachey, Christopher, 142
+Strawman requirements document, 79–80
+Strict programming languages, 661
+Strong typing, 287
+structs, 10, 36, 90, 449, 453, 513
+in C#, 99, 462, 479
+Structural operational semantics, 135
+Structure type equivalence, 288
+Structured Query Language (SQL), 709
+Structures, 689–690
+Subclasses, 486, 489–490
+Subgoals, 704–706
+Subprogram calls, 367
+Subprogram definition, 367
+Subprogram headers, 367
+Subprogram linkage, 418
+Subprogram-level concurrency, 539–544
+Subprograms
+in C++, 399–401
+in C# 2005, 403
+calling indirectly, 394–396
+characteristics of, 366–367
+closures, 374, 405–407
+coroutines, 407–410
+definitions in, 367–368
+design issues for, 374, 396–397
+in F#, 403–404
+functions as, 372–373
+fundamentals of, 366–373
+Z02_SEBE8029_12_SE_IDX.indd   749 1/8/18   5:03 PM

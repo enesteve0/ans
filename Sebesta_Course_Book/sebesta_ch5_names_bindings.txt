@@ -1,0 +1,3646 @@
+
+=========================================
+--- SEBESTA PAGE 16 (Target: ch5_names_bindings) ---
+=========================================
+
+xvi      Contents
+ 2.13 Programming Based on Logic: Prolog ...............................................77
+ 2.14 History’s Largest Design Effort: Ada ..................................................79
+ 2.15 Object-Oriented Programming: Smalltalk .........................................83
+ 2.16 Combining Imperative and Object-Oriented Features: C++ .............85
+ 2.17 An Imperative-Based Object-Oriented Language: Java .....................89
+ 2.18 Scripting Languages ............................................................................92
+ 2.19 The Flagship .NET Language: C# .....................................................98
+ 2.20 Markup-Programming Hybrid Languages .......................................100
+Summary • Bibliographic Notes • Review Questions • Problem Set •  
+Programming Exercises  ...............................................................................102
+ Chapter 3 Describing Syntax and Semantics  109
+ 3.1 Introduction .......................................................................................110
+ 3.2 The General Problem of Describing Syntax ....................................111
+ 3.3 Formal Methods of Describing Syntax .............................................113
+ 3.4 Attribute Grammars ..........................................................................128
+History Note .............................................................................................128
+ 3.5 Describing the Meanings of Programs: Dynamic Semantics ...........134
+History Note .............................................................................................142
+Summary • Bibliographic Notes • Review Questions • Problem Set  ........155
+ Chapter 4 Lexical and Syntax Analysis  161
+ 4.1 Introduction .......................................................................................162
+ 4.2 Lexical Analysis ..................................................................................163
+ 4.3 The Parsing Problem ........................................................................171
+ 4.4 Recursive-Descent Parsing................................................................175
+ 4.5 Bottom-Up Parsing ...........................................................................183
+Summary • Review Questions • Problem Set •  
+Programming Exercises 
+ ...............................................................................191
+ Chapter 5 Names, Bindings, and Scopes  197
+ 5.1 Introduction .......................................................................................198
+ 5.2 Names ................................................................................................199
+A01_SEBE8029_12_SE_FM.indd   16 1/9/18   6:14 PM
+=========================================
+--- SEBESTA PAGE 17 (Target: ch5_names_bindings) ---
+=========================================
+
+Contents     xvii
+History Note .............................................................................................199
+ 5.3 Variables .............................................................................................200
+ 5.4 The Concept of Binding ...................................................................203
+ 5.5 Scope ..................................................................................................211
+ 5.6 Scope and Lifetime ............................................................................222
+ 5.7 Referencing Environments ...............................................................223
+ 5.8 Named Constants ..............................................................................224
+Summary • Review Questions • Problem Set •  
+Programming Exercises  ...............................................................................227
+ Chapter 6 Data Types  235
+ 6.1 Introduction .......................................................................................236
+ 6.2 Primitive Data T ypes .........................................................................238
+ 6.3 Character String T ypes ......................................................................242
+History Note .............................................................................................243
+ 6.4 Enumeration T ypes ...........................................................................247
+ 6.5 Array T ypes ........................................................................................250
+History Note .............................................................................................251
+History Note .............................................................................................251
+ 6.6 Associative Arrays ..............................................................................261
+ 6.7 Record T ypes .....................................................................................263
+ 6.8 T uple T ypes........................................................................................266
+ 6.9 List T ypes ...........................................................................................268
+ 6.10 Union T ypes ......................................................................................270
+ 6.11 Pointer and Reference T ypes ............................................................273
+History Note .............................................................................................276
+ 6.12 Optional T ypes ..................................................................................285
+ 6.13 T ype Checking ...................................................................................286
+ 6.14 Strong T yping ....................................................................................287
+ 6.15 T ype Equivalence ...............................................................................288
+ 6.16 Theory and Data T ypes .....................................................................292
+Summary • Bibliographic Notes • Review Questions • Problem Set •  
+Programming Exercises 
+ ...............................................................................294
+A01_SEBE8029_12_SE_FM.indd   17 1/9/18   6:14 PM
+=========================================
+--- SEBESTA PAGE 19 (Target: ch5_names_bindings) ---
+=========================================
+
+Contents     xix
+ 9.6 Parameters That Are Subprograms ..................................................392
+History Note .............................................................................................394
+ 9.7 Calling Subprograms Indirectly ........................................................394
+ 9.8 Design Issues for Functions ..............................................................396
+ 9.9 Overloaded Subprograms ..................................................................397
+ 9.10 Generic Subprograms........................................................................398
+ 9.11 User-Defined Overloaded Operators ...............................................404
+ 9.12 Closures .............................................................................................405
+ 9.13 Coroutines .........................................................................................407
+Summary • Review Questions • Problem Set • Programming Exercises  .....410
+ Chapter 10 Implementing Subprograms  417
+ 10.1 The General Semantics of Calls and Returns...................................418
+ 10.2 Implementing “Simple” Subprograms ..............................................419
+ 10.3 Implementing Subprograms with Stack-Dynamic  
+Local Variables...................................................................................421
+ 10.4 Nested Subprograms .........................................................................429
+ 10.5 Blocks .................................................................................................436
+ 10.6 Implementing Dynamic Scoping ......................................................437
+Summary • Review Questions • Problem Set • Programming Exercises  .....441
+ Chapter 11 Abstract Data Types and Encapsulation Constructs  447
+ 11.1 The Concept of Abstraction .............................................................448
+ 11.2 Introduction to Data Abstraction......................................................449
+ 11.3 Design Issues for Abstract Data T ypes .............................................452
+ 11.4 Language Examples ...........................................................................453
+  Interview: BJARNE STROUSTRUP—C++: Its Birth,  
+Its Ubiquitousness, and Common Criticisms .....................................454
+ 11.5 Parameterized Abstract Data T ypes ..................................................466
+ 11.6 Encapsulation Constructs ..................................................................471
+ 11.7 Naming Encapsulations ....................................................................474
+Summary • Review Questions • Problem Set • Programming Exercises  .....478
+A01_SEBE8029_12_SE_FM.indd   19 1/9/18   6:14 PM
+=========================================
+--- SEBESTA PAGE 40 (Target: ch5_names_bindings) ---
+=========================================
+
+16      Chapter 1   Preliminaries
+produce optimized code. The choice between the two alternatives is influenced 
+by the environment in which the compiler will be used. In a laboratory for 
+beginning programming students, who often compile their programs many 
+times during development but use little execution time (their programs are 
+small and they must execute correctly only once), little or no optimization 
+should be done. In a production environment, where compiled programs are 
+executed many times after development, it is better to pay the extra cost to 
+optimize the code.
+Fourth, there is the cost of poor reliability. If the software fails in a critical 
+system, such as a nuclear power plant or an X-ray machine for medical use, the 
+cost could be very high. The failures of noncritical systems can also be very 
+expensive in terms of lost future business or lawsuits over defective software 
+systems.
+The final consideration is the cost of maintaining programs, which includes 
+both corrections and modifications to add new functionality. The cost of soft-
+ware maintenance depends on a number of language characteristics, primarily 
+readability. Because maintenance is often done by individuals other than the 
+original author of the software, poor readability can make the task extremely 
+challenging.
+The importance of software maintainability cannot be overstated. It has 
+been estimated that for large software systems with relatively long lifetimes, 
+maintenance costs can be as high as two to four times as much as development 
+costs (Sommerville, 2010).
+Of all the contributors to language costs, three are most important: pro-
+gram development, maintenance, and reliability. Because these are functions of 
+writability and readability, these two evaluation criteria are, in turn, the most 
+important.
+Of course, a number of other criteria could be used for evaluating pro -
+gramming languages. One example is portability, or the ease with which pro-
+grams can be moved from one implementation to another. Portability is most 
+strongly influenced by the degree of standardization of the language. Some 
+languages are not standardized at all, making programs in these languages very 
+difficult to move from one implementation to another. This problem is alle-
+viated in some cases by the fact that implementations for some languages now 
+have single sources. Standardization is a time-consuming and difficult process. 
+A committee began work on producing a standard version of C++ in 1989. It 
+was approved in 1998.
+Generality (the applicability to a wide range of applications) and well-
+ 
+definedness (the completeness and precision of the language’s official defining 
+document) are two other criteria.
+Most criteria, particularly readability, writability, and reliability, are nei-
+ther precisely defined nor accurately measurable. Nevertheless, they are useful 
+concepts and they provide valuable insight into the design and evaluation of 
+programming languages.
+A final note on evaluation criteria: language design criteria are weighed 
+differently from different perspectives. Language implementors are concerned 
+M01_SEBE8029_12_SE_C01.indd   16 1/5/18   11:10 PM
+=========================================
+--- SEBESTA PAGE 73 (Target: ch5_names_bindings) ---
+=========================================
+
+2.4 Functional Programming: Lisp     49
+The following is an example of a Lisp program:
+; Lisp Example function
+; The following code defines a Lisp predicate function
+; that takes two lists as arguments and returns True
+; if the two lists are equal, and NIL (false) otherwise
+  (DEFUN equal_lists (lis1 lis2)
+   (COND
+     ((ATOM lis1) (EQ lis1 lis2))
+     ((ATOM lis2) NIL)
+     ((equal_lists (CAR lis1) (CAR lis2))
+                
+   (equal_lists (CDR lis1) (CDR lis2)))
+     (T NIL)
+   )
+)
+2.4.5 Two Descendants of Lisp
+T wo dialects of Lisp are now widely used, Scheme and Common Lisp. These 
+are briefly discussed in the following subsections.
+2.4.5.1 Scheme
+The Scheme language emerged from MIT in the mid-1970s. It is characterized 
+by its small size, its exclusive use of static scoping (discussed in Chapter 5), and 
+its treatment of functions as first-class entities. As first-class entities, Scheme 
+functions can be assigned to variables, passed as parameters, and returned as 
+the values of function applications. They can also be the elements of lists. Early 
+versions of Lisp did not provide all of these capabilities, nor did they use static 
+scoping.
+As a small language with simple syntax and semantics, Scheme is well suited 
+to educational applications, such as courses in functional programming and 
+general introductions to programming. Scheme is described in some detail in 
+Chapter 15.
+2.4.5.2 Common Lisp
+During the 1970s and early 1980s, a large number of different dialects of Lisp 
+were developed and used. This led to the familiar problem of lack of portabil-
+ity among programs written in the various dialects. Common Lisp 
+ (Graham, 
+1996) was created in an effort to rectify this situation. Common Lisp was 
+designed by combining the features of several dialects of Lisp developed in the 
+early 1980s, including Scheme, into a single language. Being such an amalgam, 
+Common Lisp is a relatively large and complex language. Its basis, however, 
+is pure Lisp, so its syntax, primitive functions, and fundamental nature come 
+from that language.
+M02_SEBE8029_12_SE_C02.indd   49 1/5/18   11:11 PM
+=========================================
+--- SEBESTA PAGE 74 (Target: ch5_names_bindings) ---
+=========================================
+
+50      Chapter 2   Evolution of the Major Programming Languages
+Recognizing the flexibility provided by dynamic scoping as well as the 
+simplicity of static scoping, Common Lisp allows both. The default scoping 
+for variables is static, but by declaring a variable to be special, that variable 
+becomes dynamically scoped.
+Common Lisp has a large number of data types and structures, including 
+records, arrays, complex numbers, and character strings. It also has a form of 
+packages for modularizing collections of functions and data providing access 
+control.
+Common Lisp is further described in Chapter 15.
+2.4.6 Related Languages
+ML (MetaLanguage; Ullman, 1998) was originally designed in the 1980s by 
+Robin Milner at the University of Edinburgh as a metalanguage for a program 
+verification system named Logic for Computable Functions (LCF; Milner 
+et al., 1997). ML is primarily a functional language, but it also supports imper-
+ative programming. Unlike Lisp and Scheme, the type of every variable and 
+expression in ML can be determined at compile time. T ypes are associated with 
+objects rather than names. T ypes of names and expressions are inferred from 
+their context.
+Unlike Lisp and Scheme, ML does not use the parenthesized functional 
+syntax that originated with lambda expressions. Rather, the syntax of ML 
+resembles that of the imperative languages, such as Java and C++.
+Miranda was developed by David T urner (1986) at the University of Kent 
+in Canterbury, England, in the early 1980s. Miranda is based partly on the 
+languages ML, SASL, and KRC. Haskell (Hudak and Fasel, 1992) is based in 
+large part on Miranda. Like Miranda, it is a purely functional language, having 
+no variables and no assignment statement. Another distinguishing character -
+istic of Haskell is its use of lazy evaluation. This means that no expression is 
+evaluated until its value is required. This leads to some surprising capabilities 
+in the language.
+Caml (Cousineau et al., 1998) and its dialect that supports object-oriented 
+programming, OCaml (Smith, 2006), descended from ML and Haskell. Finally, 
+F# is a relatively new typed language based directly on OCaml. F# (Syme et al., 
+2010) is a .NET language with direct access to the whole .NET library. Being a 
+.NET language also means it can smoothly interoperate with any other .NET 
+language. F# supports both functional programming and procedural program-
+ming. It also fully supports object-oriented programming.
+ML, Haskell, and F# are further discussed in Chapter 15.
+2.5 The First Step Toward Sophistication: ALGOL 60
+ALGOL 60 strongly influenced subsequent programming languages and is 
+therefore of central importance in any historical study of languages.
+M02_SEBE8029_12_SE_C02.indd   50 1/5/18   11:11 PM
+=========================================
+--- SEBESTA PAGE 94 (Target: ch5_names_bindings) ---
+=========================================
+
+70      Chapter 2   Evolution of the Major Programming Languages
+APL was first described in the book from which it gets its name, A Programming 
+Language (Iverson, 1962). In the mid-1960s, the first implementation of APL 
+was developed at IBM.
+APL has a large number of powerful operators that are specified with a 
+large number of symbols, which created a problem for implementors. 
+ Initially, 
+APL was used through IBM printing terminals. These terminals had spe-
+cial optional print balls that provided the odd character set required by the 
+ language. One reason APL has so many operators is that it provides a large 
+number of unit operations on arrays. For example, the transpose of any matrix 
+is done with a single operator. The large collection of operators provides very 
+high expressivity but also makes APL programs difficult to read. Therefore, 
+people think of APL as a language that is best used for “throw-away” program-
+ming. Although programs can be written quickly, they should be discarded after 
+use because they are difficult to maintain.
+APL has been around for over 55 years and is still used today, although not 
+widely. Furthermore, it has not changed a great deal over its lifetime.
+2.9.2 Origins and Characteristics of SNOBOL
+SNOBOL (pronounced “snowball”; Griswold et al., 1971) was designed in the 
+early 1960s by three people at Bell Laboratories: D. J. Farber, R. E. Griswold, 
+and I. P . Polonsky (Farber et al., 1964). It was designed specifically for text 
+processing. The heart of SNOBOL is a collection of powerful operations for 
+string pattern matching. One of the early applications of SNOBOL was for 
+writing text editors. Because the dynamic nature of SNOBOL makes it slower 
+than alternative languages, it is no longer used for such programs. However, 
+SNOBOL is still a live and supported language that is used for a variety of 
+text-processing tasks in several different application areas.
+2.10 The Beginnings of Data Abstraction: SIMULA 67
+Although SIMULA 67 never achieved widespread use and had little impact on 
+the programmers and computing of its time, some of the constructs it intro-
+duced make it historically important.
+2.10.1 Design Process
+T wo Norwegians, Kristen Nygaard and Ole-Johan Dahl, developed the lan-
+guage SIMULA I between 1962 and 1964 at the Norwegian Computing Cen-
+ter (NCC) in Oslo. They were primarily interested in using computers for 
+simulation but also worked in operations research. SIMULA I was designed 
+exclusively for system simulation and was first implemented in late 1964 on a 
+UNIVAC 1107 computer.
+M02_SEBE8029_12_SE_C02.indd   70 1/5/18   11:11 PM
+=========================================
+--- SEBESTA PAGE 221 (Target: ch5_names_bindings) ---
+=========================================
+
+197
+5.1 Introduction
+5.2 Names
+5.3 Variables
+5.4 The Concept of Binding
+5.5 Scope
+5.6 Scope and Lifetime
+5.7 Referencing Environments
+5.8 Named Constants
+5 
+Names, Bindings,  
+and Scopes
+M05_SEBE8029_12_SE_C05.indd   197 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 222 (Target: ch5_names_bindings) ---
+=========================================
+
+198      Chapter 5   Names, Bindings, and Scopes 
+T
+his chapter introduces the fundamental semantic issues of variables. It begins 
+by describing the nature of names and special words in programming  languages. 
+The attributes of variables, including type, address, and value, are then 
+ discussed, including the issue of aliases. The important concepts of binding and 
+ binding times are introduced next, including the different possible binding times for 
+variable attributes and how they define four different categories of variables. Follow-
+ing that, two very different scoping rules for names, static and dynamic, are described, 
+along with the concept of a referencing environment of a statement. Finally, named 
+constants and variable initialization are discussed.
+5.1 Introduction
+Imperative programming languages are, to varying degrees, abstractions of 
+the underlying von Neumann computer architecture. The architecture’s two 
+primary components are its memory, which stores both instructions and data, 
+and its processor, which provides operations for modifying the contents of the 
+memory. The abstractions in a language for the memory cells of the machine 
+are variables. In some cases, the characteristics of the abstractions are very 
+close to the characteristics of the cells; an example of this is an integer variable, 
+which is usually represented directly in one or more bytes of memory. In other 
+cases, the abstractions are far removed from the organization of the hardware 
+memory, as with a three-dimensional array, which requires a software mapping 
+function to support the abstraction.
+A variable can be characterized by a collection of properties, or attributes, 
+the most important of which is type, a fundamental concept in programming 
+languages. Designing the data types of a language requires that a variety of 
+issues be considered. (Data types are discussed in Chapter 6.) Among the most 
+important of these issues are the scope and lifetime of variables.
+Functional programming languages allow expressions to be named. These 
+named expressions appear like assignments to variable names in imperative 
+languages, but are fundamentally different in that they cannot be changed. So, 
+they are like the named constants of the imperative languages. Pure functional 
+languages do not have variables that are like those of the imperative languages. 
+However, many functional languages do include such variables.
+In the remainder of this book, families of languages will often be referred to 
+as if they were single languages. For example, Fortran will mean all of the versions 
+of Fortran. This is also the case for Ada. Likewise, a reference to C will mean the 
+original version of C, as well as C89 and C99. When a specific version of a language 
+is named, it is because it is different from the other family members within the topic 
+being discussed. If we add a plus sign 
+(+) to the name of a version of a language, 
+we mean all versions of the language beginning with the one named. For example, 
+Fortran 
+95+ means all versions of Fortran beginning with Fortran 95. The phrase 
+C-based languages will be used to refer to C, Objective-C, C++, Java, and C#.1
+ 1. We were tempted to include the scripting languages JavaScript and PHP as C-based lan-
+guages, but decided they were just a bit too different from their ancestors.
+M05_SEBE8029_12_SE_C05.indd   198 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 224 (Target: ch5_names_bindings) ---
+=========================================
+
+200      Chapter 5   Names, Bindings, and Scopes 
+In many languages, notably the C-based languages, uppercase and lowercase 
+letters in names are distinct; that is, names in these languages are case sensitive. 
+For example, the following three names are distinct in C++: rose, ROSE, and 
+Rose. T o some people, this is a serious detriment to readability, because names 
+that look very similar in fact denote different entities. In that sense, case sensitiv-
+ity violates the design principle that language constructs that look similar should 
+have similar meanings. But in languages whose variable names are case-sensitive, 
+although 
+Rose and rose look similar, there is no connection between them.
+Obviously, not everyone agrees that case sensitivity is bad for names. In 
+C, the problems of case sensitivity are avoided by the convention that variable 
+names do not include uppercase letters. In Java and C#, however, the problem 
+cannot be escaped because many of the predefined names include both upper-
+case and lowercase letters. For example, the Java method for converting a string 
+to an integer value is 
+parseInt, and spellings such as ParseInt and parseint 
+are not recognized. This is a problem of writability rather than readability, 
+because the need to remember specific case usage makes it more difficult to 
+write correct programs. It is a kind of intolerance on the part of the language 
+designer, which is enforced by the compiler.
+5.2.3 Special Words
+Special words in programming languages are used to make programs more 
+readable by naming actions to be performed. They also are used to separate the 
+syntactic parts of statements and programs. In most languages, special words 
+are classified as reserved words, which means they cannot be redefined by pro-
+grammers. But in some, such as Fortran, they are only keywords, which means 
+they can be redefined.
+A reserved word is a special word of a programming language that can-
+not be used as a name. There is one potential problem with reserved words: 
+If the language includes a large number of reserved words, the user may have 
+difficulty making up names that are not reserved. The best example of this 
+is COBOL, which has 300 reserved words. Unfortunately, some of the most 
+commonly chosen names by programmers are in the list of reserved words—for 
+example, 
+LENGTH, BOTTOM, DESTINATION, and COUNT.
+In program code examples in this book, reserved words are presented in 
+boldface.
+In most languages, names that are defined in other program units, such as 
+Java packages and C and C++ libraries, can be made visible to a program. These 
+names are predefined, but visible only if explicitly imported. Once imported, 
+they cannot be redefined.
+5.3 Variables
+A program variable is an abstraction of a computer memory cell or collection 
+of cells. Programmers often think of variables as names for memory locations, 
+but there is much more to a variable than just a name.
+M05_SEBE8029_12_SE_C05.indd   200 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 225 (Target: ch5_names_bindings) ---
+=========================================
+
+5.3 Variables     201
+The move from machine languages to assembly languages was largely one 
+of replacing absolute numeric memory addresses for data with names, making 
+programs far more readable and therefore easier to write and maintain. Assem-
+bly languages also provided an escape from the problem of manual absolute 
+addressing, because the translator that converted the names to actual addresses 
+also chose those addresses.
+A variable can be characterized as a sextuple of attributes: (name, address, 
+value, type, lifetime, and scope). Although this may seem too complicated for 
+such an apparently simple concept, it provides the clearest way to explain the 
+various aspects of variables.
+Our discussion of variable attributes will lead to examinations of the 
+important related concepts of aliases, binding, binding times, declarations, 
+scoping rules, and referencing environments.
+The name, address, type, and value attributes of variables are discussed in 
+the following subsections. The lifetime and scope attributes are discussed in 
+Sections 5.4.3 and 5.5, respectively.
+5.3.1 Name
+Variable names are the most common names in programs. They were dis-
+cussed at length in Section 5.2 in the general context of entity names in pro-
+grams. Most variables have names. The ones that do not are discussed in 
+Section 5.4.3.3.
+5.3.2 Address
+The address of a variable is the machine memory address with which it is asso-
+ciated. This association is not as simple as it may appear. In many languages, 
+it is possible for the same variable to be associated with different addresses at 
+different times during the execution of the program. For example, if a sub-
+program has a local variable that is allocated from the run-time stack when 
+the subprogram is called, different calls may result in that variable having 
+different addresses. These are in a sense different instantiations of the same  
+variable.
+The process of associating variables with addresses is further discussed in 
+Section 5.4.3. An implementation model for subprograms and their activations 
+is discussed in Chapter 10.
+The address of a variable is sometimes called its l-value, because the 
+address is what is required when the name of a variable appears in the left side 
+of an assignment.
+It is possible to have multiple variables that have the same address. When 
+more than one variable name can be used to access the same memory location, 
+the variables are called aliases. Aliasing is a hindrance to readability because 
+it allows a variable to have its value changed by an assignment to a different 
+variable. For example, if variables named 
+total and sum are aliases, any change 
+to the value of total also changes the value of sum and vice versa. A reader of 
+the program must always remember that total and sum are different names 
+M05_SEBE8029_12_SE_C05.indd   201 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 226 (Target: ch5_names_bindings) ---
+=========================================
+
+202      Chapter 5   Names, Bindings, and Scopes 
+for the same memory cell. Because there can be any number of aliases in a 
+program, this can be very difficult in practice. Aliasing also makes program 
+verification more difficult.
+Aliases can be created in programs in several different ways. One common 
+way in C and C++ is with their union types. Unions are discussed at length in 
+Chapter 6.
+T wo pointer variables are aliases when they point to the same memory 
+location. The same is true for reference variables. This kind of aliasing is simply 
+a side effect of the nature of pointers and references. When a C++ pointer is set 
+to point at a named variable, the pointer, when dereferenced, and the variable’s 
+name are aliases.
+Aliasing can be created in many languages through subprogram parame-
+ters. These kinds of aliases are discussed in Chapter 9.
+The time when a variable becomes associated with an address is very 
+important to an understanding of programming languages. This subject is dis-
+cussed in Section 5.4.3.
+5.3.3 Type
+The type of a variable determines the range of values the variable can store 
+and the set of operations that are defined for values of the type. For example, 
+the 
+int type in Java specifies a value range of -2147483648 to 2147483647 
+and arithmetic operations for addition, subtraction, multiplication, division, 
+and modulus.
+5.3.4 Value
+The value of a variable is the contents of the memory cell or cells associated 
+with the variable. It is convenient to think of computer memory in terms of 
+abstract cells, rather than physical cells. The physical cells, or individually 
+addressable units, of most contemporary computer memories are eight-bit 
+units called bytes. A byte size is too small for most program variables. An 
+abstract memory cell has the size required by the variable with which it is 
+associated. For example, although floating-point values may occupy four 
+physical bytes in a particular implementation of a particular language, a 
+floating-point value is thought of as occupying a single abstract memory 
+cell. The value of each simple nonstructured type is considered to occupy 
+a single abstract cell. Henceforth, the term memory cell will mean abstract 
+memory cell.
+A variable’s value is sometimes called its r-value because it is what is 
+required when the name of the variable appears in the right side of an assign-
+ment statement. T o access the r-value, the l-value must be determined first. 
+Such determinations are not always simple. For example, scoping rules can 
+greatly complicate matters, as is discussed in Section 5.5.
+M05_SEBE8029_12_SE_C05.indd   202 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 228 (Target: ch5_names_bindings) ---
+=========================================
+
+204      Chapter 5   Names, Bindings, and Scopes 
+bindings, however, are maintained by computer hardware, and the changes are 
+invisible to the program and the user. Because they are not important to the 
+discussion, we are not concerned with these hardware bindings. The essential 
+point is to distinguish between static and dynamic bindings.
+5.4.2 Type Bindings
+Before a variable can be referenced in a program, it must be bound to a data 
+type. The two important aspects of this binding are how the type is specified 
+and when the binding takes place. T ypes can be specified statically through 
+some form of explicit or implicit declaration.
+5.4.2.1 Static Type Binding
+An explicit declaration is a statement in a program that lists variable names 
+and specifies that they are a particular type. An implicit declaration is a means 
+of associating variables with types through default conventions, rather than 
+declaration statements. In this case, the first appearance of a variable name in 
+a program constitutes its implicit declaration. Both explicit and implicit decla-
+rations create static bindings to types.
+Most widely used programming languages that use static type binding 
+exclusively and were designed since the mid-1960s require explicit declarations 
+of all variables (Visual Basic, ML, C#, and Swift are some exceptions).
+Implicit variable type binding is done by the language processor, either a 
+compiler or an interpreter. There are several different bases for implicit vari-
+able type bindings. The simplest of these is naming conventions. In this case, 
+the compiler or interpreter binds a variable to a type based on the syntactic 
+form of the variable’s name.
+Although they are a minor convenience to programmers, implicit decla-
+rations can be detrimental to reliability because they prevent the compilation 
+process from detecting some typographical and programmer errors.
+Some of the problems with implicit declarations can be avoided by requir-
+ing names for specific types to begin with particular special characters. For 
+example, in Perl any name that begins with 
+$ is a scalar, which can store either 
+a string or a numeric value. If a name begins with @, it is an array; if it begins 
+with a %, it is a hash structure.3 This creates different namespaces for different 
+type variables. In this scenario, the names @apple and %apple are unrelated, 
+because each is from a different namespace. Furthermore, a program reader 
+always knows the type of a variable when reading its name.
+Another kind of implicit type declarations uses context. This is sometimes 
+called type inference. In the simpler case, the context is the type of the value 
+assigned to the variable in a declaration statement. For example, in C# a 
+var 
+declaration of a variable must include an initial value, whose type is taken as 
+the type of the variable. Consider the following declarations:
+ 3. Both arrays and hashes are considered types—both can store any scalar in their elements.
+M05_SEBE8029_12_SE_C05.indd   204 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 229 (Target: ch5_names_bindings) ---
+=========================================
+
+5.4 The Concept of Binding     205
+var sum = 0;
+var total = 0.0;
+var name = "Fred";
+The types of sum, total, and name are int, float, and string, respectively. 
+Keep in mind that these are statically typed variables—their types are fixed for 
+the lifetime of the unit in which they are declared.
+Visual Basic, Swift, and the functional languages ML, Haskell, OCaml, and 
+F# also use type inferencing.
+5.4.2.2 Dynamic Type Binding
+With dynamic type binding, the type of a variable is not specified by a decla-
+ration statement, nor can it be determined by the spelling of its name. Instead, 
+the variable is bound to a type when it is assigned a value in an assignment state-
+ment. When the assignment statement is executed, the variable being assigned 
+is bound to the type of the value of the expression on the right side of the 
+assignment. Such an assignment may also bind the variable to an address and 
+a memory cell, because different type values may require different amounts of 
+storage. Any variable can be assigned any type value. Furthermore, a variable’s 
+type can change any number of times during program execution. It is important 
+to realize that the type of a variable whose type is dynamically bound may be 
+temporary.
+When the type of a variable is statically bound, the name of the variable can 
+be thought of being bound to a type, in the sense that the type and name of a 
+variable are simultaneously bound. However, when a variable’s type is dynam-
+ically bound, its name can be thought of as being only temporarily bound to a 
+type. In reality, the names of variables are never bound to types. Names can be 
+bound to variables and variables can be bound to types.
+Languages in which types are dynamically bound are dramatically differ -
+ent from those in which types are statically bound. The primary advantage of 
+dynamic binding of variables to types is that it provides more programming 
+flexibility. For example, a program to process numeric data in a language that 
+uses dynamic type binding can be written as a generic program, meaning that 
+it is capable of dealing with data of any numeric type. Whatever type data is 
+input will be acceptable, because the variables in which the data are to be stored 
+can be bound to the correct type when the data is assigned to the variables 
+after input. By contrast, because of static binding of types, one cannot write a 
+C program to process data without knowing the type of that data.
+Before the mid-1990s, the most commonly used programming languages 
+used static type binding, the primary exceptions being some functional lan-
+guages such as Lisp. However, since then there has been a significant shift to 
+languages that use dynamic type binding. In Python, Ruby, JavaScript, and 
+PHP , type binding is dynamic. For example, a JavaScript script may contain 
+the following statement:
+list = [10.2, 3.5];
+M05_SEBE8029_12_SE_C05.indd   205 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 230 (Target: ch5_names_bindings) ---
+=========================================
+
+206      Chapter 5   Names, Bindings, and Scopes 
+Regardless of the previous type of the variable named list, this assignment 
+causes it to become the name of a single-dimensioned array of length 2. If the 
+statement
+list = 47;
+followed the previous example assignment, list would become the name of 
+a scalar variable.
+The option of dynamic type binding was included in C# 2010. A variable 
+can be declared to use dynamic type binding by including the dynamic reserved 
+word in its declaration, as in the following example:
+dynamic  any;
+This is similar, although also different from declaring any to have type object. 
+It is similar in that any can be assigned a value of any type, just as if it were 
+declared object. It is different in that it is not useful for several different situ-
+ations of interoperation; for example, with dynamically typed languages such as 
+IronPython and IronRuby (.NET versions of Python and Ruby, respectively). 
+However, it is useful when data of unknown type come into a program from an 
+external source. Class members, properties, method parameters, method return 
+values, and local variables can all be declared 
+dynamic.
+In pure object-oriented languages—for example, Ruby—all variables are ref-
+erences and do not have types; all data are objects and any variable can reference 
+any object. Variables in such languages are, in a sense, all the same type—they 
+are references. However, unlike the references in Java, which are restricted to 
+referencing one specific type of value, variables in Ruby can reference any object.
+There are two disadvantages to dynamic type binding. First, it causes pro-
+grams to be less reliable, because the error-detection capability of the compiler 
+is diminished relative to a compiler for a language with static type bindings. 
+Dynamic type binding allows any variable to be assigned a value of any type. 
+Incorrect types of right sides of assignments are not detected as errors; rather, 
+the type of the left side is simply changed to the incorrect type. For example, 
+suppose that in a particular JavaScript program, 
+i and x are currently the 
+names of scalar numeric variables and y is currently the name of an array. 
+Furthermore, suppose that the program needs the assignment statement
+i = x;
+but because of a keying error, it has the assignment statement
+i = y;
+In JavaScript (or any other language that uses dynamic type binding), no error 
+is detected in this statement by the interpreter—the type of the variable named 
+i is simply changed to an array. But later uses of i will expect it to be a scalar, 
+and correct results will be impossible. In a language with static type binding, 
+M05_SEBE8029_12_SE_C05.indd   206 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 231 (Target: ch5_names_bindings) ---
+=========================================
+
+5.4 The Concept of Binding     207
+such as Java, the compiler would detect the error in the assignment i = y, and 
+the program would not get to execution.
+Note that this disadvantage is also present to some extent in some languages 
+that use static type binding, such as C and C++, which in many cases automat-
+ically convert the type of the RHS of an assignment to the type of the LHS.
+Perhaps the greatest disadvantage of dynamic type binding is cost. The 
+cost of implementing dynamic attribute binding is considerable, particularly in 
+execution time. T ype checking must be done at run time. Furthermore, every 
+variable must have a run-time descriptor associated with it to maintain the cur-
+rent type. The storage used for the value of a variable must be of varying size, 
+because different type values require different amounts of storage.
+Finally, languages that have dynamic type binding for variables are usually 
+implemented using pure interpreters rather than compilers. Computers do not 
+have instructions whose operand types are not known at compile time. There-
+fore, a compiler cannot build machine instructions for the expression 
+a + b if 
+the types of a and b are not known at compile time. Pure interpretation typically 
+takes at least 10 times as long as it does to execute equivalent machine code. 
+Of course, if a language is implemented with a pure interpreter, the time to do 
+dynamic type binding is hidden by the overall time of interpretation, so it seems 
+less costly in that environment. On the other hand, languages with static type 
+bindings are seldom implemented by pure interpretation, because programs in 
+these languages can be easily translated to very efficient machine code versions.
+5.4.3 Storage Bindings and Lifetime
+The fundamental character of an imperative programming language is in large 
+part determined by the design of the storage bindings for its variables. It is 
+therefore important to have a clear understanding of these bindings.
+The memory cell to which a variable is bound somehow must be taken 
+from a pool of available memory. This process is called allocation. Deallo-
+cation is the process of placing a memory cell that has been unbound from a 
+variable back into the pool of available memory.
+The lifetime of a variable is the time during which the variable is bound 
+to a specific memory location. So, the lifetime of a variable begins when it 
+is bound to a specific cell and ends when it is unbound from that cell. T o 
+investigate storage bindings of variables, it is convenient to separate scalar 
+(unstructured) variables into four categories, according to their lifetimes. These 
+categories are named static, stack-dynamic, explicit heap-dynamic, and implicit 
+heap-dynamic. In the following sections, we discuss the definitions of these four 
+categories, along with their purposes, advantages, and disadvantages.
+5.4.3.1 Static Variables
+A static variable is one that is bound to a memory cell before program 
+execution begins and remains bound to that same memory cell until pro-
+gram execution terminates. Statically bound variables have several valuable 
+M05_SEBE8029_12_SE_C05.indd   207 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 232 (Target: ch5_names_bindings) ---
+=========================================
+
+208      Chapter 5   Names, Bindings, and Scopes 
+applications in programming. Globally accessible variables are often used 
+throughout the execution of a program, thus making it necessary to have them 
+bound to the same storage during that execution. Sometimes it is 
+ convenient 
+to have subprograms that are history sensitive. Such a subprogram must have 
+local static variables.
+One advantage of static variables is efficiency. All addressing of static vari-
+ables can be direct;
+4 other kinds of variables often require indirect addressing, 
+which is slower. Also, no run-time overhead is incurred for allocation and deal-
+location of static variables, although this time is often negligible.
+One disadvantage of static binding to storage is reduced flexibility; in 
+particular, a language that has only static variables cannot support recursive 
+subprograms. Another disadvantage is that storage cannot be shared among 
+variables. For example, suppose a program has two subprograms, both of which 
+require large arrays. Furthermore, suppose that the two subprograms are never 
+active at the same time. If the arrays are static, they cannot share the same 
+storage.
+C and C++ allow programmers to include the 
+static specifier on a variable 
+definition in a function, making the variables it defines static. Note that when 
+the 
+static modifier appears in the declaration of a variable in a class definition 
+in C++, Java, and C#, it also implies that the variable is a class variable, rather 
+than an instance variable. Class variables are created statically some time before 
+the class is first instantiated.
+5.4.3.2 Stack-Dynamic Variables
+Stack-dynamic variables are those whose storage bindings are created when 
+their declaration statements are elaborated, but whose types are statically 
+bound. Elaboration of such a declaration refers to the storage allocation and 
+binding process indicated by the declaration, which takes place when execution 
+reaches the code to which the declaration is attached. Therefore, elaboration 
+occurs during run time. For example, the variable declarations that appear at 
+the beginning of a Java method are elaborated when the method is called and 
+the variables defined by those declarations are deallocated when the method 
+completes its execution.
+As their name indicates, stack-dynamic variables are allocated from the 
+run-time stack.
+Some languages—for example, C++ and Java—allow variable declarations 
+to occur anywhere a statement can appear. In some implementations of these 
+languages, all of the stack-dynamic variables declared in a function or method 
+(not including those declared in nested blocks) may be bound to storage at the 
+beginning of execution of the function or method, even though the declarations 
+of some of these variables do not appear at the beginning. In such cases, the 
+ 4. In some implementations, static variables are addressed through a base register, making 
+accesses to them as costly as for stack-allocated variables.
+M05_SEBE8029_12_SE_C05.indd   208 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 234 (Target: ch5_names_bindings) ---
+=========================================
+
+210      Chapter 5   Names, Bindings, and Scopes 
+As an example of explicit heap-dynamic variables, consider the following 
+C++ code segment:
+int  *intnode;      // Create a pointer
+intnode =  new int; // Create the heap-dynamic variable
+. . .
+delete  intnode;   // Deallocate the heap-dynamic variable
+                        // to which intnode points
+In this example, an explicit heap-dynamic variable of int type is created by 
+the new operator. This variable can then be referenced through the pointer,  
+intnode . Later, the variable is deallocated by the delete  operator. C++ 
+requires the explicit deallocation operator delete, because it does not use 
+implicit storage reclamation, such as garbage collection.
+In Java, all data except the primitive scalars are objects. Java objects are 
+explicitly heap dynamic and are accessed through reference variables. Java has 
+no way of explicitly destroying a heap-dynamic variable; rather, implicit gar -
+bage collection is used. Garbage collection is discussed in Chapter 6.
+C# has both explicit heap-dynamic and stack-dynamic objects, all of which are 
+implicitly deallocated. In addition, C# supports C++-style pointers. Such pointers 
+are used to reference heap, stack, and even static variables and objects. These point-
+ers have the same dangers as those of C++, and the objects they reference on the 
+heap are not implicitly deallocated. Pointers are included in C# to allow C# com-
+ponents to interoperate with C and C++ components. T o discourage their use, and 
+also to make clear to any program reader that the code uses pointers, the header of 
+any method that defines a pointer must include the reserved word 
+unsafe.
+Explicit heap-dynamic variables are often used to construct dynamic struc-
+tures, such as linked lists and trees, that need to grow and/or shrink during exe-
+cution. Such structures can be built conveniently using pointers or references 
+and explicit heap-dynamic variables.
+The disadvantages of explicit heap-dynamic variables are the difficulty of 
+using pointer and reference variables correctly, the cost of references to the 
+variables, and the complexity of the required storage management implemen-
+tation. This is essentially the problem of heap management, which is costly and 
+complicated. Implementation methods for explicit heap-dynamic variables are 
+discussed at length in Chapter 6.
+5.4.3.4 Implicit Heap-Dynamic Variables
+Implicit heap-dynamic variables are bound to heap storage only when they 
+are assigned values. In fact, all their attributes are bound every time they are 
+assigned. For example, consider the following JavaScript assignment statement:
+highs = [74, 84, 86, 90, 71];
+Regardless of whether the variable named highs was previously used in the 
+program or what it was used for, it is now an array of five numeric values.
+M05_SEBE8029_12_SE_C05.indd   210 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 235 (Target: ch5_names_bindings) ---
+=========================================
+
+5.5 Scope     211
+The advantage of such variables is that they have the highest degree of 
+flexibility, allowing highly generic code to be written. One disadvantage of 
+implicit heap-dynamic variables is the run-time overhead of maintaining all 
+the dynamic attributes, which could include array subscript types and ranges, 
+among others. Another disadvantage is the loss of some error detection by the 
+compiler, as discussed in Section 5.4.2.2.
+5.5 Scope
+One of the important factors in understanding variables is scope. The scope of 
+a variable is the range of statements in which the variable is visible. A variable 
+is visible in a statement if it can be referenced or assigned in that statement.
+The scope rules of a language determine how a particular occurrence of a 
+name is associated with a variable, or in the case of a functional language, how a 
+name is associated with an expression. In particular, scope rules determine how 
+references to variables declared outside the currently executing subprogram or 
+block are associated with their declarations and thus their attributes (blocks are 
+discussed in Section 5.5.2). A clear understanding of these rules for a language 
+is therefore essential to the ability to write or read programs in that language.
+A variable is local in a program unit or block if it is declared there. The 
+nonlocal variables of a program unit or block are those that are visible within 
+the program unit or block but are not declared there. Global variables are a 
+special category of nonlocal variables, which are discussed in Section 5.5.4.
+Scoping issues of classes, packages, and namespaces are discussed in 
+ Chapter 11.
+5.5.1 Static Scope
+ALGOL 60 introduced the method of binding names to nonlocal variables 
+called static scoping,
+5 which has been copied by many subsequent imperative 
+languages and many nonimperative languages as well. Static scoping is so 
+named because the scope of a variable can be statically determined—that is, 
+prior to execution. This permits a human program reader (and a compiler) to 
+determine the type of every variable in the program simply by examining its 
+source code.
+There are two categories of static-scoped languages: those in which sub-
+programs can be nested, which creates nested static scopes, and those in which 
+subprograms cannot be nested. In the latter category, static scopes are also 
+created by subprograms but nested scopes are created only by nested class 
+definitions and blocks.
+Ada, JavaScript, Common Lisp, Scheme, Fortran 
+2003+, F#, and Python 
+allow nested subprograms, but the C-based languages do not.
+ 5. Static scoping is sometimes called lexical scoping.
+M05_SEBE8029_12_SE_C05.indd   211 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 236 (Target: ch5_names_bindings) ---
+=========================================
+
+212      Chapter 5   Names, Bindings, and Scopes 
+Our discussion of static scoping in this section focuses on those languages 
+that allow nested subprograms. Initially, we assume that all scopes are associ-
+ated with program units and that all referenced nonlocal variables are declared 
+in other program units.
+6 In this chapter, it is assumed that scoping is the only 
+method of accessing nonlocal variables in the languages under discussion. This 
+is not true for all languages. It is not even true for all languages that use static 
+scoping, but the assumption simplifies the discussion here.
+When the reader of a program finds a reference to a variable, the attri-
+butes of the variable can be determined by finding the statement in which it is 
+declared (either explicitly or implicitly). In static-scoped languages with nested 
+subprograms, this process can be thought of in the following way. Suppose a 
+reference is made to a variable 
+x in subprogram sub1. The correct declaration 
+is found by first searching the declarations of subprogram sub1. If no decla-
+ration is found for the variable there, the search continues in the declarations 
+of the subprogram that declared subprogram 
+sub1, which is called its static 
+parent. If a declaration of x is not found there, the search continues to the next-
+larger enclosing unit (the unit that declared sub1’s parent), and so forth, until a 
+declaration for x is found or the largest unit’s declarations have been searched 
+without success. In that case, an undeclared variable error is reported. The 
+static parent of subprogram 
+sub1, and its static parent, and so forth up to and 
+including the largest enclosing subprogram, are called the static ancestors of 
+sub1. Actual implementation techniques for static scoping, which are discussed 
+in Chapter 10, are usually much more efficient than the process just described.
+Consider the following JavaScript function, big, in which the two func-
+tions sub1 and sub2 are nested:
+function  big() {
+  function  sub1() {
+    var  x = 7;
+    sub2();
+  }
+  function  sub2() {
+    var  y = x;
+  }
+  var  x = 3;
+  sub1();
+}
+Under static scoping, the reference to the variable x in sub2 is to the x declared 
+in the procedure big. This is true because the search for x begins in the pro-
+cedure in which the reference occurs, sub2, but no declaration for x is found 
+there. The search continues in the static parent of sub2, big, where the dec-
+laration of x is found. The x declared in sub1 is ignored, because it is not in 
+the static ancestry of sub2.
+ 6. Nonlocal variables not defined in other program units are discussed in Section 5.5.4.
+M05_SEBE8029_12_SE_C05.indd   212 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 237 (Target: ch5_names_bindings) ---
+=========================================
+
+5.5 Scope     213
+In some languages that use static scoping, regardless of whether nested 
+subprograms are allowed, some variable declarations can be hidden from some 
+other code segments. For example, consider again the JavaScript function big. 
+The variable x is declared in both big and in sub1, which is nested inside big. 
+Within sub1, every simple reference to x is to the local x. Therefore, the outer 
+x is hidden from sub1.
+5.5.2 Blocks
+Many languages allow new static scopes to be defined in the midst of executable 
+code. This powerful concept, introduced in ALGOL 60, allows a section of 
+code to have its own local variables whose scope is minimized. Such variables 
+are typically stack dynamic, so their storage is allocated when the section is 
+entered and deallocated when the section is exited. Such a section of code 
+is called a block. Blocks provide the origin of the phrase block-structured 
+language.
+The C-based languages allow any compound statement (a statement 
+sequence surrounded by matched braces) to have declarations and thereby 
+define a new scope. Such compound statements are called blocks. For example, 
+if 
+list were an integer array, one could write the following:
+if (list[i] < list[j]) {
+  int temp;
+  temp = list[i];
+  list[i] = list[j];
+  list[j] = temp;
+}
+The scopes created by blocks, which could be nested in larger blocks, are 
+treated exactly like those created by subprograms. References to variables in 
+a block that are not declared there are connected to declarations by searching 
+enclosing scopes (blocks or subprograms) in order of increasing size.
+Consider the following skeletal C function:
+void sub() {
+  int count;
+  . . .
+  while (. . .) {
+    int count;
+    count++;
+    . . .
+  }
+  . . .
+}
+The reference to count in the while loop is to that loop’s local count. In this 
+case, the count of sub is hidden from the code inside the while loop. In gen-
+eral, a declaration for a variable effectively hides any declaration of a variable 
+M05_SEBE8029_12_SE_C05.indd   213 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 238 (Target: ch5_names_bindings) ---
+=========================================
+
+214      Chapter 5   Names, Bindings, and Scopes 
+with the same name in a larger enclosing scope.7 Note that this code is legal in 
+C and C++ but illegal in Java and C#. The designers of Java and C# believed 
+that the reuse of names in nested blocks was too error prone to be allowed.
+Although JavaScript uses static scoping for its nested functions, nonfunc-
+tion blocks cannot be defined in the language.
+Most functional programming languages include a construct that is related 
+to the blocks of the imperative languages, usually named let. These constructs 
+have two parts, the first of which is to bind names to values, usually specified 
+as expressions. The second part is an expression that uses the names defined 
+in the first part. Programs in functional languages are comprised of expres-
+sions, rather than statements. Therefore, the final part of a 
+let construct is an 
+expression, rather than a statement. In Scheme, a let construct is a call to the 
+function LET with the following form:
+(LET (
+ (name1 expression1)
+ . . .
+ (namen expressionn))
+ expression
+)
+The semantics of the call to LET is as follows: The first n expressions are 
+evaluated and the values are assigned to the associated names. Then, the final 
+expression is evaluated and the return value of 
+LET is that value. This differs 
+from a block in an imperative language in that the names are of values; they 
+are not variables in the imperative sense. Once set, they cannot be changed. 
+However, they are like local variables in a block in an imperative language in 
+that their scope is local to the call to 
+LET. Consider the following call to LET:
+(LET (
+  (top (+ a b))
+  (bottom (- c d)))
+  (/ top bottom)
+)
+This call computes and returns the value of the expression (a + b) / (c - d).
+In ML, the form of a let construct is as follows:
+let
+ val  name1 = expression1
+ . . .
+ val  namen = expressionn
+in
+ expression
+end;
+ 7. As discussed in Section 5.5.4, in C++, such hidden global variables can be accessed in the 
+inner scope using the scope operator (::).
+M05_SEBE8029_12_SE_C05.indd   214 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 240 (Target: ch5_names_bindings) ---
+=========================================
+
+216      Chapter 5   Names, Bindings, and Scopes 
+In the official documentation for C#, the scope of any variable declared in a 
+block is said to be the whole block, regardless of the position of the declaration 
+in the block, as long as it is not in a nested block. The same is true for methods. 
+However, this is misleading, because the C# language definition requires that 
+all variables be declared before they are used. Therefore, although the scope 
+of a variable is said to extend from the declaration to the top of the block or 
+subprogram in which that declaration appears, the variable still cannot be used 
+above its declaration.
+Recall that C# does not allow the declaration of a variable in a nested block 
+to have the same name as a variable in a nesting scope. This, together with the 
+rule that the scope of a declaration is the whole block, makes the following 
+nested declaration of 
+x illegal:
+{
+  {int  x;  // Illegal
+  ...
+  }
+  int  x;
+}
+Note that C# still requires that all be declared before they are used. There-
+fore, although the scope of a variable extends from the declaration to the top 
+of the block or subprogram in which that declaration appears, the variable still 
+cannot be used above its declaration.
+In JavaScript, local variables can be declared anywhere in a function, but 
+the scope of such a variable is always the entire function. If used before its 
+declaration in the function, such a variable has the value 
+undefined . The 
+reference is not illegal.
+The for statements of C++, Java, and C# allow variable definitions in their 
+initialization expressions. In early versions of C++, the scope of such a variable 
+was from its definition to the end of the smallest enclosing block. In the stan-
+dard version, however, the scope is restricted to the 
+for construct, as is the case 
+with Java and C#. Consider the following skeletal method:
+void  fun() {
+   . . .
+   for (int  count = 0; count < 10; count++){
+     . . .
+   }
+   . . .
+}
+In later versions of C++, as well as in Java and C#, the scope of count is from 
+the for statement to the end of its body (the right brace).
+M05_SEBE8029_12_SE_C05.indd   216 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 242 (Target: ch5_names_bindings) ---
+=========================================
+
+218      Chapter 5   Names, Bindings, and Scopes 
+made visible by including it in a global declaration statement. Consider the 
+following example:
+$day = "Monday";
+$month = "January";
+function calendar() {
+  $day = "Tuesday";
+  global $month;
+  print "local day is $day  ";
+  $gday = $GLOBALS['day'];
+  print "global day is $gday <br \>";
+  print "global month is $month ";
+}
+calendar();
+Interpretation of this code produces the following:
+local day is Tuesday
+global day is Monday
+global month is January
+The global variables of JavaScript are very similar to those of PHP , except 
+that there is no way to access a global variable in a function that has declared a 
+local variable with the same name.
+The visibility rules for global variables in Python are unusual. Variables 
+are not normally declared, as in PHP . They are implicitly declared when they 
+appear as the targets of assignment statements. A global variable can be ref-
+erenced in a function, but a global variable can be assigned in a function only 
+if it has been declared to be global in the function. Consider the following 
+examples:
+day = "Monday"
+def tester():
+print "The global day is:", day
+tester()
+The output of this script, because globals can be referenced directly in 
+ functions, is as follows:
+The global day is: Monday
+The following script attempts to assign a new value to the global day:
+M05_SEBE8029_12_SE_C05.indd   218 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 243 (Target: ch5_names_bindings) ---
+=========================================
+
+5.5 Scope     219
+day = "Monday"
+def  tester():
+  print "The global day is:", day
+  day = "Tuesday"
+  print "The new value of day is:", day
+tester()
+This script creates an UnboundLocalError error message, because the assign-
+ment to day in the second line of the body of the function makes day a local 
+variable, which makes the reference to day in the first line of the body of the 
+function an illegal forward reference to the local.
+The assignment to day can be to the global variable if day is declared to 
+be global at the beginning of the function. This prevents the assignment to day 
+from creating a local variable. This is shown in the following script:
+day = "Monday"
+def tester():
+  global  day
+  print  "The global day is:", day
+  day = "Tuesday"
+  print  "The new value of day is:", day
+tester()
+The output of this script is as follows:
+The global day is: Monday
+The new value of day is: Tuesday
+Functions can be nested in Python. Variables defined in nesting functions 
+are accessible in a nested function through static scoping, but such variables 
+must be declared nonlocal  in the nested function. 9 An example skeletal 
+ program in Section 5.7 illustrates accesses to nonlocal variables.
+All names defined outside function definitions in F# are globals. Their 
+scope extends from their definitions to the end of the file.
+Declaration order and global variables are also issues in the class and 
+member declarations in object-oriented languages. These are discussed in 
+Chapter 12.
+ 9. The nonlocal reserved word was introduced in Python 3.
+M05_SEBE8029_12_SE_C05.indd   219 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 244 (Target: ch5_names_bindings) ---
+=========================================
+
+220      Chapter 5   Names, Bindings, and Scopes 
+5.5.5 Evaluation of Static Scoping
+Static scoping provides a method of nonlocal access that works well in many 
+situations. However, it is not without its problems. First, in most cases it allows 
+more access to both variables and subprograms than is necessary. It is simply 
+too crude a tool for concisely specifying such restrictions. Second, and perhaps 
+more important, is a problem related to program evolution. Software is highly 
+dynamic—programs that are used regularly continually change. These changes 
+often result in restructuring, thereby destroying the initial structure that 
+restricted variable and subprogram access in a static-scoped language. T o avoid 
+the complexity of maintaining these access restrictions, developers often dis-
+card structure when it gets in the way. Thus, getting around the restrictions of 
+static scoping can lead to program designs that bear little resemblance to the 
+original, even in areas of the program in which changes have not been made. 
+Designers are encouraged to use far more globals than are necessary. All sub-
+programs can end up being nested at the same level, in the main program, using 
+globals instead of deeper levels of nesting.
+10 Moreover, the final design may be 
+awkward and contrived, and it may not reflect the underlying conceptual 
+design. These and other defects of static scoping are discussed in detail in 
+Clarke, Wileden, and Wolf (1980). An alternative to the use of static scoping 
+to control access to variables and subprograms is an encapsulation construct, 
+which is included in many newer languages. Encapsulation constructs are 
+ discussed in Chapter 11.
+5.5.6 Dynamic Scope
+The scope of variables in APL, SNOBOL4, and the early versions of Lisp is 
+dynamic. Perl and Common Lisp also allow variables to be declared to have 
+dynamic scope, although the default scoping mechanism in these languages is 
+static. Dynamic scoping is based on the calling sequence of subprograms, not 
+on their spatial relationship to each other. Thus, the scope can be determined 
+only at run time.
+Consider again the function 
+big from Section 5.5.1, which is reproduced 
+here, minus the function calls:
+function  big() {
+  function  sub1() {
+    var  x = 7;
+  }
+  function  sub2() {
+    var  y = x;
+    var  z = 3;
+  }
+  var  x = 3;
+}
+ 10. Sounds like the structure of a C program, doesn’t it?
+M05_SEBE8029_12_SE_C05.indd   220 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 245 (Target: ch5_names_bindings) ---
+=========================================
+
+5.5 Scope     221
+Assume that dynamic-scoping rules apply to nonlocal references. The meaning 
+of the identifier x referenced in sub2 is dynamic—it cannot be determined 
+at compile time. It may reference the variable from either declaration of x, 
+depending on the calling sequence.
+One way the correct meaning of x can be determined during execution is 
+to begin the search with the local declarations. This is also the way the process 
+begins with static scoping, but that is where the similarity between the two 
+techniques ends. When the search of local declarations fails, the declarations 
+of the dynamic parent, or calling function, are searched. If a declaration for 
+x is not found there, the search continues in that function’s dynamic parent, 
+and so forth, until a declaration for x is found. If none is found in any dynamic 
+ancestor, it is a run-time error.
+Consider the two different call sequences for sub2 in the earlier example. 
+First, big calls sub1, which calls sub2. In this case, the search proceeds from 
+the local procedure, sub2, to its caller, sub1, where a declaration for x is found. 
+So, the reference to x in sub2 in this case is to the x declared in sub1. Next, 
+sub2 is called directly from big. In this case, the dynamic parent of sub2 is 
+big, and the reference is to the x declared in big.
+Note that if static scoping were used, in either calling sequence discussed, 
+the reference to x in sub2 would be to big’s x.
+Perl’s dynamic scoping is unusual—in fact, it is not exactly like that dis-
+cussed in this section, although the semantics are often that of traditional 
+dynamic scoping (see Programming Exercise 1).
+5.5.7 Evaluation of Dynamic Scoping
+The effect of dynamic scoping on programming is profound. When dynamic 
+scoping is used, the correct attributes of nonlocal variables visible to a program 
+statement cannot be determined statically. Furthermore, a reference to the 
+name of such a variable is not always to the same variable. A statement in a sub-
+program that contains a reference to a nonlocal variable can refer to different 
+nonlocal variables during different executions of the subprogam. Several kinds 
+of programming problems follow directly from dynamic scoping.
+First, during the time span beginning when a subprogram begins its exe-
+cution and ending when that execution ends, the local variables of the subpro-
+gram are all visible to any other executing subprogram, regardless of its textual 
+proximity or how execution got to the currently executing subprogram. There 
+is no way to protect local variables from this accessibility. Subprograms are 
+always executed in the environment of all previously called subprograms that 
+have not yet completed their executions. As a result, dynamic scoping results 
+in less reliable programs than static scoping.
+A second problem with dynamic scoping is the inability to type check 
+references to nonlocals statically. This problem results from the inability to 
+statically find the declaration for a variable referenced as a nonlocal.
+Dynamic scoping also makes programs much more difficult to read, 
+because the calling sequence of subprograms must be known to determine the 
+M05_SEBE8029_12_SE_C05.indd   221 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 246 (Target: ch5_names_bindings) ---
+=========================================
+
+222      Chapter 5   Names, Bindings, and Scopes 
+meaning of references to nonlocal variables. This task can be virtually impos-
+sible for a human reader.
+Finally, accesses to nonlocal variables in dynamic-scoped languages take 
+far longer than accesses to nonlocals when static scoping is used. The reason 
+for this is explained in Chapter 10.
+On the other hand, dynamic scoping is not without merit. In many cases, 
+the parameters passed from one subprogram to another are variables that are 
+defined in the caller. None of these needs to be passed in a dynamically scoped 
+language, because they are implicitly visible in the called subprogram.
+It is not difficult to understand why dynamic scoping is not as widely used 
+as static scoping. Programs in static-scoped languages are easier to read, are 
+more reliable, and execute faster than equivalent programs in dynamic-scoped 
+languages. It was precisely for these reasons that dynamic scoping was replaced 
+by static scoping in most current dialects of Lisp. Implementation methods for 
+both static and dynamic scoping are discussed in Chapter 10.
+5.6 Scope and Lifetime
+Sometimes the scope and lifetime of a variable appear to be related. For 
+example, consider a variable that is declared in a Java method that contains 
+no method calls. The scope of such a variable is from its declaration to the 
+end of the method. The lifetime of that variable is the period of time begin-
+ning when the method is entered and ending when execution of the method 
+terminates. Although the scope and lifetime of the variable are clearly not the 
+same, because static scope is a textual, or spatial, concept whereas lifetime is a 
+temporal concept, they at least appear to be related in this case.
+This apparent relationship between scope and lifetime does not hold in other 
+situations. In C and C++, for example, a variable that is declared in a function 
+using the specifier 
+static is statically bound to the scope of that function and is 
+also statically bound to storage. So, its scope is static and local to the function, but 
+its lifetime extends over the entire execution of the program of which it is a part.
+Scope and lifetime are also unrelated when subprogram calls are involved. 
+Consider the following C++ functions:
+void printheader() {
+  . . .
+ } /* end of printheader */
+void compute() {
+  int sum;
+  . . .
+  printheader();
+ } /* end of compute */
+The scope of the variable sum is completely contained within the compute 
+function. It does not extend to the body of the function printheader, although 
+printheader executes in the midst of the execution of compute. However, the 
+M05_SEBE8029_12_SE_C05.indd   222 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 247 (Target: ch5_names_bindings) ---
+=========================================
+
+5.7 Referencing Environments     223
+lifetime of sum extends over the time during which printheader executes. 
+Whatever storage location sum is bound to before the call to printheader, 
+that binding will continue during and after the execution of printheader.
+5.7 Referencing Environments
+The referencing environment of a statement is the collection of all variables 
+that are visible in the statement. The referencing environment of a statement in 
+a static-scoped language is the variables declared in its local scope plus the col-
+lection of all variables of its ancestor scopes that are visible. In such a language, 
+the referencing environment of a statement is needed while that statement is 
+being compiled, so code and data structures can be created to allow references 
+to variables from other scopes during run time. T echniques for implementing 
+references to nonlocal variables in both static- and dynamic-scoped languages 
+are discussed in Chapter 10.
+In Python, scopes can be created by function definitions. The referencing 
+environment of a statement includes the local variables, plus all of the variables 
+declared in the functions in which the statement is nested (excluding variables 
+in nonlocal scopes that are hidden by declarations in nearer functions). Each 
+function definition creates a new scope and thus a new environment. Consider 
+the following Python skeletal program:
+g = 3; # A global
+def sub1():
+    a = 5; # Creates a local
+    b = 7; # Creates another local
+    . . . <------------------------------ 1
+  def  sub2():
+  global g;  # Global g is now assignable here
+    c = 9;  # Creates a new local
+    . . . <------------------------------ 2
+    def  sub3():
+      nonlocal  c:  # Makes nonlocal c visible here
+      g = 11;  # Creates a new local
+      . . . <------------------------------ 3
+The referencing environments of the indicated program points are as follows:
+Point Referencing Environment
+1 local a and b (of sub1), global g for reference, 
+but not for assignment
+2 local c (of sub2), global g for both reference 
+and for assignment
+3 nonlocal c (of sub2), local g (of sub3)
+M05_SEBE8029_12_SE_C05.indd   223 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 248 (Target: ch5_names_bindings) ---
+=========================================
+
+224      Chapter 5   Names, Bindings, and Scopes 
+Now consider the variable declarations of this skeletal program. First, note 
+that, although the scope of sub1 is at a higher level (it is less deeply nested) than 
+sub3, the scope of sub1 is not a static ancestor of sub3, so sub3 does not have 
+access to the variables declared in sub1. There is a good reason for this. The 
+variables declared in sub1 are stack dynamic, so they are not bound to storage 
+if sub1 is not in execution. Because sub3 can be in execution when sub1 is not, 
+it cannot be allowed to access variables in sub1, which would not necessarily 
+be bound to storage during the execution of sub3.
+A subprogram is active if its execution has begun but has not yet terminated. 
+The referencing environment of a statement in a dynamically scoped language 
+is the locally declared variables, plus the variables of all other  subprograms 
+that are currently active. Once again, some variables in active subprograms can 
+be hidden from the referencing environment. Recent subprogram activations 
+can have declarations for variables that hide variables with the same names in 
+previous subprogram activations.
+Consider the following example program. Assume that the only function 
+calls are the following: 
+main calls sub2, which calls sub1.
+void sub1() {
+  int a, b;
+  . . . <------------ 1
+}  /* end of sub1 */
+void sub2() {
+  int b, c;
+  . . . . <------------ 2
+  sub1();
+}  /* end of sub2 */
+void main() {
+  int c, d;
+  . . . <------------ 3
+  sub2();
+}  /* end of main */
+The referencing environments of the indicated program points are as 
+follows:
+Point Referencing Environment
+1 a and b of sub1, c of sub2, d of main, (c of 
+main and b of sub2 are hidden)
+2 b and c of sub2, d of main, (c of main is hidden)
+3 c and d of main
+5.8 Named Constants
+A named constant is a variable that is bound to a value only once. Named con-
+stants are useful as aids to readability and program reliability. Readability can be 
+improved, for example, using the name pi instead of the constant 3.14159265.
+M05_SEBE8029_12_SE_C05.indd   224 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 250 (Target: ch5_names_bindings) ---
+=========================================
+
+226      Chapter 5   Names, Bindings, and Scopes 
+C++ allows dynamic binding of values to named constants. This allows 
+expressions containing variables to be assigned to constants in the declarations. 
+For example, the C++ statement
+const int  result = 2 * width + 1;
+declares result to be an integer type named constant whose value is set to the 
+value of the expression 2 * width + 1, where the value of the variable width 
+must be visible when result is allocated and bound to its value.
+Java also allows dynamic binding of values to named constants. In Java, 
+named constants are defined with the final reserved word (as in the earlier 
+example). The initial value can be given in the declaration statement or in a 
+subsequent assignment statement. The assigned value can be specified with 
+any expression.
+C# has two kinds of named constants: those defined with 
+const and those 
+defined with readonly . The const named constants, which are implicitly 
+static, are statically bound to values; that is, they are bound to values at com-
+pile time, which means those values can be specified only with literals or other 
+const  members. The readonly  named constants, which are dynamically 
+bound to values, can be assigned in the declaration or with a static constructor.11 
+So, if a program needs a constant-valued object whose value is the same on 
+every use of the program, a 
+const constant is used. However, if a program 
+needs a constant-valued object whose value is determined only when the object 
+is created and can be different for different executions of the program, then a 
+readonly constant is used.
+The discussion of binding values to named constants naturally leads to the 
+topic of initialization, because binding a value to a named constant is the same 
+process, except it is permanent.
+In many instances, it is convenient for variables to have values before the 
+code of the program or subprogram in which they are declared begins execut-
+ing. The binding of a variable to a value at the time it is bound to storage is 
+called initialization. If the variable is statically bound to storage, binding and 
+initialization occur before run time. In these cases, the initial value must be 
+specified as a literal or an expression whose only nonliteral operands are named 
+constants that have already been defined. If the storage binding is dynamic, 
+initialization is also dynamic and the initial values can be any expression.
+In most languages, initialization is specified on the declaration that creates 
+the variable. For example, in C++, we could have
+int sum = 0;
+int* ptrSum = &sum;
+char name[] = "George Washington Carver";
+ 11. Static constructors in C# run at some indeterminate time before the class is instantiated.
+M05_SEBE8029_12_SE_C05.indd   226 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 251 (Target: ch5_names_bindings) ---
+=========================================
+
+Review Questions     227
+SUMMARY
+Case sensitivity and the use of underscores are the design issues for names.
+Variables can be characterized by the sextuple of attributes: name, address, 
+value, type, lifetime, and scope.
+Aliases are two or more variables bound to the same storage address. They 
+are regarded as detrimental to reliability but are difficult to eliminate entirely 
+from a language.
+Binding is the association of attributes with program entities. Knowl -
+edge of the binding times of attributes to entities is essential to understanding 
+the semantics of programming languages. Binding can be static or dynamic. 
+ Declarations, either explicit or implicit, provide a means of specifying the static 
+binding of variables to types. In general, dynamic binding allows greater flex-
+ibility but at the expense of readability, efficiency, and reliability.
+Scalar variables can be separated into four categories by considering their 
+lifetimes: static, stack dynamic, explicit heap dynamic, and implicit heap dynamic.
+Static scoping is a central feature of ALGOL 60 and some of its descendants. 
+It provides a simple, reliable, and efficient method of allowing visibility of non-
+local variables in subprograms. Dynamic scoping provides more flexibility than 
+static scoping but, again, at the expense of readability, reliability, and efficiency.
+Most functional languages allow the user to create local scopes with 
+let 
+constructs, which limit the scope of their defined names.
+The referencing environment of a statement is the collection of all of the 
+variables that are visible to that statement.
+Named constants are simply variables that are bound to values only once.
+REVIEW QUESTIONS
+1. What are the design issues for names?
+2. What is the potential danger of case-sensitive names?
+3. What is an alias?
+4. Which category of C++ reference variables always produces aliases?
+5. What is the l-value of a variable? What is the r-value?
+6. Define binding and binding time.
+7. After language design and implementation, what are the four times 
+bindings can take place in a program?
+8.
+ Define static binding and dynamic binding.
+9. What are the advantages and disadvantages of implicit declarations?
+10. What are the advantages and disadvantages of dynamic type binding?
+11. Define static, stack-dynamic, explicit heap-dynamic, and implicit heap-dynamic 
+variables. What are their advantages and disadvantages?
+M05_SEBE8029_12_SE_C05.indd   227 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 252 (Target: ch5_names_bindings) ---
+=========================================
+
+228      Chapter 5   Names, Bindings, and Scopes 
+12. Define lifetime, scope, static scope, and dynamic scope.
+13. How is a reference to a nonlocal variable in a static-scoped program 
+connected to its definition?
+14. What is the general problem with static scoping?
+15. What is the referencing environment of a statement?
+16. What is a static ancestor of a subprogram? What is a dynamic ancestor 
+of a subprogram?
+17.
+ What is a block?
+18. What is the purpose of the let constructs in functional languages?
+19. What is the difference between the names defined in an ML let 
+construct from the variables declared in a C block?
+20. Describe the encapsulation of an F# let inside a function and outside all 
+functions.
+21. What are the advantages and disadvantages of dynamic scoping?
+22. What are the advantages of named constants?
+PROBLEM SET
+1. Which of the following identifier forms is most readable? Support your 
+decision.
+SumOfSales
+sum_of_sales
+SUMOFSALES
+2. Some programming languages are typeless. What are the obvious 
+advantages and disadvantages of having no types in a language?
+3. Write a simple assignment statement with one arithmetic operator in 
+some language you know. For each component of the statement, list the 
+various bindings that are required to determine the semantics when the 
+statement is executed. For each binding, indicate the binding time used 
+for the language.
+4.
+ Dynamic type binding is closely related to implicit heap-dynamic 
+variables. Explain this relationship.
+5.
+ Describe a situation when a history-sensitive variable in a subprogram is 
+useful.
+6.
+ Consider the following JavaScript skeletal program:
+// The main program
+var  x;
+function  sub1() {
+M05_SEBE8029_12_SE_C05.indd   228 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 253 (Target: ch5_names_bindings) ---
+=========================================
+
+Problem Set     229
+  var  x;
+  function  sub2() {
+    . . .
+  }
+}
+function  sub3() {
+  . . .
+}
+Assume that the execution of this program is in the following unit 
+order:
+main calls sub1
+sub1 calls sub2
+sub2 calls sub3
+a. Assuming static scoping, in the following, which declaration of x is the 
+correct one for a reference to x?
+i. sub1
+ii. sub2
+iii. sub3
+b. Repeat part a, but assume dynamic scoping.
+7. Assume the following JavaScript program was interpreted using 
+static-scoping rules. What value of 
+x is displayed in function sub1? 
+Under dynamic-scoping rules, what value of x is displayed in function 
+sub1?
+var x;
+function  sub1() {
+  document.write("x = " + x + "");
+}
+function  sub2() {
+   var x;
+   x = 10;
+   sub1();
+}
+x = 5;
+sub2();
+8. Consider the following JavaScript program:
+var  x, y, z;
+function  sub1() {
+  var  a, y, z;
+M05_SEBE8029_12_SE_C05.indd   229 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 254 (Target: ch5_names_bindings) ---
+=========================================
+
+230      Chapter 5   Names, Bindings, and Scopes 
+  function sub2() {
+    var  a, b, z;
+    . . .
+  }
+  . . .
+}
+function  sub3() {
+  var  a, x, w;
+  . . .
+}
+List all the variables, along with the program units where they are 
+declared, that are visible in the bodies of sub1, sub2, and sub3, assum-
+ing static scoping is used.
+9. Consider the following Python program:
+x = 1;
+y = 3;
+z = 5;
+def sub1():
+  a = 7;
+  y = 9;
+  z = 11;
+  . . .
+def sub2():
+  global  x;
+  a = 13;
+  x = 15;
+  w = 17;
+  . . .
+  def sub3():
+    nonlocal  a;
+    a = 19;
+    b = 21;
+    z = 23;
+    . . .
+. . .
+List all the variables, along with the program units where they are 
+declared, that are visible in the bodies of sub1, sub2, and sub3, assum-
+ing static scoping is used.
+M05_SEBE8029_12_SE_C05.indd   230 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 256 (Target: ch5_names_bindings) ---
+=========================================
+
+232      Chapter 5   Names, Bindings, and Scopes 
+Given the following calling sequences and assuming that dynamic scop-
+ing is used, what variables are visible during execution of the last func-
+tion called? Include with each visible variable the name of the function in 
+which it was defined.
+a. main calls fun1; fun1 calls fun2; fun2 calls fun3.
+b. main calls fun1; fun1 calls fun3.
+c. main calls fun2; fun2 calls fun3; fun3 calls fun1.
+d. main calls fun3; fun3 calls fun1.
+e. main calls fun1; fun1 calls fun3; fun3 calls fun2.
+f. main calls fun3; fun3 calls fun2; fun2 calls fun1.
+12. Consider the following program, written in JavaScript-like syntax:
+// main program
+var  x, y, z;
+function  sub1() {
+var  a, y, z;
+. . .
+}
+function  sub2() {
+  var  a, b, z;
+  . . .
+}
+function  sub3() {
+  var  a, x, w;
+  . . .
+}
+Given the following calling sequences and assuming that dynamic scop-
+ing is used, what variables are visible during execution of the last subpro-
+gram activated? Include with each visible variable the name of the unit 
+where it is declared.
+a. main calls sub1; sub1 calls sub2; sub2 calls sub3.
+b. main calls sub1; sub1 calls sub3.
+c. main calls sub2; sub2 calls sub3; sub3 calls sub1.
+d. main calls sub3; sub3 calls sub1.
+e. main calls sub1; sub1 calls sub3; sub3 calls sub2.
+f. main calls sub3; sub3 calls sub2; sub2 calls sub1.
+M05_SEBE8029_12_SE_C05.indd   232 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 257 (Target: ch5_names_bindings) ---
+=========================================
+
+Programming Exercises     233
+PROGRAMMING EXERCISES
+1. Perl allows both static and a kind of dynamic scoping. Write a Perl 
+program that uses both and clearly shows the difference in effect of 
+the two. Explain clearly the difference between the dynamic scoping 
+described in this chapter and that implemented in Perl.
+2.
+ Write a Common Lisp program that clearly shows the difference 
+between static and dynamic scoping.
+3.
+ Write a JavaScript script that has subprograms nested three deep and in 
+which each nested subprogram references variables defined in all of its 
+enclosing subprograms.
+4.
+ Repeat Programming Exercise 3 with Python.
+5. Write a C99 function that includes the following sequence of statements:
+x = 21;
+int x;
+x = 42;
+Run the program and explain the results. Rewrite the same code in C++ 
+and Java and compare the results.
+6. Write test programs in C++, Java, and C# to determine the scope of 
+a variable declared in a 
+for statement. Specifically, the code must 
+determine whether such a variable is visible after the body of the for 
+statement.
+7. Write three functions in C or C++: one that declares a large array 
+statically, one that declares the same large array on the stack, and 
+one that creates the same large array from the heap. Call each of the 
+subprograms a large number of times (at least 100,000) and output the 
+time required by each. Explain the results.
+M05_SEBE8029_12_SE_C05.indd   233 1/5/18   10:39 PM
+=========================================
+--- SEBESTA PAGE 276 (Target: ch5_names_bindings) ---
+=========================================
+
+252      Chapter 6   Data Types
+of scalars always begin with dollar signs ( $), references to array elements use 
+dollar signs rather than at signs in their names. For example, for the array @
+list, the second element is referenced with $list[1].
+One can reference an array element in Perl with a negative subscript, in 
+which case the subscript value is an offset from the end of the array. For exam-
+ple, if the array @list has five elements with the subscripts 0..4, $list3 -24 
+references the element with the subscript 3. A reference to a nonexistent ele-
+ment in Perl yields 
+undef, but no error is reported.
+6.5.3 Subscript Bindings and Array Categories
+The binding of the subscript type to an array variable is usually static, but the 
+subscript value ranges are sometimes dynamically bound.
+In some languages, the lower bound of the subscript range is implicit. For 
+example, in the C-based languages, the lower bound of all subscript ranges is 
+fixed at 
+0. In some other languages, the lower bounds of the subscript ranges 
+must be specified by the programmer.
+There are four categories of arrays, based on the binding to subscript 
+ranges, the binding to storage, and from where the storage is allocated. The 
+category names indicate the design choices of these three. In the first three of 
+these categories, once the subscript ranges are bound and the storage is allo-
+cated, they remain fixed for the lifetime of the variable. Of course, when the 
+subscript ranges are fixed, the array cannot change size.
+A static array is one in which the subscript ranges are statically bound 
+and storage allocation is static (done before run time). The advantage of static 
+arrays is efficiency: No dynamic allocation or deallocation is required. The 
+disadvantage is that the storage for the array is fixed for the entire execution 
+time of the program.
+A fixed stack-dynamic array is one in which the subscript ranges are stat-
+ically bound, but the allocation is done at declaration elaboration time during 
+execution. The advantage of fixed stack-dynamic arrays over static arrays is space 
+efficiency. A large array in one subprogram can use the same space as a large array 
+in a different subprogram, as long as both subprograms are not active at the same 
+time. The same is true if the two arrays are in different blocks that are not active at 
+the same time. The disadvantage is the required allocation and deallocation time.
+A fixed heap-dynamic array is similar to a fixed stack-dynamic array, in that 
+the subscript ranges and the storage binding are both fixed after storage is allocated. 
+The differences are that both the subscript ranges and storage bindings are done 
+when the user program requests them during execution, and the storage is allo-
+cated from the heap, rather than the stack. The advantage of fixed heap-dynamic 
+arrays is flexibility—the array’s size always fits the problem. The disadvantage is 
+allocation time from the heap, which is longer than allocation time from the stack.
+A heap-dynamic array is one in which the binding of subscript ranges 
+and storage allocation is dynamic and can change any number of times during 
+the array’s lifetime. The advantage of heap-dynamic arrays over the others is 
+flexibility: Arrays can grow and shrink during program execution as the need 
+for space changes. The disadvantage is that allocation and deallocation take 
+M06_SEBE8029_12_SE_C06.indd   252 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 298 (Target: ch5_names_bindings) ---
+=========================================
+
+274      Chapter 6   Data Types
+6.11.1 Design Issues
+The primary design issues particular to pointers are the following:
+• What are the scope and lifetime of a pointer variable?
+• What is the lifetime of a heap-dynamic variable (the value a pointer 
+references)?
+• Are pointers restricted as to the type of value to which they can point?
+• Are pointers used for dynamic storage management, indirect addressing, 
+or both?
+•
+ Should the language support pointer types, reference types, or both?
+6.11.2 Pointer Operations
+Languages that provide a pointer type usually include two fundamental pointer 
+operations: assignment and dereferencing. The first operation sets a pointer 
+variable’s value to some useful address. If pointer variables are used only to 
+manage dynamic storage, then the allocation mechanism, whether by operator 
+or built-in subprogram, serves to initialize the pointer variable. If pointers are 
+used for indirect addressing to variables that are not heap dynamic, then there 
+must be an explicit operator or built-in subprogram for fetching the address of 
+a variable, which can then be assigned to the pointer variable.
+An occurrence of a pointer variable in an expression can be interpreted in 
+two distinct ways. First, it could be interpreted as a reference to the contents 
+of the memory cell to which it is bound, which in the case of a pointer is an 
+address. This is exactly how a nonpointer variable in an expression would be 
+interpreted, although in that case its value likely would not be an address. 
+However, the pointer also could be interpreted as a reference to the value in 
+the memory cell pointed to by the memory cell to which the pointer variable 
+is bound. In this case, the pointer is interpreted as an indirect reference. The 
+former case is a normal pointer reference; the latter is the result of derefer-
+encing the pointer. Dereferencing, which takes a reference through one level 
+of indirection, is the second fundamental pointer operation.
+Dereferencing of pointers can be either explicit or implicit. In many con-
+temporary languages, it occurs only when explicitly specified. In C++, it is 
+explicitly specified with the asterisk (
+*) as a prefix unary operator. Consider the 
+following example of dereferencing: If ptr is a pointer variable with the value 
+7080 and the cell whose address is 7080 has the value 206, then the assignment
+j = *ptr
+sets j to 206. This process is shown in Figure 6.8.
+When pointers point to records, the syntax of the references to the fields 
+of these records varies among languages. In C and C++, there are two ways a 
+pointer to a record can be used to reference a field in that record. If a pointer 
+variable 
+p points to a record with a field named age, (*p).age can be used to 
+M06_SEBE8029_12_SE_C06.indd   274 1/5/18   10:41 PM
+=========================================
+--- SEBESTA PAGE 400 (Target: ch5_names_bindings) ---
+=========================================
+
+376      Chapter 9   Subprograms
+In most contemporary languages, local variables in a subprogram are by 
+default stack dynamic. In C and C++ functions, locals are stack dynamic unless 
+specifically declared to be static. For example, in the following C (or C++) 
+function, the variable sum is static and count is stack dynamic.
+int adder(int list[], int listlen) {
+  static int sum = 0;
+  int count;
+  for (count = 0; count < listlen; count ++)
+    sum += list [count];
+  return  sum;
+}
+The methods of C++, Java, and C# have only stack-dynamic local variables.
+In Python, the only declarations used in method definitions are for glo-
+bals. Any variable declared to be global in a method must be a variable defined 
+outside the method. A variable defined outside the method can be referenced 
+in the method without declaring it to be global, but such a variable cannot be 
+assigned in the method. If the name of a global variable is assigned in a method, 
+it is implicitly declared to be a local and the assignment does not disturb the 
+global. All local variables in Python methods are stack dynamic.
+9.4.2 Nested Subprograms
+The idea of nesting subprograms originated with ALGOL 60. The motivation was 
+to be able to create a hierarchy of both logic and scopes. If a subprogram is needed 
+only within another subprogram, why not place it there and hide it from the rest 
+of the program? Because static scoping is usually used in languages that allow sub-
+programs to be nested, this also provides a highly structured way to grant access to 
+nonlocal variables in enclosing subprograms. Recall that in Chapter 5, the prob-
+lems introduced by this were discussed. For a long time, the only languages that 
+allowed nested subprograms were those directly descending from ALGOL 60, 
+which were ALGOL 68, Pascal, and Ada. Many other languages, including all 
+of the direct descendants of C, do not allow subprogram nesting. Recently, some 
+new languages again allow it. Among these are JavaScript, Python, and Ruby. Also, 
+most functional programming languages allow subprograms to be nested.
+9.5 Parameter-Passing Methods
+Parameter-passing methods are the ways in which parameters are transmitted 
+to and/or from called subprograms. First, we focus on the different semantics 
+models of parameter-passing methods. Then, we discuss the various implemen-
+tation models invented by language designers for these semantics models. Next, 
+we survey the design choices of several languages and discuss the actual methods 
+used to implement the implementation models. Finally, we consider the design 
+considerations that face a language designer in choosing among the methods.
+M09_SEBE8029_12_SE_C09.indd   376 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 430 (Target: ch5_names_bindings) ---
+=========================================
+
+406      Chapter 9   Subprograms
+nesting subprograms has terminated, which normally means that the variables 
+defined in such nesting subprograms have been deallocated—they no longer 
+exist. For the subprogram to be callable from anywhere in the program, its 
+referencing environment must be available wherever it might be called. There-
+fore, the variables defined in nesting subprograms may need lifetimes that are 
+of the entire program, rather than just the time during which the subprogram 
+in which they were defined is active. A variable whose lifetime is that of the 
+whole program is said to have unlimited extent. This usually means they must 
+be heap dynamic, rather than stack dynamic.
+Nearly all functional programming languages, most scripting languages, 
+and at least one primarily imperative language, C#, support closures. These 
+languages are static-scoped, allow nested subprograms,
+12  and allow subpro-
+grams to be passed as parameters. Following is an example of a closure written 
+in JavaScript:
+function makeAdder(x) {
+    return function(y) {return x + y;}
+}
+. . .
+var add10 = makeAdder(10);
+var add5 = makeAdder(5);
+document.write("Add 10 to 20: " + add10(20) +
+"<br />");
+document.write("Add 5 to 20: " + add5(20) +
+"<br />");
+The output of this code, assuming it was embedded in an HTML document 
+and displayed with a browser, is as follows:
+Add 10 to 20: 30
+Add 5 to 20: 25
+In this example, the closure is the anonymous function defined inside the 
+makeAdder function, which makeAdder returns. The variable x referenced in 
+the closure function is bound to the parameter that was sent to  makeAdder. 
+The makeAdder  function is called twice, once with a parameter of 10 and 
+once with 5. Each of these calls returns a different version of the closure 
+because they are bound to different values of x. The first call to makeAdder 
+creates a function that adds 10 to its parameter; the second creates a function 
+that adds 5 to its parameter. The two versions of the function are bound to 
+different activations of makeAdder . Obviously, the lifetime of the version 
+ 12.  In C#, the only methods that can be nested are anonymous delegates and lambda 
+expressions.
+M09_SEBE8029_12_SE_C09.indd   406 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 431 (Target: ch5_names_bindings) ---
+=========================================
+
+9.13 Coroutines     407
+of x created when makeAdder is called must extend over the lifetime of the 
+program.
+This same closure function can be written in C# using a nested anonymous 
+delegate. The type of the nesting method is specified to be a function that takes 
+an int as a parameter and returns an anonymous delegate. The return type is 
+specified with the special notation for such delegates, Func<int, int>. The 
+first type in the angle brackets is the parameter type. Such a delegate can encap-
+sulate methods that have only one parameter. The second type is the return 
+type of the method encapsulated by the delegate.
+static Func<int, int> makeAdder(int x) {
+  return delegate(int y) { return x + y;};
+}
+. . .
+Func<int, int> Add10 = makeAdder(10);
+Func<int, int> Add5 = makeAdder(5);
+Console.WriteLine("Add 10 to 20: {0}", Add10(20));
+Console.WriteLine("Add 5 to 20: {0}", Add5(20));
+The output of this code is exactly the same as for the previous JavaScript clo-
+sure example.
+The anonymous delegate could have been written as a lambda expression. 
+The following is a replacement for the body of the makeAdder method, using 
+a lambda expression instead of the delegate:
+return y => x + y
+Ruby’s blocks are implemented so that they can reference variables vis-
+ible in the position in which they were defined, even if they are called at a 
+place in which those variables would have disappeared. This makes such blocks 
+closures.
+9.13 Coroutines
+A coroutine is a special kind of subprogram. Rather than the master-slave 
+relationship between a caller and a called subprogram that exists with conven-
+tional subprograms, caller and called coroutines are more equitable. In fact, 
+the coroutine control mechanism is often called the symmetric unit control 
+model.
+Coroutines can have multiple entry points, which are controlled by the 
+coroutines themselves. They also have the means to maintain their status 
+between activations. This means that coroutines must be history sensitive and 
+thus have static local variables. Secondary executions of a coroutine often begin 
+at points other than its beginning. Because of this, the invocation of a coroutine 
+is called a resume rather than a call.
+M09_SEBE8029_12_SE_C09.indd   407 1/5/18   10:47 PM
+=========================================
+--- SEBESTA PAGE 441 (Target: ch5_names_bindings) ---
+=========================================
+
+417
+ 10.1 The General Semantics of Calls and Returns
+ 10.2 Implementing “Simple” Subprograms
+ 10.3 Implementing Subprograms with Stack-Dynamic  
+Local Variables
+ 10.4 Nested Subprograms
+ 10.5 Blocks
+ 10.6 Implementing Dynamic Scoping
+10 
+Implementing 
+Subprograms
+M10_SEBE8029_12_SE_C10.indd   417 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 442 (Target: ch5_names_bindings) ---
+=========================================
+
+418      Chapter 10   Implementing Subprograms
+T
+he purpose of this chapter is to explore the implementation of subprograms. 
+The discussion will provide the reader with some knowledge of how subprogram 
+linkage works, and also why ALGOL 60 was a challenge to the unsuspecting 
+ compiler writers of the early 1960s. We begin with the simplest situation, nonnestable 
+subprograms with static local variables, advance to more complicated subprograms 
+with stack-dynamic local variables, and conclude with nested subprograms with 
+stack-dynamic local variables and static scoping. The increased difficulty of imple-
+menting subprograms in languages with nested subprograms is caused by the need to 
+include mechanisms to access nonlocal variables.
+The static chain method of accessing nonlocals in static-scoped languages is dis-
+cussed in detail. Then, techniques for implementing blocks are described. Finally, sev-
+eral methods of implementing nonlocal variable access in a dynamic-scoped language 
+are discussed.
+10.1 The General Semantics of Calls and Returns
+The subprogram call and return operations are together called subprogram 
+linkage. The implementation of subprograms must be based on the semantics 
+of the subprogram linkage of the language being implemented.
+A subprogram call in a typical language has numerous actions associ-
+ated with it. The call process must include the implementation of whatever 
+ parameter-passing method is used. If local variables are not static, the call 
+process must allocate storage for the locals declared in the called subprogram 
+and bind those variables to that storage. It must save the execution status 
+of the calling program unit. The execution status is everything needed to 
+resume execution of the calling program unit. This includes register values, 
+CPU status bits, and the environment pointer (EP). The EP , which is dis-
+cussed further in Section 10.3, is used to access parameters and local variables 
+during the execution of a subprogram. The calling process also must arrange 
+to transfer control to the code of the subprogram and ensure that control 
+can return to the proper place when the subprogram execution is completed. 
+Finally, if the language supports nested subprograms, the call process must 
+create some mechanism to provide access to nonlocal variables that are visible 
+to the called subprogram.
+The required actions of a subprogram return are less complicated than 
+those of a call. If the subprogram has parameters that are out mode or inout 
+mode and are implemented by copy, the first action of the return process is to 
+move the local values of the associated formal parameters to the actual parame-
+ters. Next, it must deallocate the storage used for local variables and restore the 
+execution status of the calling program unit. Finally, control must be returned 
+to the calling program unit.
+M10_SEBE8029_12_SE_C10.indd   418 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 454 (Target: ch5_names_bindings) ---
+=========================================
+
+430      Chapter 10   Implementing Subprograms
+approach to implementing subprograms that may be nested. Until the very end 
+of this section, we ignore closures.
+10.4.1 The Basics
+A reference to a nonlocal variable in a static-scoped language with nested sub-
+programs requires a two-step access process. All nonstatic variables that can 
+be nonlocally accessed are in existing activation record instances and therefore 
+are somewhere in the stack. The first step of the access process is to find the 
+instance of the activation record in the stack in which the variable was allocated. 
+The second part is to use the local_offset of the variable (within the activation 
+record instance) to access it.
+Finding the correct activation record instance is the more interesting and 
+more difficult of the two steps. First, note that in a given subprogram, only 
+variables that are declared in static ancestor scopes are visible and can be 
+accessed. Also, activation record instances of all of the static ancestors are 
+always on the stack when variables in them are referenced by a nested subpro-
+gram. This is guaranteed by the static semantic rules of the static-scoped lan-
+guages: A subprogram is callable only when all of its static ancestor subprograms 
+are active.
+1 If a particular static ancestor were not active, its local variables 
+would not be bound to storage, so it would be nonsense to allow access to them.
+The semantics of nonlocal references dictates that the correct declaration 
+is the first one found when looking through the enclosing scopes, most closely 
+nested first. So, to support nonlocal references, it must be possible to find all of 
+the instances of activation records in the stack that correspond to those static 
+ancestors. This observation leads to the implementation approach described 
+in the following subsection.
+We do not address the issue of blocks until Section 10.5, so in the remain-
+der of this section, all scopes are assumed to be defined by subprograms. 
+Because functions cannot be nested in the C-based languages (the only static 
+scope in those languages are those created with blocks), the discussions of this 
+section do not apply to those languages directly.
+10.4.2 Static Chains
+The most common way to implement static scoping in languages that allow 
+nested subprograms is static chaining. In this approach, a new pointer, called 
+a static link, is added to the activation record. The static link, which is some-
+times called a static scope pointer, points to the bottom of the activation record 
+instance of an activation of the static parent. It is used for accesses to nonlocal 
+variables. T ypically, the static link appears in the activation record below the 
+parameters. The addition of the static link to the activation record requires that 
+local offsets differ from when the static link is not included. Instead of having 
+two activation record elements before the parameters, there are now three: the 
+return address, the static link, and the dynamic link.
+ 1. Closures, of course, violate this rule.
+M10_SEBE8029_12_SE_C10.indd   430 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 459 (Target: ch5_names_bindings) ---
+=========================================
+
+10.4 Nested Subprograms     435
+of links in this move is equal to the nesting_depth, which was computed at 
+compile time.
+Consider again the program main  and the stack situation shown in 
+ Figure 10.9. At the call to sub1 in sub3, the compiler determines the nesting_
+depth of sub3 (the caller) to be two levels inside the procedure that declared 
+the called procedure sub1, which is bigsub. When the call to sub1 in sub3 is 
+executed, this information is used to set the static link of the activation record 
+instance for 
+sub1. This static link is set to point to the activation record 
+instance that is pointed to by the second static link in the static chain from the 
+caller’s activation record instance. In this case, the caller is 
+sub3, whose static 
+link points to its parent’s activation record instance (that of sub2). The static 
+link of the activation record instance for sub2 points to the activation record 
+instance for bigsub. So, the static link for the new activation record instance 
+for sub1 is set to point to the activation record instance for bigsub.
+This method works for all subprogram linkage, except when parameters 
+that are subprograms are involved.
+One criticism of using the static chain approach to access nonlocal variables is 
+that references to variables in scopes beyond the static parent cost more than ref-
+erences to locals. The static chain must be followed, one link per enclosing scope 
+from the reference to the declaration. Fortunately, in practice, references to dis-
+tant nonlocal variables are rare, so this is not a serious problem. Another criticism 
+of the static-chain approach is that it is difficult for a programmer working on a 
+time-critical program to estimate the costs of nonlocal references, because the cost 
+of each reference depends on the depth of nesting between the reference and the 
+scope of declaration. Further complicating this problem is that subsequent code 
+modifications may change nesting depths, thereby changing the timing of some 
+references, both in the changed code and possibly in code far from the changes.
+Some alternatives to static chains have been developed, most notably an 
+approach that uses an auxiliary data structure called a display. However, none 
+of the alternatives has been found to be superior to the static-chain method, 
+which is still the most widely used approach. Therefore, none of the alterna-
+tives are discussed here.
+The processes and data structures described in this section correctly imple-
+ment closures in languages that do not permit functions to return functions and 
+do not allow functions to be assigned to variables. However, they are inade-
+quate for languages that do allow one or both of those operations. Several new 
+mechanisms are needed to implement access to nonlocals in such languages. 
+First, if a subprogram accesses a variable from a nesting but not global scope, 
+that variable cannot be stored only in the activation record of its home scope. 
+That activation record could be deallocated before the subprogram that needs 
+it is activated. Such variables could also be stored in the heap and given unlim-
+ited extend (their lifetimes are the lifetime of the whole program). Second, 
+subprograms must have mechanisms to access the nonlocals that are stored 
+in the heap. Third, the heap-allocated variables that are nonlocally accessed 
+must be updated every time their stack versions are updated. Clearly, these are 
+nontrivial extensions to the implementation static scoping using static chains.
+M10_SEBE8029_12_SE_C10.indd   435 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 460 (Target: ch5_names_bindings) ---
+=========================================
+
+436      Chapter 10   Implementing Subprograms
+10.5 Blocks
+Recall from Chapter 5, that a number of languages, including the C-based 
+languages, provide for user-specified local scopes for variables called blocks. 
+As an example of a block, consider the following code segment:
+{ int temp;
+  temp = list[upper];
+  list[upper] = list[lower];
+  list[lower] = temp;
+}
+A block is specified in the C-based languages as a compound statement that 
+begins with one or more data definitions. The lifetime of the variable temp in 
+the preceding block begins when control enters the block and ends when con-
+trol exits the block. The advantage of using such a local is that it cannot inter-
+fere with any other variable with the same name that is declared elsewhere in 
+the program, or more specifically, in the referencing environment of the block.
+Blocks can be implemented by using the static-chain process described 
+in Section 10. 4 for implementing nested subprograms. Blocks are treated as 
+parameterless subprograms that are always called from the same place in the 
+program. Therefore, every block has an activation record. An instance of its 
+activation record is created every time the block is executed.
+Blocks can also be implemented in a different and somewhat simpler and 
+more efficient way. The maximum amount of storage required for block vari-
+ables at any time during the execution of a program can be statically deter -
+mined, because blocks are entered and exited in strictly textual order. This 
+amount of space can be allocated after the local variables in the activation 
+record. Offsets for all block variables can be statically computed, so block vari-
+ables can be addressed exactly as if they were local variables.
+For example, consider the following skeletal program:
+void main() {
+  int x, y, z;
+  while ( . . ) {
+    int a, b, c;
+    .
+    while ( . . . ) {
+      int d, e;
+      .
+    }
+  }
+  while ( . . . ) {
+    int f, g;
+    . . .
+  }
+  . .
+}
+M10_SEBE8029_12_SE_C10.indd   436 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 461 (Target: ch5_names_bindings) ---
+=========================================
+
+10.6 Implementing Dynamic Scoping     437
+For this program, the static-memory layout shown in Figure 10.10 could be used. 
+Note that f and g occupy the same memory locations as a and b, because a and b 
+are popped off the stack when their block is exited (before f and g are allocated).
+10.6 Implementing Dynamic Scoping
+There are at least two distinct ways in which local variables and nonlocal refer-
+ences to them can be implemented in a dynamic-scoped language: deep access 
+and shallow access. Note that deep access and shallow access are not concepts 
+related to deep and shallow binding. An important difference between binding 
+and access is that deep and shallow bindings result in different semantics; deep 
+and shallow accesses do not.
+10.6.1 Deep Access
+If local variables are stack dynamic and are part of the activation records in a 
+dynamic-scoped language, references to nonlocal variables can be resolved by 
+searching through the activation record instances of the other subprograms 
+Figure 10.10
+Block variable 
+ storage when blocks 
+are not treated 
+as 
+ parameterless 
+procedures
+Locals
+e
+d
+c
+b and g
+a and f
+z
+y
+x
+Block
+variables
+Activation
+record instance 
+for
+main
+M10_SEBE8029_12_SE_C10.indd   437 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 463 (Target: ch5_names_bindings) ---
+=========================================
+
+10.6 Implementing Dynamic Scoping     439
+There are two important differences between the deep-access method for 
+nonlocal access in a dynamic-scoped language and the static-chain method for 
+static-scoped languages. First, in a dynamic-scoped language, there is no way 
+to determine at compile time the length of the chain that must be searched. 
+Every activation record instance in the chain must be searched until the first 
+instance of the variable is found. This is one reason why dynamic-scoped lan-
+guages typically have slower execution speeds than static-scoped languages. 
+Second, activation records must store the names of variables for the search 
+process, whereas in static-scoped language implementations only the values 
+are required. (Names are not required for static scoping, because all variables 
+are represented by the chain_offset/local_offset pairs.)
+10.6.2 Shallow Access
+Shallow access is an alternative implementation method, not an alternative 
+semantics. As stated previously, the semantics of deep access and shallow access 
+are identical. In the shallow-access method, variables declared in subprograms 
+are not stored in the activation records of those subprograms. Because with 
+dynamic scoping there is at most one visible version of a variable of any specific 
+Figure 10.11
+Stack contents for 
+a dynamic-scoped 
+program
+ARI = activation record instance
+v
+Local
+Local
+Dynamic link
+Return (to main)
+Local
+Local
+w
+v
+Return (to sub1)
+Dynamic link
+Local
+Local
+Dynamic link
+Return (to sub1)
+z
+x
+x
+w
+Dynamic link
+Local
+Local
+Return (to sub2)
+Local
+Local
+ARI
+for sub3
+ARI
+for sub2
+ARI
+for sub1
+ARI
+for sub1
+ARI 
+for main
+w
+v
+u
+M10_SEBE8029_12_SE_C10.indd   439 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 464 (Target: ch5_names_bindings) ---
+=========================================
+
+440      Chapter 10   Implementing Subprograms
+name at a given time, a very different approach can be taken. One variation of 
+shallow access is to have a separate stack for each variable name in a complete 
+program. Every time a new variable with a particular name is created by a dec-
+laration at the beginning of a subprogram that has been called, the variable is 
+given a cell at the top of the stack for its name. Every reference to the name is 
+to the variable on top of the stack associated with that name, because the top 
+one is the most recently created. When a subprogram terminates, the lifetimes 
+of its local variables end, and the stacks for those variable names are popped. 
+This method allows fast references to variables, but maintaining the stacks at 
+the entrances and exits of subprograms is costly.
+Figure 10.12 shows the variable stacks for the earlier example program in 
+the same situation as shown with the stack in Figure 10.11.
+Another option for implementing shallow access is to use a central table 
+that has a location for each different variable name in a program. Along with 
+each entry, a bit called active is maintained that indicates whether the name has 
+a current binding or variable association. Any access to any variable can then be 
+to an offset into the central table. The offset is static, so the access can be fast. 
+SNOBOL implementations use the central table implementation technique.
+Maintenance of a central table is straightforward. A subprogram call 
+requires that all of its local variables be logically placed in the central table. If 
+the position of the new variable in the central table is already active—that is, 
+if it contains a variable whose lifetime has not yet ended (which is indicated 
+by the active bit)—that value must be saved somewhere during the lifetime of 
+the new variable. Whenever a variable begins its lifetime, the active bit in its 
+central table position must be set.
+There have been several variations in the design of the central table and in the 
+way values are stored when they are temporarily replaced. One variation is to have 
+a “hidden” stack on which all saved objects are stored. Because subprogram calls 
+and returns, and thus the lifetimes of local variables, are nested, this works well.
+The second variation is perhaps the cleanest and least expensive to imple-
+ment. A central table of single cells is used, storing only the current version of each 
+variable with a unique name. Replaced variables are stored in the activation record 
+of the subprogram that created the replacement variable. This is a stack mech-
+anism, but it uses the stack that already exists, so the new overhead is minimal.
+The choice between shallow and deep access to nonlocal variables depends 
+on the relative frequencies of subprogram calls and nonlocal references. The 
+deep-access method provides fast subprogram linkage, but references to nonlocals, 
+Figure 10.12
+One method of using 
+shallow access to 
+ implement dynamic 
+scoping
+main main sub2 sub3 sub1
+u v x z w
+sub1 sub3 sub1
+sub1 sub2
+(The names in the stack cells indicate the 
+program units of the variable declaration.)
+M10_SEBE8029_12_SE_C10.indd   440 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 466 (Target: ch5_names_bindings) ---
+=========================================
+
+442      Chapter 10   Implementing Subprograms
+9. What are the two steps in locating a nonlocal variable in a static-
+scoped language with stack-dynamic local variables and nested 
+subprograms?
+10.
+ Define static chain, static_depth, nesting_depth, and chain_offset.
+11. What is an EP , and what is its purpose?
+12. How are references to variables represented in the static-chain method?
+13. Name three widely used programming languages that do not allow 
+nested subprograms.
+14.
+ What are the two potential problems with the static-chain method?
+15. Explain the two methods of implementing blocks.
+16. Describe the deep-access method of implementing dynamic scoping.
+17. Describe the shallow-access method of implementing dynamic scoping.
+18. What are the two differences between the deep-access method for 
+nonlocal access in dynamic-scoped languages and the static-chain 
+method for static-scoped languages?
+19.
+ Compare the efficiency of the deep-access method to that of the shallow-
+access method, in terms of both calls and nonlocal accesses.
+PROBLEM SET
+1. Show the stack with all activation record instances, including static and 
+dynamic chains, when execution reaches position 1 in the following 
+skeletal program. Assume 
+bigsub is at level 1.
+function bigsub() {
+  function a() {
+     function b() {
+        ... <----------------------------1
+     } // end of b
+     function  c() {
+       ...
+       b();
+       ...
+     } // end of c
+     ...
+     c();
+     ...
+  } // end of a
+  ...
+  a();
+  ...
+} // end of bigsub
+M10_SEBE8029_12_SE_C10.indd   442 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 468 (Target: ch5_names_bindings) ---
+=========================================
+
+444      Chapter 10   Implementing Subprograms
+    ...
+  } // end of c
+  ...
+  a(true);
+  ...
+} // end of bigsub
+The calling sequence for this program for execution to reach d is
+bigsub  calls  a
+a calls  b
+b calls  a
+a calls  c
+c calls  d
+4. Show the stack with all activation record instances, including static and 
+dynamic chains, when execution reaches position 1 in the following 
+skeletal program. This program uses the deep-access method to 
+implement dynamic scoping.
+void fun1() {
+  float a;
+  . . .
+}
+void fun2() {
+  int b, c;
+  . . .
+}
+void fun3() {
+  float d;
+  . . . <--------- 1
+}
+void main() {
+  char e, f, g;
+   . . .
+} 
+The calling sequence for this program for execution to reach fun3 is
+main calls fun2
+fun2 calls fun1
+fun1 calls fun1
+fun1 calls fun3
+5. Assume that the program of Problem 4 is implemented using the 
+shallow-access method using a stack for each variable name. Show the 
+stacks for the time of the execution of 
+fun3, assuming execution found 
+its way to that point through the sequence of calls shown in Problem 4.
+M10_SEBE8029_12_SE_C10.indd   444 1/5/18   10:48 PM
+=========================================
+--- SEBESTA PAGE 480 (Target: ch5_names_bindings) ---
+=========================================
+
+456      Chapter 11   Abstract Data Types and Encapsulation Constructs
+C++ classes are types. A C++ program unit that declares an instance of a 
+class can also access any of the public entities in that class, but only through an 
+instance of the class.
+11.4.1.1 Encapsulation
+The data defined in a C++ class are called data members; the functions (meth-
+ods) defined in a class are called member functions. Data members and mem-
+ber functions appear in two categories: class and instance. Class members are 
+associated with the class; instance members are associated with the instances 
+of the class. In this chapter, only the instance members of a class are discussed. 
+All of the instances of a class share a single set of member functions, but each 
+instance has its own set of the class’s data members. Class instances can be 
+static, stack dynamic, or heap dynamic. If static or stack dynamic, they are 
+referenced directly with value variables. If heap dynamic, they are referenced 
+through pointers. Stack dynamic instances of classes are always created by the 
+elaboration of an object declaration. Furthermore, the lifetime of such a class 
+instance ends when the end of the scope of its declaration is reached. Heap 
+dynamic class instances are created with the 
+new operator and destroyed with 
+the delete operator. Both stack- and heap-dynamic classes can have pointer 
+data members that reference heap dynamic data, so that even though a class 
+instance is stack dynamic, it can include data members that reference heap 
+dynamic data.
+A member function of a class can be defined in two distinct ways: The 
+complete definition can appear in the class, or only in its header. When both 
+the header and the body of a member function appear in the class definition, 
+the member function is implicitly inlined. Recall that this means that its 
+code is placed in the caller’s code, rather than requiring the usual call and 
+return linkage. If only the header of a member function appears in the class 
+definition, its complete definition appears outside the class and is separately 
+compiled. The rationale for allowing member functions to be inlined was 
+to save function call overhead in real-time applications, in which run-time 
+efficiency is of utmost importance. The downside of inlining member func-
+tions is that it clutters the class definition interface, resulting in a reduction 
+in readability.
+Placing member function definitions outside the class definition separates 
+specification from implementation, a common goal of modern programming.
+11.4.1.2 Information Hiding
+A C++ class can contain both hidden and visible entities (meaning they are 
+either hidden from or visible to clients of the class). Entities that are to be 
+hidden are placed in a 
+private clause, and visible, or public, entities appear in 
+a public clause. The public clause therefore describes the interface to class 
+instances. There is also a third category of visibility, protected, which makes 
+a member visible to subclasses, but not to clients.
+M11_SEBE8029_12_SE_C11.indd   456 1/5/18   10:51 PM
+=========================================
+--- SEBESTA PAGE 481 (Target: ch5_names_bindings) ---
+=========================================
+
+11.4 Language Examples     457
+11.4.1.3 Constructors and Destructors
+C++ allows the user to include constructor functions in class definitions, which 
+are used to initialize the data members of newly created objects. A constructor 
+may also allocate the heap-dynamic data that are referenced by the pointer 
+members of the new object. Constructors are implicitly called when an object 
+of the class type is created. A constructor has the same name as the class whose 
+objects it initializes. Constructors can be overloaded, but of course each con-
+structor of a class must have a unique parameter profile.
+A C++ class can also include a function called a destructor, which is implic-
+itly called when the lifetime of an instance of the class ends. As stated earlier, 
+stack-
+ dynamic class instances can contain pointer members that reference heap- 
+dynamic data. The destructor function for such an instance can include a delete 
+operator on the pointer members to deallocate the heap space they reference. 
+Destructors are often used as a debugging aid, in which case they display or print 
+the values of some or all of the object’s data members before those members are 
+deallocated. The name of a destructor is the class’s name, preceded by a tilde (
+~).
+Neither constructors nor destructors have return types, and neither use 
+return statements. Both constructors and destructors can be explicitly called.
+11.4.1.4 An Example
+Our example of a C++ abstract data type is a stack:
+#include <iostream.h>
+class Stack {
+  private:  //** These members are visible only to other
+           //** members and friends (see Section 11.6.4)
+    int *stackPtr;
+    int maxLen;
+    int topSub;
+  public:  //** These members are visible to clients
+    Stack() { //** A constructor
+      stackPtr = new int [100];
+      maxLen = 99;
+      topSub = -1;
+    }
+    ~Stack() {delete  [] stackPtr;};  //** A destructor
+    void push(int number) {
+      if (topSub == maxLen)
+        cerr << "Error in push--stack is full\n";
+      else stackPtr[++topSub] = number;
+    }
+    void pop() {
+      if (empty())
+        cerr << "Error in pop--stack is empty\n";
+      else topSub--;
+    }
+    int top() {
+M11_SEBE8029_12_SE_C11.indd   457 1/5/18   10:51 PM
+=========================================
+--- SEBESTA PAGE 496 (Target: ch5_names_bindings) ---
+=========================================
+
+472      Chapter 11   Abstract Data Types and Encapsulation Constructs
+use them. This can be done in Python and Ruby. As discussed in Chapter 5, 
+however, this method of organizing programs, which uses static scoping, is far 
+from ideal. Therefore, even in languages that allow nested subprograms, they 
+are not used as a primary organizing encapsulation construct.
+11.6.2 Encapsulation in C
+C does not provide complete support for abstract data types, although both 
+abstract data types and multiple-type encapsulations can be simulated.
+In C, a collection of related functions and data definitions can be placed in 
+a file, which can be independently compiled. Such a file, which acts as a library, 
+has an implementation of its entities. The interface to such a file, including 
+data, type, and function declarations, is placed in a separate file called a header 
+file. T ype representations can be hidden by declaring them in the header file 
+as pointers to struct types. The complete definitions of such struct types need 
+only appear in the implementation file.
+The header file, in source form, and the compiled version of the imple -
+mentation file are furnished to clients. When such a library is used, the header 
+file is included in the client code, using an 
+#include preprocessor specifica-
+tion, so that references to functions and data in the client code can be type 
+checked. The 
+#include specification also documents the fact that the client 
+program depends on the library implementation file. This approach effectively 
+separates the specification and implementation of an encapsulation.
+Although these encapsulations work, they create some insecurities. For 
+example, a user could simply cut and paste the definitions from the header file 
+into the client program, rather than using 
+#include. This would work, because 
+#include simply copies the contents of its operand file into the file in which the 
+#include appears. However, there are two problems with this approach. First, 
+the documentation of the dependence of the client program on the library (and 
+its header file) is lost. Second, suppose a user copies the header file into his or 
+her program. Then the author of the library changes both the header and the 
+implementation files. Following this, the user uses the new implementation file 
+with the old header. For example, a variable 
+x could have been defined to be int 
+type in the old header file, which the client code still uses, although the imple-
+mentation code has been recompiled with the new header file, which defines 
+x 
+to be float. So, the implementation code was compiled with x as an int but the 
+client code was compiled with x as a float. The linker does not detect this error.
+Thus, it is the user’s responsibility to ensure that both the header and 
+implementation files are up-to-date. This is often done with a make utility.
+One other drawback of this approach is the inherent problems of pointers 
+and the potential confusion with assignment and comparisons of pointers.
+11.6.3 Encapsulation in C++
+C++ provides two different kinds of encapsulation: header and implementation 
+files can be defined as in C, or class headers and definitions can be defined. 
+Because of the complex interplay of C++ templates and separate compilation, 
+M11_SEBE8029_12_SE_C11.indd   472 1/5/18   10:51 PM
+=========================================
+--- SEBESTA PAGE 559 (Target: ch5_names_bindings) ---
+=========================================
+
+13.1 Introduction     535
+code. Another example is the software systems that are designed to simulate 
+actual physical systems that consist of multiple concurrent subsystems. For all 
+of these kinds of applications, the programming language (or a library or at 
+least the operating system) must support unit-level concurrency.
+Statement-level concurrency is quite different from concurrency at the unit 
+level. From a language designer’s point of view, statement-level concurrency 
+is largely a matter of specifying how data should be distributed over multiple 
+memories and which statements can be executed concurrently.
+The goal of developing concurrent software is to produce scalable and 
+portable concurrent algorithms. A concurrent algorithm is scalable if the speed 
+of its execution increases when more processors are available. This is important 
+because the number of processors sometimes increases with the new genera-
+tions of machines. The algorithms must be portable because the lifetime of 
+hardware is relatively short. Therefore, software systems should not depend 
+on a particular architecture—that is, they should run efficiently on machines 
+with different architectures.
+The intention of this chapter is to discuss the aspects of concurrency that 
+are most relevant to language design issues, rather than to present a definitive 
+study of all of the issues of concurrency, including the development of concur-
+rent programs. That would clearly be inappropriate for a book on program-
+ming languages.
+13.1.1 Multiprocessor Architectures
+A large number of different computer architectures have more than one proces-
+sor and can support some form of concurrent execution. Before beginning to 
+discuss concurrent execution of programs and statements, we briefly describe 
+some of these architectures.
+The first computers that had multiple processors had one general-purpose 
+processor and one or more other processors, often called peripheral proces-
+sors, that were used only for input and output operations. This architecture 
+allowed those computers, which appeared in the late 1950s, to execute one 
+program while concurrently performing input or output for that program or 
+other programs.
+By the early 1960s, there were machines that had multiple complete 
+processors. These processors were used by the job scheduler of the operat-
+ing system, which distributed separate jobs from a batch-job queue to the 
+separate processors. Systems with this structure supported program-level 
+concurrency.
+In the mid-1960s, some machines appeared that had several identical par-
+tial processors. These were fed instructions from a single instruction stream. 
+For example, some machines had two or more floating-point multipliers, while 
+others had two or more complete floating-point arithmetic units. The compil-
+ers for these machines were required to determine which instructions could be 
+executed concurrently and to schedule these instructions accordingly. Systems 
+with this structure supported instruction-level concurrency.
+M13_SEBE8029_12_SE_C13.indd   535 1/5/18   10:56 PM
+=========================================
+--- SEBESTA PAGE 565 (Target: ch5_names_bindings) ---
+=========================================
+
+13.2 Introduction to Subprogram-Level Concurrency     541
+One general method for providing mutually exclusive access (to support 
+competition synchronization) to a shared resource is to consider the resource 
+to be something that a task can possess and allow only a single task to possess 
+it at a time. T o gain possession of a shared resource, a task must request it. 
+Possession will be granted only when no other task has possession. While a 
+task possesses a resource, all other tasks are prevented from having access to 
+that resource. When a task is finished with a shared resource that it possesses, 
+it must relinquish that resource so it can be made available to other tasks.
+Three methods of providing for mutually exclusive access to a shared 
+resource are semaphores, which are discussed in Section 13.3; monitors, 
+which are discussed in Section 13.4; and message passing, which is discussed 
+in 
+ Section 13.5.
+Mechanisms for synchronization must be able to delay task execution. Syn-
+chronization imposes an order of execution on tasks that is enforced with these 
+delays. T o understand what happens to tasks through their lifetimes, we must 
+consider how task execution is controlled. Regardless of whether a machine 
+has a single processor or more than one, there is always the possibility of there 
+being more tasks than there are processors. A run-time system program called 
+a scheduler manages the sharing of processors among the tasks. If there were 
+never any interruptions and tasks all had the same priority, the scheduler could 
+simply give each task a time slice, such as 0.1 second, and when a task’s turn 
+came, the scheduler could let it execute on a processor for that amount of time. 
+Of course, there are several events that complicate this, for example, task delays 
+for synchronization and for input or output operations. Because input and 
+output operations are very slow relative to the processor’s speed, a task is not 
+allowed to keep a processor while it waits for completion of such an operation.
+T asks can be in several different states:
+1.
+ New: A task is in the new state when it has been created but has not yet 
+begun its execution.
+2.
+ Ready: A ready task is ready to run but is not currently running. Either 
+it has not been given processor time by the scheduler, or it had run 
+previously but was blocked in one of the ways described in Paragraph 4 
+Figure 13.1
+The need for 
+ competition 
+synchronization
+Value of TOTAL 3
+Task A
+Task B
+Time
+4 6
+Fetch
+TOTAL
+Store
+TOTAL
+Add 1
+Fetch
+TOTAL
+Store
+TOTAL
+Multiply
+by 2
+M13_SEBE8029_12_SE_C13.indd   541 1/5/18   10:56 PM
+=========================================
+--- SEBESTA PAGE 656 (Target: ch5_names_bindings) ---
+=========================================
+
+632      Chapter 15  Functional Programming Languages
+The lambda notation described in Section 15.2.1 was chosen to specify 
+function definitions. It had to be modified, however, to allow the binding of 
+functions to names so that functions could be referenced by other functions 
+and by themselves. This name binding was specified by a list consisting of the 
+function name and a list containing the lambda expression, as in
+(function_name (LAMBDA ( param1... paramn) expression))
+If you have had no prior exposure to functional programming, it may seem 
+odd to even consider a nameless function. However, nameless functions are 
+sometimes useful in functional programming (as well as in mathematics and 
+imperative programming). For example, consider a function whose action is 
+to produce a function for immediate application to a parameter list. The pro-
+duced function has no need for a name, for it is applied only at the point of its 
+construction. Such an example is given in Section 15.5.14.
+Lisp functions specified in this new notation were called S-expressions, for 
+symbolic expressions. Eventually, all Lisp structures, both data and code, were 
+called S-expressions. An S-expression can be either a list or an atom. We will 
+usually refer to S-expressions simply as expressions.
+McCarthy successfully developed a universal function that could evaluate 
+any other function. This function was named 
+EVAL and was itself in the form of 
+an expression. T wo of the people in the AI Project, which was developing Lisp, 
+Stephen B. Russell and Daniel J. Edwards, noticed that an implementation of 
+EVAL could serve as a Lisp interpreter, and they promptly constructed such an 
+implementation (McCarthy et al., 1965).
+There were several important results of this quick, easy, and unexpected 
+implementation. First, all early Lisp implementations copied EVAL and were 
+therefore interpretive. Second, the definition of M-notation, which was the 
+planned programming notation for Lisp, was never completed or imple-
+mented, so S-expressions became Lisp’s only notation. The use of the same 
+notation for data and code has important consequences, one of which will be 
+discussed in Section 15.5.14. Third, much of the original language design 
+was effectively frozen, keeping certain odd features in the language, such as 
+the conditional expression form and the use of 
+() for both the empty list and 
+logical false.
+Another feature of early Lisp systems that was apparently accidental was 
+the use of dynamic scoping. Functions were evaluated in the environments 
+of their callers. No one at the time knew much about scoping, and there may 
+have been little thought given to the choice. Dynamic scoping was used for 
+most dialects of Lisp before 1975. Contemporary dialects either use static 
+scoping or allow the programmer to choose between static and dynamic 
+scoping.
+An interpreter for Lisp can be written in Lisp. Such an interpreter, which is 
+not a large program, describes the operational semantics of Lisp, in Lisp. This 
+is vivid evidence of the semantic simplicity of the language.
+M15_SEBE8029_12_SE_C15.indd   632 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 657 (Target: ch5_names_bindings) ---
+=========================================
+
+15.5 An Introduction to Scheme     633
+15.5 An Introduction to Scheme
+In this section, we describe the core part of Scheme (Dybvig, 2011). We have 
+chosen Scheme because it is relatively simple, it is popular in colleges and 
+universities, and Scheme interpreters are readily available (and free) for a 
+wide variety of computers. The version of Scheme described in this section 
+is Scheme 4. Note that this section covers only a small part of Scheme, and it 
+includes none of Scheme’s imperative features.
+15.5.1 Origins of Scheme
+The Scheme language, which is a dialect of Lisp, was developed at MIT in the 
+mid-1970s (Sussman and Steele, 1975). It is characterized by its small size, its 
+exclusive use of static scoping, and its treatment of functions as first-class enti-
+ties. As first-class entities, Scheme functions can be the values of expressions, 
+elements of lists, passed as parameters, and returned from functions. Early 
+versions of Lisp did not provide all of these capabilities.
+As an essentially typeless small language with simple syntax and semantics, 
+Scheme is well suited to educational applications, such as courses in functional 
+programming, and also to general introductions to programming.
+Most of the Scheme code in the following sections would require only 
+minor modifications to be converted to valid Lisp code.
+15.5.2 The Scheme Interpreter
+A Scheme interpreter in interactive mode is an infinite read-evaluate-print loop 
+(often abbreviated as REPL). It repeatedly reads an expression typed by the 
+user (in the form of a list), interprets the expression, and displays the resulting 
+value. This form of interpreter is also used by Ruby and Python. Expressions 
+are interpreted by the function 
+EVAL. Literals evaluate to themselves. So, if you 
+type a number to the interpreter, it simply displays the number. Expressions 
+that are calls to primitive functions are evaluated in the following way: First, 
+each of the parameter expressions is evaluated, in no particular order. Then, 
+the primitive function is applied to the parameter values, and the resulting 
+value is displayed.
+Of course, Scheme programs that are stored in files can be loaded and 
+interpreted.
+Comments in Scheme are any text following a semicolon on any line.
+15.5.3 Primitive Numeric Functions
+Scheme includes primitive functions for the basic arithmetic operations. These 
+are 
++, -, *, and /, for add, subtract, multiply, and divide. * and + can have zero 
+or more parameters. If * is given no parameters, it returns 1; if + is given no 
+parameters, it returns 0. + adds all of its parameters together. * multiplies all 
+M15_SEBE8029_12_SE_C15.indd   633 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 676 (Target: ch5_names_bindings) ---
+=========================================
+
+652      Chapter 15  Functional Programming Languages
+Recognizing the occasional flexibility provided by dynamic scoping, as 
+well as the simplicity of static scoping, Common Lisp allows both. The default 
+scoping for variables is static, but by declaring a variable to be “special,” that 
+variable becomes dynamically scoped.
+Macros are often used in Common Lisp to extend the language. In fact, 
+some of the predefined functions are actually macros. For example, 
+DOLIST, 
+which takes two parameters, a variable and a list, is a macro. For example, 
+consider the following:
+(DOLIST (x '(1 2 3)) (print x))
+This produces the following:
+1
+2
+3
+NIL
+NIL
+ here is the return value of DOLIST.
+Macros create their effect in two steps: First, the macro is expanded. Sec-
+ond, the expanded macro, which is Lisp code, is evaluated. Users can define 
+their own macros with DEFMACRO.
+The Common Lisp backquote operator (`) is similar to Scheme’s QUOTE, 
+except some parts of the parameter can be unquoted by preceding them with 
+commas. For example, consider the following two examples:
+`(a (* 3 4) c)
+This expression evaluates to (a (* 3 4) c). However, the following expression:
+`(a ,(* 3 4) c)
+evaluates to (a 12 c).
+Lisp implementations have a front end called the reader that transforms the 
+text of Lisp programs into a code representation. Then, the macro calls in the 
+code representation are expanded into code representations. The output of this 
+step is then either interpreted or compiled into the machine language of the 
+host computer, or perhaps into an intermediate code than can be interpreted. 
+There is a special kind of macro, named reader macros or read macros, that are 
+expanded during the reader phase of a Lisp language processor. A reader macro 
+expands a specific character into a string of Lisp code. For example, the apos-
+trophe in Lisp is a read macro that expands to a call to 
+QUOTE. Users can define 
+their own reader macros to create other shorthand constructs.
+Common Lisp, as well as other Lisp-based languages, have a symbol data 
+type. The reserved words are symbols that evaluate to themselves, as are T and 
+NIL. T echnically, symbols are either bound or unbound. Parameter symbols are 
+bound while the function is being evaluated. Also, symbols that are the names 
+M15_SEBE8029_12_SE_C15.indd   652 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 677 (Target: ch5_names_bindings) ---
+=========================================
+
+15.7 ML     653
+of imperative-style variables and have been assigned values are bound. Other 
+symbols are unbound. For example, consider the following expression:
+(LIST '(A B C))
+The symbols A, B, and C are unbound. Recall that Ruby also has a symbol data 
+type.
+In a sense, Scheme and Common Lisp are opposites. Scheme is far smaller 
+and semantically simpler, in part because of its exclusive use of static scoping, 
+but also because it was designed to be used for teaching programming, whereas 
+Common Lisp was meant to be a commercial language. Common Lisp has 
+succeeded in being a widely used language for AI applications, among other 
+areas. Scheme, on the other hand, is more frequently used in college courses on 
+functional programming. It is also more likely to be studied as a functional lan-
+guage because of its relatively small size. An important design goal of Common 
+Lisp that caused it to be a large language was the desire to make it compatible 
+with several of the dialects of Lisp from which it was derived.
+The Common Lisp Object System (CLOS) (Paepeke, 1993) was developed 
+in the late 1980s as an object-oriented version of Common Lisp. This language 
+supports generic functions and multiple inheritance, among other constructs.
+15.7 ML
+ML (Milner et al., 1997) is a static-scoped functional programming language, 
+like Scheme. However, it differs from Lisp and its dialects, including Scheme, 
+in a number of significant ways. One important difference is that ML is a 
+strongly typed language, whereas Scheme is essentially typeless. ML has type 
+declarations for function parameters and the return types of functions, although 
+because of its type inferencing they are often not used. The type of every 
+variable and expression can be statically determined. ML, like other functional 
+programming languages, does not have variables in the sense of the imperative 
+languages. It does have identifiers, which have the appearance of names of 
+variables in imperative languages. However, these identifiers are best thought 
+of as names for values. Once set, they cannot be changed. They are like the 
+named constants of imperative languages like 
+final declarations in Java. ML 
+identifiers do not have fixed types—any identifier can be the name of a value 
+of any type.
+A table called the evaluation environment stores the names of all implic-
+itly and explicitly declared identifiers in a program, along with their types. This 
+is like a run-time symbol table. When an identifier is declared, either implicitly 
+or explicitly, it is placed in the evaluation environment.
+Another important difference between Scheme and ML is that ML uses a 
+syntax that is more closely related to that of an imperative language than that 
+of Lisp. For example, arithmetic expressions are written in ML using infix 
+notation.
+M15_SEBE8029_12_SE_C15.indd   653 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 691 (Target: ch5_names_bindings) ---
+=========================================
+
+15.10 Support for Functional Programming in Primarily Imperative Languages      667
+anonymous functions, which are like lambda expressions, are now part of JavaS-
+cript, Python, Ruby, Java, and C#.
+In JavaScript, named functions are defined with the following syntax:
+function name (formal-parameters) {
+ body
+}
+An anonymous function is defined in JavaScript with the same syntax, except 
+that the name of the function is omitted.
+In C#, a lambda expression is an instance of a delegate. They can be anony-
+mous or named. An anonymous lambda expression is simpler than an anonymous 
+method because methods must define their parameter types and return type, but 
+lambda expressions use the C# inferencing process to avoid those necessities. 
+The syntax of an unnamed lambda expression in C# is as follows:
+parameter(s) => expression
+If there is more than one parameter, they must be enclosed in parentheses. If 
+there are no parameters, empty parentheses must appear in the place of the 
+parameters. If the system cannot infer the types of the parameters, they can 
+be preceded by type names. The type of the return value is never specified; it 
+is always inferred by the context of the lambda expression. The expression is 
+either a single expression or a compound statement enclosed in braces. Such a 
+compound statement must include a 
+return statement.
+One common use of anonymous lambda expressions is as actual parameters 
+to methods that are specified to take delegates as parameters. For example, C# 
+has a collection of methods for arrays that perform searching operations. For 
+example, the 
+FindAll method finds all of the elements of an array that satisfy a 
+given instance of a delegate that takes a parameter of the type of the array’s ele-
+ments and returns a Boolean value. For example, we could have the following:
+int[] numbers = {-3, 0, 4, 5, 1, 7, -3, -6, -9, 0, 3};
+int[] positives = Array.FindAll(numbers, n => n > 0);
+// Now, positives is {4, 5, 1, 7, 3}
+Lambda expressions in C# can also be named. The language has generic 
+delegates that make defining such lambda expressions simple, although they 
+do not cover all possibilities. One commonly used generic delegate is Func, 
+which can take up to sixteen generic parameters for the parameters of the 
+lambda expression, plus one more for the return type. For example, consider 
+the following example of a named lambda expression and an invocation of it:
+Func<int, int, int> eval1 = (a, b) => 3 * a + (b / 2);
+int result = eval1(6, 22);
+C# lambda expressions can access variables defined outside their definitions. 
+When they do, the lifetimes of the accessed external variables, which are called 
+M15_SEBE8029_12_SE_C15.indd   667 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 696 (Target: ch5_names_bindings) ---
+=========================================
+
+672      Chapter 15  Functional Programming Languages
+produce results; rather, they use function applications, conditional expressions, 
+and recursion for execution control and functional forms to construct complex 
+functions. Lisp began as a purely functional language but soon acquired a num-
+ber of imperative-language features added in order to increase its efficiency 
+and ease of use.
+The first version of Lisp grew out of the need for a list-processing lan-
+guage for AI applications. Lisp is still the most widely used language for that 
+application area.
+The first implementation of Lisp was serendipitous: The original version 
+of 
+EVAL was developed solely to demonstrate that a universal Lisp function 
+could be written.
+Because Lisp data and Lisp programs have the same form, it is possible to 
+have a program build another program. The availability of EVAL allows dynam-
+ically constructed programs to be executed immediately.
+Scheme is a relatively simple dialect of Lisp that uses static scoping exclu-
+sively. Like Lisp, Scheme’s primary primitives include functions for construct-
+ing and dismantling lists, functions for conditional expressions, and simple 
+predicates for numbers, symbols, and lists.
+Common Lisp is a Lisp-based language that was designed to include most 
+of the features of the Lisp dialects of the early 1980s. It allows both static- and 
+dynamic-scoped variables and includes many imperative features. Common 
+Lisp uses macros to define some of its functions. Users are allowed to define 
+their own macros. The language includes reader macros, which are also user 
+definable. Reader macros define single-symbol macros.
+ML is a static-scoped and strongly typed functional programming language 
+that uses a syntax that is more closely related to that of an imperative language 
+than to Lisp. It includes a type-inferencing system, exception handling, a vari-
+ety of data structures, and abstract data types.
+ML does not do any type coercions and does not allow function overload-
+ing. Multiple definitions of functions can be defined using pattern matching of 
+the actual parameter form. Currying is the process of replacing a function that 
+takes multiple parameters with one that takes a single parameter and returns a 
+function that takes the other parameters. ML, as well as several other functional 
+languages, supports currying.
+Haskell is similar to ML, except that all expressions in Haskell are eval-
+uated using a lazy method, which allows programs to deal with infinite lists. 
+Haskell also supports list comprehensions, which provide a convenient and 
+familiar syntax for describing sets. Unlike ML and Scheme, Haskell is a pure 
+functional language.
+F# is a .NET programming language that supports functional and imper-
+ative programming, including object-oriented programming. Its functional 
+programming core is based on OCaml, a descendent of ML and Haskell. F# is 
+supported by an elaborate and widely used IDE. It also interoperates with other 
+.NET languages and has access to the .NET class library.
+M15_SEBE8029_12_SE_C15.indd   672 1/9/18   6:22 PM
+=========================================
+--- SEBESTA PAGE 752 (Target: ch5_names_bindings) ---
+=========================================
+
+728      Index
+Attributes, 171, 198, 517
+binding, 203–204
+defined, 129
+instance data as, 464
+intrinsic, 130
+of variables, names, 199, 201
+Automatic generalization, 403
+Automatic programming, 39
+awk scripting language, 92
+Axiomatic semantics, 680
+assertions in, 143–144
+assignment statements in, 145–147
+evaluation of, 155
+logical pretest loops in, 149–152
+program proofs in, 152–155
+selection in, 148–149
+sequences in, 147–148
+weakest preconditions in, 144–145
+Axioms, 144, 155, 681, 684
+B
+B, language, 75
+Babbage, Charles, 37, 80, 366
+Backtracking, 685, 694, 697, 699, 704–705, 711
+Backus, John, 40–41
+BNF (Backus-Naur Form) (see BNF 
+(Backus-Naur Form))
+Fortran by, 18, 41, 624
+FP (functional programming), 624–625
+speedcoding system by, 39
+Backward chaining, 693
+Base class, 486
+base prefix, 514
+Basic (Beginner’s All-purpose Symbolic 
+Instruction Code)
+design process, 61–62
+evaluation of, 62–63
+example of, 63
+BASIC-PLUS, 62
+Bauer, Fritz, 51
+BCD (binary coded decimal), 240
+Bell Laboratories. see AT&T Bell Laboratories
+BINAC computer, 38
+binary coded decimal (BCD), 240
+Binary operators, 256, 303
+Binary semaphore, 547
+Binding, 632, 635, 656
+of actual parameters to formal parameters, 370
+ad hoc, 393–394
+attributes to variables, 203–204
+deep, 393–394, 437
+definition, 203
+difference between access, 437
+dynamic type, 205–207
+exceptions to handlers, C++, 595
+exceptions to handlers, Java, 599–600
+explicit heap-dynamic variables in, 209–210
+implicit heap-dynamic variables in, 210–211
+lifetime of, 207
+shallow, 393–394, 437
+stack-dynamic variables in, 208–209
+static type, 314
+static variables in, 207–208
+static-type, 493, 512
+storage, 207, 226
+subscript, 252–254
+type, 204–207
+to a variable, 689
+Binding time, 203
+Blocked tasks, 542
+Blocks
+in Ruby, 668
+for scope, 213–215
+BNF (Backus-Naur Form), 53–54
+describing lists in, 115
+fundamentals of, 114–115
+origins of, 113–114
+Böhm, Corrado, 332, 359
+Boolean abstract data types, 461–462
+Boolean data types, 76, 332
+Boolean expressions, 316–318, 661
+boolean type variables, 76, 90, 241, 581
+Borland JBuilder, 29
+Bottom-up parsers, 173–174
+LR parsers and, 186–190
+parsing problem for, 184–186
+shift-reduce algorithms for, 186
+Bottom-up resolution, 693
+Bound variables, 207, 634
+Bounded wildcard types, 403
+Bounds, 72, 259–260, 401
+Boxing, 509
+Z02_SEBE8029_12_SE_IDX.indd   728 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 758 (Target: ch5_names_bindings) ---
+=========================================
+
+734      Index
+Dynamic binding, 205, 488–489
+in Ada, 82
+in C#, 514–515
+in C++, 87, 226, 504–507
+in Java, 512
+of messages to methods, 493, 495
+of method calls to methods, 484, 519–521
+in object-oriented programming,  
+488–489, 493
+in Ruby, 517
+in Smalltalk, 495–496
+of subprogram calls, 82
+Dynamic chains, 426
+Dynamic dispatch, 488
+Dynamic languages, 69–70
+Dynamic length strings, 245
+Dynamic link libraries (DLLs), 65, 474
+Dynamic links, 422–423
+Dynamic scoping, 220–222, 437–441, 632
+Dynamic semantics, 129
+axiomatic semantics as, 142–155
+denotational semantics as, 137–142
+operational semantics as, 134–137
+Dynamic type binding, 205–207
+Dynamic type checking, 286
+E
+Eager approach, 282
+EBNF (Extended BNF), 125–127
+ECMA (European Computer Manufacturers 
+Association), 94
+Edinburgh syntax, 689
+Edwards, Daniel J., 632
+Eich, Brendan, 94
+Elaboration, 208
+Elemental operators, Fortran 95+, 198
+Elliptical references, 265
+else-if clause, 341
+Encapsulation constructs
+in C, 472
+in C#, 461–462, 473–474
+in C++, 456, 472–473, 475–476
+introduction to, 471–472
+in Java, 476–477
+naming, 474–478
+in Ruby, 463, 477–478
+entry clauses, 553
+Enumeration constants, 247
+Enumeration types, 247–250, 337
+in C#, 249
+in C++, 248–249
+design issues for, 247–248
+designs, 247–249
+evaluation of, 249–250
+in F#, 249
+in Java 5.0, 249
+in ML, 249
+Environment pointers (EPs), 418
+Epilogue of subprogram linkage, 419
+EPs (Environment pointers), 418
+EQ? function, 641
+Equivalence, 288–291
+Erasure rule, 181
+Errors
+in arithmetic expressions, 315
+European Computer Manufacturers Association 
+(ECMA), 94
+EVAL functions, 632, 635–636, 650–651
+Evaluation environments, 653
+Event handling
+in C#, 613–616
+introduction to, 608–609
+in Java, 609–613
+Event listeners, 610–611
+Events, 591–592, 608–610
+Exception handling
+in Ada, 14
+basic concepts of, 589–591
+in C++, 14, 594–598
+design issues for, 591–594
+introduction to, 588–594
+in Java, 598–605
+in Python, 605–607
+in Ruby, 607–608
+Exceptions, 315
+Exclusivity of objects, 489–490
+Executable images, 25
+Execution efficiency, 670
+Expert systems, 709–710
+Explicit declarations, 204
+Explicit heap-dynamic variables, 209–210
+Explicit locks in, Java 5.0, 569–570
+Z02_SEBE8029_12_SE_IDX.indd   734 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 764 (Target: ch5_names_bindings) ---
+=========================================
+
+740      Index
+L
+Lambda calculus, 627
+Lambda expressions, 50, 91, 627, 635
+in C#, 667–668
+in Java 8, 668
+in Python, 668
+in Scheme, 635
+Language design
+Ada, 80
+ALGOL 58, 52–53
+ALGOL 60, 53–56
+ALGOL 68, 72
+BASIC, 62
+C#, 98–99
+C++, 87
+categories in, 20–21
+COBOL, 56–61
+computer architecture, 17–19
+concurrency, 543
+early design process, 51
+for Fortran, 43
+Hoare’s observation, 13, 21, 359
+hybrid implementation system, 26
+influences on, 17–20
+Java, 89–90
+PL/I, 67, 68
+Prolog programs, 77–78
+SIMULA 67, 71
+Smalltalk, 84
+trade-offs, 21–22
+Language generators, 112–113
+Language recognizers, 112
+Laning and Zierler system, 41
+Lattner, C., 87
+Lazy approach, 282
+Lazy evaluation, 661–663
+LCF (Logic for Computable Functions), 50
+Learning new languages, 2
+Left factoring, 183
+Left recursive grammar rules, 123
+Left-hand side (LHS), 114–115, 123, 138, 
+173–174, 181, 184, 186, 188, 190,  
+192, 207
+grammar rules for, 115, 123, 173
+Leftmost derivations, 116
+Lerdorf, Rasmus, 96
+let
+in F#, 664
+in Haskell, 660
+in ML, 214, 656
+in Scheme, 214, 646–647
+scope of, 215
+Level numbers, 264
+Lexemes, 111, 164
+Lexical analysis, 163–171
+lexical analyzer, 164–165
+process, 164
+Lifetime, 207–211
+Lightweight task, 539
+Limited dynamic length strings, 245
+Linkers, 25, 420
+Linking, 25
+Linking and loading, 25
+LISP , 205, 220, 222, 237. see also Common 
+LISP; Multi-LISP (ML); Scheme  
+language
+allocation and deallocation in, 281
+artificial intelligence and, 45–46
+common, 651–653
+data structures in, 47, 48, 629–631
+data types in, 629–631
+descendants of, 49–50
+design goals of, 282
+design process for, 46
+evaluation of, 48–49
+expressions in, 308
+functional programming in, 47
+implementation of, 639
+interpreter in, 631–632
+languages related to, 50
+list processing and, 45–46
+reflections in, 527
+single-size allocation heap in, 281–282
+syntax of, 48
+List comprehensions, 270
+LIST functions, Scheme, 268
+Lists, 115
+in Common LISP , 268–269
+descriptions of, 115
+functions of, 638–641
+in Multi-LISP (ML), 269
+predicate functions for, 641–642
+Z02_SEBE8029_12_SE_IDX.indd   740 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 768 (Target: ch5_names_bindings) ---
+=========================================
+
+744      Index
+Parameters (continued)
+for subprograms, 368–372
+subprograms as, 392–394
+type checking, 385–387
+Parametric polymorphism, 399
+params, 99
+Parent class, 486, 491
+differences between subclasses and,  
+486–487
+Parentheses, 307
+Parse trees, 24–25, 117–118
+Parsing, 25, 55, 119
+bottom-up, 173–174, 183–190
+complexity of, 174–175
+introduction to, 171–172
+LL grammar class in, 180–183
+LR parsers for, 186–190
+recursive-descent, 175–180
+shift-reduce algorithms for, 186
+top-down, 172–173
+Partial correctness, 152
+Partial evaluation, 658
+Pascal, 55, 248, 276, 281, 289, 295, 376, 394, 
+549, 577
+Concurrent, 549
+evaluation of, 74–75
+historical background, 73
+T urbo, 98
+Pass-by-assignment, 385
+Pass-by-copy, 380
+Pass-by-name, 381–382
+Pass-by-reference, 380–381
+Pass-by-result, 378–379
+Pass-by-value-result, 379–380
+Passed by value, 378
+pcall constructs, 575
+PDA (Pushdown automaton), 186
+Peripheral processors, 535
+Perl, 92–94, 341, 350
+array assignments, 255
+arrays, 92, 253
+assignment statements in, 322
+associative arrays in, 261
+binary logic operators of, 317
+built-in pattern-matching operations, 244
+clause form, 334
+coercion rules for mixed-mode  
+assignment, 324
+compound assignment operators of, 320
+conditional targets on assignment 
+statements, 320
+dynamic scoping in, 220
+enumeration types of, 249
+expressions in, 303, 309
+foreach statement, 99, 360
+as a general-purpose language, 93
+hashes, 96, 261, 262
+hybrid implementation system, 27
+mixed-mode assignment in, 324
+multiple-source assignment statements  
+in, 323
+nesting selectors in, 334
+origins and characteristics of, 92–94
+passing parameters of, 384
+strings in, 245
+subscripting in, 251
+unary arithmetic operators in, 321
+Unicode in, 241
+as a UNIX utility, 93
+user-located loop control in, 350
+variable names in, 199
+variables in, 93
+Perlis, Alan, 44, 51
+PHP , 6, 26, 29, 217, 386, 670
+access to HTML form data, 96
+built-in pattern-matching operations, 244
+foreach statement, 99
+formal parameters of, 370
+function definitions, 217
+global variables of, 217–218
+origins and characteristics of, 96
+relational operators of, 316
+scalar types of, 339
+switch statement, 339
+type binding in, 205, 286
+variable names in, 199
+Phrases, 185–186
+Physical concurrency, 537
+pipeline operators (| >), 665
+Plankalkül, 36–37
+PL/I, 66–69
+design process, 67
+Z02_SEBE8029_12_SE_IDX.indd   744 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 772 (Target: ch5_names_bindings) ---
+=========================================
+
+748      Index
+Rule of consequence, 146
+Rules, 114–115, 117, 120
+run methods, 560–561, 570
+Running task, 542
+Run-time stacks, 424
+Russell, Stephen B., 632
+R-value, 202
+S
+Satisfying subgoals, 692
+Scalable algorithms, 535
+Schedulers, 541
+Scheme language, 49
+apply-to-all functional forms in, 649–650
+code-building functions in, 650–651
+control flow in, 637–638
+defining functions in, 634–636
+examples of function definitions in, 643–646
+functional compositions in, 648–649
+functional forms in, 648–650
+interpreter in, 633
+LET, 646–647
+list functions in, 638–641
+lists in, 269
+numeric predicate functions in, 637
+origins of, 633
+output functions in, 636
+predicate functions in, 641–642
+primitive numeric functions in, 633–634
+tail recursive functions in, 647–648
+Schwartz, Jules I., 53
+Scientific applications, 5
+Scope
+blocks for, 213–215
+declaration order for, 215–216
+dynamic scoping, 220–222, 437–441
+global, 217–219
+lifetime and, 222–223
+named constants and, 224–226
+referencing environments and, 223–224
+static scoping, 220
+in subprograms, implementing, 437–441
+Scott, Dana, 142
+Scripting languages, 92–98
+JavaScript, 94–96
+Perl, 92–94
+PHP , 96
+Python, 96
+Ruby, 97–98
+Scripts, 162
+select statements, 555–556
+Selection, 148–149
+Selection statements
+multiple-selection, 336–343
+postconditions in, 148–149
+two-way, 332
+Selector expressions, 336
+Semantic domains, 137
+Semantics. see also Axiomatic semantics; 
+Denotational semantics
+dynamic, 134–155
+introduction to, 110–111
+natural operational, 135
+operational, 134–137
+static, 128–129
+structural operational, 135
+Semaphores, 544–548
+Sentences, 111
+Sentential forms, 116
+Sequences, 147–148
+Sergot, M. J., 710
+Server tasks, 554
+Servlet containers, 101
+Setter methods, 464, 516
+S-expressions, 632
+Shallow access, 439–441
+Shallow binding, 393–394
+SHARE, 51, 53, 67
+Shared inheritance, 491
+Shaw, J. C., 45
+Shift-reduce algorithms, 186
+Short Code, 38–39
+short integer, 238
+Short Range Committee, 58
+Short-circuit evaluation, 318–319
+Side effects, 309–311, 396–397
+SIGPLAN Notices, 80, 103
+SIMD (Single-Instruction, Multiple-Data) 
+computers, 536
+Simon, Herbert, 45
+Simple assignment statements, 130, 687
+Simple functions, 626–627
+Z02_SEBE8029_12_SE_IDX.indd   748 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 773 (Target: ch5_names_bindings) ---
+=========================================
+
+Index     749
+Simple lists, 630, 643–644
+Simple phrases, 185
+Simplicity, 8–9, 13, 73–75, 163
+SIMULA 67, 19, 384, 453, 485–486, 498, 500
+design process for, 70–71
+language overview of, 71
+support for coroutines in, 71
+Single inheritance, 487, 491–492
+Single-Instruction, Multiple-Data (SIMD) 
+computers, 536
+Single-size cells, 281–282
+sleep methods, 562, 577
+Slices, 242, 257
+Smalltalk, 86, 494–496
+dynamic binding, 495–496
+evaluation of, 496
+general characteristics, 494–495
+inheritance in, 495
+SNOBOL, 69–70
+Solaris Common Desktop Environment  
+(CDE), 29
+Source languages, 23, 26, 41
+special, 50
+Special words, 12
+Speedcoding, 39
+SQL (Structured Query Language), 709
+Stack-dynamic arrays, 54, 252
+Stack-dynamic local variables, 421–429
+Stack-dynamic variables, 208–209
+Stanford University, 73
+start methods, 561
+Start symbols, 115
+State diagrams, 165
+State of programs, 140
+Statement-level concurrency, 535, 538, 578–580
+Statement-level control structures
+counter-controlled loops, 344–348
+for statements, 345–348
+guarded commands by, 356–359
+iterative statements, 343–355
+logically controlled loops, 348
+two-way selection statements, 332
+unconditional branch statement, 355–356
+Static ancestors, 212
+Static arrays, 252
+Static binding, 204–205, 493
+Static chaining, 430–435
+Static length strings, 244
+Static links, 430–431
+static modifiers, 208, 253
+Static parents, 212, 430–431
+Static scoping, 49, 50, 376, 435, 439, 472, 633, 
+652, 653
+Static semantics, 128–129
+Static type bindings, 204–205
+Static variables, 209, 210, 375
+in binding, 207–208
+static_depth, 431
+Steele Jr., Guy L., 338
+Steelman requirements document, 80
+Stepsize, 344
+Stichting Mathematisch Centrum, 96
+Storage bindings, 207–211
+Strachey, Christopher, 142
+Strawman requirements document, 79–80
+Strict programming languages, 661
+Strong typing, 287
+structs, 10, 36, 90, 449, 453, 513
+in C#, 99, 462, 479
+Structural operational semantics, 135
+Structure type equivalence, 288
+Structured Query Language (SQL), 709
+Structures, 689–690
+Subclasses, 486, 489–490
+Subgoals, 704–706
+Subprogram calls, 367
+Subprogram definition, 367
+Subprogram headers, 367
+Subprogram linkage, 418
+Subprogram-level concurrency, 539–544
+Subprograms
+in C++, 399–401
+in C# 2005, 403
+calling indirectly, 394–396
+characteristics of, 366–367
+closures, 374, 405–407
+coroutines, 407–410
+definitions in, 367–368
+design issues for, 374, 396–397
+in F#, 403–404
+functions as, 372–373
+fundamentals of, 366–373
+Z02_SEBE8029_12_SE_IDX.indd   749 1/8/18   5:03 PM
+=========================================
+--- SEBESTA PAGE 774 (Target: ch5_names_bindings) ---
+=========================================
+
+750      Index
+Subprograms (continued)
+generic, 374, 399–404
+in Java 5.0, 401–403
+local variables in, 375–376
+multidimensional arrays and, 387–389
+nested, 376
+overloaded, 374, 398
+parameter profile of, 368
+parameter-passing methods, 376–392
+parameters as, 392–394
+parameters in, 368–372
+procedures as, 372–373
+protocol of, 368
+user-defined overloaded data types in, 
+404–405
+Subprograms, implementing
+blocks in, 436–437
+calls in, 418
+deep access in, 437–439
+dynamic scoping in, 437–441
+of nested subprograms, 429–435
+with recursion, 427–429
+returns in, 418
+shallow access in, 439–441
+stack-dynamic local variables for, 421–429
+static chaining, 430–435
+without recursion, 425–427
+Subrange types, in Ada, 290
+Subscript bindings, 252–254
+Subscripts, 251
+Substring references, 242
+subtype enumeration type, 290
+Subtype polymorphism, 399
+Subtypes, 293, 490–491
+Sun Microsystems, 89, 94
+Superclass, 486, 500
+Swing GUI components, 609–610
+Symbolic atoms and lists, 641–642
+Symbolic logic, 681
+Synchronization, 536, 539. see also 
+Competition synchronization; 
+Cooperation synchronization
+of CML, 576
+explicit locks as, 569–570
+nonblocking, 569
+of threads, 573–574
+Synchronous message passing, 551–552
+Syntactic domains, 137–139
+Syntax. see also Attribute grammars
+ambiguous grammars in, 118–119
+analysis, 163
+analyzer, 24, 28
+associativity in, 122–123
+BNF and, 113–114, 126
+context-free grammars and, 113, 114
+derivations in, 115–117
+design, 12
+in Extended BNF , 125–127
+fundamentals of, 114–115
+generators in, 112–113
+grammars and, 115–117, 127–128
+if-then-else statements, 308, 342
+of Java, 110, 111
+of JavaScript, 94
+of LISP , 48
+list descriptions in, 115
+of ML, 50
+operator precedence in, 119–122
+parsing and, 117–118
+of Python, 97
+recognizers in, 112, 127–128
+of Ruby, 98
+of Smalltalk, 84, 86
+unambiguous grammars in, 120, 124–125
+Synthesized attributes, 129
+Syracuse University, 684
+System.Object, 98
+Systems programming, 66, 75
+Systems software, 22
+T
+Tail recursive functions, 647–648
+Task(s), 539–544
+concurrent execution of, 543
+descriptors, 544
+heavyweight, 539
+lightweight, 539
+states, 541–542
+termination, 555, 557
+task specifications, 552–553
+T ask termination, 555
+Task-ready queue, 542, 562
+Z02_SEBE8029_12_SE_IDX.indd   750 1/8/18   5:03 PM

@@ -1,0 +1,9 @@
+element H { atomic_mass = 1.008, valence = 1, symbol = "H" };
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+
+reaction water_synthesis {
+    reactants = 2*H2 + O2,
+    products  = 2*H2O,
+    check     = balanced,
+    energy    = exothermic 571.6 kJ
+};

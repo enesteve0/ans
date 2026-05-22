@@ -195,7 +195,10 @@ static ReactionSideVal build_reaction_side(const AstNode *rxn_expr, int line) {
                 formula_free(fv);
                 *rs.terms[i].species = resolved;
             } else {
-                *rs.terms[i].species = make_formula(fv);
+                formula_free(fv);
+                runtime_error(line,
+                    "reaction species formula '%s' does not match a declared compound",
+                    species_node->text);
             }
         } else { /* ND_IDENT = named compound */
             Value v;
