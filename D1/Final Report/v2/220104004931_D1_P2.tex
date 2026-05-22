@@ -224,7 +224,7 @@ Formula literal & \code{H}, \code{O2}, \code{H2O}, \code{CH4} & \rx{(?:[A-Z][a-z
 Unit literal & \code{g/mol}, \code{kg/mol}, \code{kJ/mol} & longest match before the slash operator \\
 Hard keywords & \code{let}, \code{function}, \code{return}, \code{for}, \code{in}, \code{if}, \code{elif}, \code{else}, \code{print} & identifier text, then keyword table lookup \\
 Context words & \code{element}, \code{compound}, \code{reaction}, \code{balanced} & parsed by grammar position \\
-Operators & \code{==}, \code{!=}, \code{+=}, \code{=}, \code{+}, \code{-}, \code{*}, \code{/}, \code{<}, \code{>} & longer operators before shorter ones \\
+Operators & \code{==}, \code{!=}, \code{+=}, \code{-=}, \code{*=}, \code{/=}, \code{=}, \code{+}, \code{-}, \code{*}, \code{/}, \code{<}, \code{>}, \code{<=}, \code{>=} & longer operators before shorter ones \\
 Separators & \code{\{} \code{\}} \code{(} \code{)} \code{[} \code{]} \code{,} \code{;} \code{.} & single character tokens \\
 Comments & \code{// comment} & skipped until newline \\
 \bottomrule
@@ -256,6 +256,7 @@ ambiguous-looking cases are separated into different non-terminals.
                        | <augmented_assignment_statement> ";"
                        | <print_statement> ";"
                        | <expression_statement> ";"
+                       | <for_statement>
                        | <if_statement>
 
 <block> -> "{" { <statement> } "}"
@@ -382,9 +383,24 @@ formula_count(F, E)    return count of element E in formula F (0 if absent)
 species_formula(S)     formula value of a reaction species (see below)
 reaction_atoms(R)      atom-count map for a reaction expression (see below)
 atom_maps_equal(A, B)  true iff every symbol has equal count in A and B
+reaction_side_coeff(RS, K) return coefficient of compound/formula key K in reaction_side RS (0.0 if absent)
 \end{lstlisting}
 
 \subsection{4.4.1\quad For-in Loop}
+
+\textbf{List iteration.}\; When the iterable evaluates to a List, the loop visits each element in index order.
+
+\begin{lstlisting}[style=sem]
+L = evaluate(collection)
+
+if type(L) is list:
+    for i = 0 to length(L) - 1:
+        iter_scope = new_scope(current_scope)
+        bind variable in iter_scope to L[i]
+        execute body using iter_scope
+        destroy iter_scope
+    end
+\end{lstlisting}
 
 \textbf{Formula iteration.}\; When the iterable evaluates to a Formula, the loop visits each distinct element in first-appearance order.
 
@@ -420,9 +436,9 @@ if type(R) is reaction_side:
     end
 \end{lstlisting}
 
-Iterating over the reactants of \code{CH4 + 2*O2} (with \code{methane} and \code{oxygen} declared) yields \code{methane} first, then \code{oxygen}, because formula-literal species must resolve to declared compounds before execution. Unresolved formulas are semantic errors. Coefficients are accessible via \code{reaction\_side[compound]}.
+Iterating over the reactants of \code{CH4 + 2*O2} (with \code{methane} and \code{oxygen} declared) yields \code{methane} first, then \code{oxygen}, because formula-literal species must resolve to declared compounds before execution. Unresolved formulas are semantic errors. Coefficients are accessible via \code{reaction\_side[compound]} or \code{reaction\_side[formula]}.
 
-\textbf{Scoping.}\; Both forms create a fresh nested scope per iteration. Inner declarations vanish at scope destruction. Assignment to an outer variable updates it through the static-scope chain.
+\textbf{Scoping.}\; All loop forms create a fresh nested scope per iteration. Inner declarations vanish at scope destruction. Assignment to an outer variable updates it through the static-scope chain.
 
 \textbf{Formula indexing} --- \code{formula[element]}:
 
@@ -434,6 +450,17 @@ result = formula_count(F, E)    // 0 if element absent
 \end{lstlisting}
 
 This lets the molar-mass calculation \code{mass += element.atomic\_mass * formula[element]} be executed as: \texttt{count = formula\_count(F, E);\ term = element.atomic\_mass * count;\ mass = mass + term}.
+
+\textbf{ReactionSide indexing} --- \code{reaction\_side[compound]} or \code{reaction\_side[formula]}:
+
+\begin{lstlisting}[style=sem]
+RS = evaluate(reaction_side);  K = evaluate(key)
+if type(RS) != reaction_side:  semantic_error("left of [] must be reaction_side")
+if type(K) not in {compound, formula}:  semantic_error("reaction_side index must be compound or formula")
+result = reaction_side_coeff(RS, K)    // 0.0 if species absent
+\end{lstlisting}
+
+This allows looking up stoichiometric coefficients, e.g. \code{combustion.reactants[CH4]} or \code{combustion.reactants[methane]} at runtime.
 
 \subsection{4.4.2\quad Reaction Balance Check: \code{check = balanced}}
 
@@ -625,7 +652,9 @@ ANS defines \textbf{left-to-right} evaluation (Sebesta \S7.2). For \code{a + b},
 No implicit coercion (\S4.5). Arithmetic operators require Number operands:
 \begin{center}
 \code{Number} $\{+, -, *, /\}$ \code{Number} $\to$ \code{Number} \qquad
-\code{Formula[Element]} $\to$ \code{Number}
+\code{Formula[Element]} $\to$ \code{Number} \\
+\code{ReactionSide[Compound]} $\to$ \code{Number} \qquad
+\code{ReactionSide[Formula]} $\to$ \code{Number}
 \end{center}
 Quantity values appear as stored literals (e.g.\ reaction energy fields); arithmetic on Quantities is not defined in this subset. Different-unit Quantities are not interchangeable even with the same operator.
 
