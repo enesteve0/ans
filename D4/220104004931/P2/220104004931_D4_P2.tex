@@ -12,6 +12,7 @@
 \usepackage[scaled=0.92]{helvet}
 \usepackage[varqu,varl]{zi4}
 \usepackage[english]{babel}
+\usepackage{amsmath}
 \usepackage{microtype}
 \usepackage[a4paper,margin=2.25cm,top=2.0cm,bottom=2.15cm]{geometry}
 
@@ -94,7 +95,7 @@
 \section{Part 1 Journal Entries}
 
 \begin{journalentry}
-Entry \# & 1 of 12 \\ \hline
+Entry \# & 1 of 18 \\ \hline
 Date & 2026-05-04 \\ \hline
 Phase & Design \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -108,7 +109,7 @@ Reflection & This was a good example of using AI for framing, not for final trut
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 2 of 12 \\ \hline
+Entry \# & 2 of 18 \\ \hline
 Date & 2026-05-04 \\ \hline
 Phase & Lexer \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -122,7 +123,7 @@ Reflection & This was a good example of using AI for framing, not for final trut
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 3 of 12 \\ \hline
+Entry \# & 3 of 18 \\ \hline
 Date & 2026-05-05 \\ \hline
 Phase & Lexer / Parser \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -136,7 +137,7 @@ Reflection & AI gave a useful compiler-design concept, but the implementation st
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 4 of 12 \\ \hline
+Entry \# & 4 of 18 \\ \hline
 Date & 2026-05-05 \\ \hline
 Phase & Lexer \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -150,7 +151,7 @@ Reflection & This entry reminded me that a correct-looking formal pattern is not
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 5 of 12 \\ \hline
+Entry \# & 5 of 18 \\ \hline
 Date & 2026-05-05 \\ \hline
 Phase & Design / Parser \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -164,7 +165,7 @@ Reflection & Syntax changes ripple through the whole project. This was useful, b
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 6 of 12 \\ \hline
+Entry \# & 6 of 18 \\ \hline
 Date & 2026-05-05 \\ \hline
 Phase & Parser \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -178,7 +179,7 @@ Reflection & This entry is a clear case where AI was useful for structure but un
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 7 of 12 \\ \hline
+Entry \# & 7 of 18 \\ \hline
 Date & 2026-05-05 \\ \hline
 Phase & Names / Binding / Scope \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -192,7 +193,7 @@ Reflection & This helped me use Sebesta vocabulary more accurately, especially t
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 8 of 12 \\ \hline
+Entry \# & 8 of 18 \\ \hline
 Date & 2026-05-07 \\ \hline
 Phase & Design / Parser \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -206,7 +207,7 @@ Reflection & A critique prompt was more useful than asking for code. It helped i
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 9 of 12 \\ \hline
+Entry \# & 9 of 18 \\ \hline
 Date & 2026-05-07 \\ \hline
 Phase & Lexer \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -220,7 +221,7 @@ Reflection & This taught me to include hard constraints in implementation prompt
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 10 of 12 \\ \hline
+Entry \# & 10 of 18 \\ \hline
 Date & 2026-05-07 \\ \hline
 Phase & Lexer \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -234,7 +235,7 @@ Reflection & AI was useful for translating the idea into C, but repository integ
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 11 of 12 [EXPERIMENT E1] \\ \hline
+Entry \# & 11 of 18 [EXPERIMENT E1] \\ \hline
 Date & 2026-05-08 \\ \hline
 Phase & Parser \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -248,7 +249,7 @@ Reflection & E1 showed that a short prompt is not enough for a precise grammar. 
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 12 of 12 \\ \hline
+Entry \# & 12 of 18 \\ \hline
 Date & 2026-05-08 \\ \hline
 Phase & Parser \\ \hline
 AI tool & GPT-5.5 Thinking \\ \hline
@@ -265,101 +266,87 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \section{Part 2 Continuation Entries}
 
 \begin{journalentry}
-Entry \# & 1 of 7 \\ \hline
-Date & 2026-05-10 \\ \hline
-Phase & Planning / Requirements \\ \hline
-AI tool & ChatGPT (GPT-4o) \\ \hline
-Goal & Turn the Part 2 handout and submission guide into a concrete work plan before changing the project. \\ \hline
-Prompt & ``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly and then understand where we are. We have finished Part 1 and now we have to work on Part 2 and make this assignment finished done absolute. Plan that accordingly and properly.'' \\ \hline
-Response (key part) & Codex identified Part 2 as a full revised submission: final D1, D2 type checker and interpreter, executed D3 examples, continued D4 journals, D5 retrospectives, and D6 contribution report. It separated individual files (\code{D1}, \code{D4}, \code{D5}) from shared pair files (\code{D2}, \code{D3}, \code{D6}). \\ \hline
-Accepted & I kept the order: read the handout first, then align D1 and D2, then run D3 examples, then package. That stopped me from treating the code as finished while the reports and upload files were still incomplete. \\ \hline
-Rejected / modified & I did not accept the early ``fully done'' framing as proof. The plan still needed real builds, actual interpreter output, and extracted-archive checks. \\ \hline
-Errors you caught & The first planning pass could make the project sound closer to final than it was. I caught that by comparing the plan against the handout requirement for type checking, interpreter execution, D4 E2/E3, and final upload structure. \\ \hline
-Reflection & This helped me turn a broad deadline into a checklist. The important lesson was that a good AI plan is not proof; I still needed builds, outputs, PDFs, and package checks. \\ \hline
-\end{journalentry}
-
-\begin{journalentry}
-Entry \# & 2 of 7 \\ \hline
-Date & 2026-05-13 \\ \hline
-Phase & Exam Preparation / Understanding \\ \hline
-AI tool & ChatGPT (GPT-4o) \\ \hline
-Goal & Prepare for the personalized written exam by studying the actual submitted PDFs and C code. \\ \hline
-Prompt & ``I need to be ready for the Part 1 exam and I need you to teach me everything about my submission like I know nothing about it. I'm Enes btw in case you need to read according to that.'' \\ \hline
-Response (key part) & Codex read the submitted PDFs and code, then made an Enes-specific exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It focused on parser flow, AST dump, token handling, and the difference between Part 1 parsing and Part 2 semantics. \\ \hline
-Accepted & I accepted the code-grounded explanation style because it forced me to connect written claims to actual files such as \code{lexer.c}, \code{parser.c}, \code{ast.c}, and \code{error.c}. \\ \hline
-Rejected / modified & I had to push the AI beyond a report summary by asking it to read the PDFs and then the code. A report-only explanation would not prepare me for project-specific exam questions. \\ \hline
-Errors you caught & The danger was over-explaining future type-checking behavior while studying a Part 1 parser submission. I detected that by checking which features were actually implemented at that point. \\ \hline
-Reflection & This session showed me that AI tutoring is only useful when it is tied to the repository. For the exam I need to explain code details, not only repeat clean report sentences. \\ \hline
-\end{journalentry}
-
-\begin{journalentry}
-Entry \# & 3 of 7 \\ \hline
+Entry \# & 13 of 18 \\ \hline
 Date & 2026-05-19 \\ \hline
-Phase & Design / Operational Semantics \\ \hline
-AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Phase & Design \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
 Goal & Write operational semantics for two non-trivial ANS chemistry DSL constructs: formula iteration and reaction balance checking. \\ \hline
-Prompt & ``We're doing Part 2 of our CSE341 language project. For D1 section 4.4, we need to write operational semantics for two non-trivial ANS constructs. Our language is a chemistry DSL. Can you help us write the semantics section for: 1. looping over a formula, like for (let element in formula) 2. checking whether a reaction is balanced with check = balanced'' \\ \hline
-Response (key part) & The response drafted a D1-ready operational semantics section using environments $\Gamma$, $\rho$, and $\sigma$. It defined formula values such as $H_2O \Downarrow \{ H \mapsto 2, O \mapsto 1 \}$, gave a formal loop rule for \code{for (let element in e) B}, and defined \code{check = balanced} by comparing \code{atoms(R) = atoms(P)}. It also stated that \code{check = balanced} ``does not try to repair or auto-balance the reaction.'' \\ \hline
-Accepted & I accepted the formal semantics breakdown of formula iteration and reaction balance checking. Specifically, we kept the environment definitions ($\Gamma$, $\rho$, $\sigma$) and the idea of mapping formulas to element-to-count maps. \\ \hline
-Rejected / modified & I rejected the inference-rule format because the course requires Sebesta-style operational semantics (which uses an abstract machine and state changes). We also modified the looping definition because iterating over a formula literal directly was too simple; we needed to generalize the loop to expressions that evaluate to formulas. \\ \hline
-Errors you caught & The AI's initial rules assumed a static set of elements in the formula and didn't define iteration order or local variable scope cleanup, which would cause name shadowing bugs in our interpreter. \\ \hline
+Prompt & We're doing Part 2 of our CSE341 language project. For D1 section 4.4, we need to write operational semantics for two non-trivial ANS constructs. Our language is a chemistry DSL. Can you help us write the semantics section for: 1. looping over a formula, like for (let element in formula) 2. checking whether a reaction is balanced with check = balanced \\ \hline
+Response (key part) & The response drafted a D1-ready operational semantics section using environments \(\Gamma\), \(\rho\), and \(\sigma\). It defined formula values such as \(H_2O \Downarrow \{ H \mapsto 2, O \mapsto 1 \}\), gave a formal loop rule for \(\langle \text{for (let element in e) B}, \rho, \sigma_0, \Gamma \rangle \Downarrow \sigma_n\), and defined \code{check = balanced} by comparing \(atoms(R) = atoms(P)\). It also stated that \code{check = balanced} ``does not try to repair or auto-balance the reaction.'' \\ \hline
+Accepted & I accepted the environment definitions (\(\Gamma\), \(\rho\), \(\sigma\)) and the formal representation of formulas as a map from element symbols to counts (e.g. \(H_2O \Downarrow \{H \mapsto 2, O \mapsto 1\}\)), as well as the atom conservation constraint for checking if reactions are balanced. \\ \hline
+Rejected / modified & I rejected the logical inference-rule format for D1 because our course requires Sebesta-style operational semantics, which are based on abstract-machine state transitions. We also modified the looping definition to evaluate general expressions to formulas rather than assuming only literal formula variables. \\ \hline
+Errors you caught & The AI's initial inference rules assumed a static set of elements in the formula and didn't define iteration order or local variable scope cleanup, which would cause name shadowing bugs in our interpreter. \\ \hline
 Reflection & I learned that formal logic-style operational semantics are clean but hard to map directly to an interpreter implementation in C. Switching to Sebesta-style operational semantics makes the translation to C code much more natural. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 4 of 7 \\ \hline
+Entry \# & 14 of 18 \\ \hline
 Date & 2026-05-19 \\ \hline
-Phase & Design / Operational Semantics \\ \hline
-AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
+Phase & Design \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
 Goal & Revise the ANS operational semantics section so it follows Sebesta Section 3.5 style more closely. \\ \hline
-Prompt & ``The Semantics needs to be like Sebesta Style as you can see through the books 3.5 section'' \\ \hline
-Response (key part) & The response described operational semantics using abstract-machine operations such as \code{evaluate(E)}, \code{formula\_elements(F)}, \code{reaction\_atoms(R)}, and \code{semantic\_error(M)}. It rewrote formula iteration and reaction balance checking as lower-level state changes. \\ \hline
-Accepted & I kept the abstract-machine style because it matched Sebesta's idea of explaining meaning through execution effects. It also fit the interpreter I expected to build in D2. \\ \hline
-Rejected / modified & The first output was too vague about iteration order, loop scope, empty formulas, energy type checking, and whether reaction field checks were semantic or syntactic. I did not paste it directly into D1. \\ \hline
-Errors you caught & The AI used \code{formula\_elements(F)} like a set without defining an order. That is a real semantics gap, because interpreter behavior should be deterministic. I caught it by reviewing the output against the D3 molar-mass loop. \\ \hline
-Reflection & The AI gave the right general shape, but not enough precision. In semantics, missing details like scope lifetime or iteration order can become implementation bugs later. \\ \hline
+Prompt & The Semantics needs to be like Sebesta Style as you can see through the books 3.5 section \\ \hline
+Response (key part) & The response replaced formal inference rules with Sebesta-style operational descriptions using abstract-machine operations such as \code{evaluate(E)}, \code{formula\_elements(F)}, \code{reaction\_atoms(R)}, and \code{semantic\_error(M)}. It described \code{for (let element in formula)} as lower-level loop operations and \code{check = balanced} as comparing \code{left\_atoms} and \code{right\_atoms} before calling \code{bind\_reaction(N, reaction\_value)}. \\ \hline
+Accepted & We accepted the use of abstract machine state modifications and helper functions (like \code{evaluate}, \code{formula\_elements}, \code{reaction\_atoms}, and \code{semantic\_error}) to specify semantics, as this maps directly to how our compiler front-end operates. \\ \hline
+Rejected / modified & The AI's list of helper functions was initially unstructured. We restructured the description to explicitly define each helper function before using it in the operational rules, ensuring the machine state remains formal. \\ \hline
+Errors you caught & The AI used \code{formula\_elements(F)} like a mathematical set without specifying a deterministic iteration order. This is a semantic gap for interpreter execution. We caught this and defined the iteration order to be the left-to-right order of appearance in the formula. \\ \hline
+Reflection & Sebesta's style of operational semantics provides a clear blueprint for interpreter implementation because it describes semantics using low-level, step-by-step algorithms on an abstract machine. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 5 of 7 \\ \hline
-Date & 2026-05-19 \\ \hline
-Phase & Design Review / Semantics \\ \hline
-AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
-Goal & Ask AI to review the revised 4.4 section like an instructor and identify remaining implementation risks. \\ \hline
-Prompt & ``Can you check my 4.4 Semantics section like my teacher would? I just want to know if it fits Sebesta-style operational semantics, if anything is unclear or too long, and if it says anything that would be hard to implement in D2. Please don't rewrite everything unless needed, just tell me what to fix.'' \\ \hline
-Response (key part) & The response said the section mostly fit Sebesta-style operational semantics, but recommended moving helper operations out of the main constructs, clarifying empty formula behavior, stating that field checks are semantic checks, and separating runtime execution from pre-execution validation. \\ \hline
-Accepted & I accepted the critique that 4.4 needed clearer helper-operation boundaries and better distinction between semantic checking and runtime interpretation. \\ \hline
-Rejected / modified & I rejected the idea that every helper deserved a full subsection. That made the section too long for D1, so the final version compressed helper operations while keeping the important checks. \\ \hline
-Errors you caught & The review exposed a design problem I had not written clearly enough: the grammar allowed reaction fields as a list, but the semantic pass had to require exactly one \code{reactants}, \code{products}, \code{check}, and \code{energy} field. \\ \hline
-Reflection & This session was useful because the AI acted more like a reviewer than a writer. That helped me keep my own wording while still finding missing rules. \\ \hline
+Entry \# & 15 of 18 \\ \hline
+Date & 2026-05-22 \\ \hline
+Phase & Type Checker \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Decide how to implement ANS static lexical scoping and symbol-table lookup in C11. \\ \hline
+Prompt & Okay, next up is the symbol table for the type checker. We need static lexical scoping (like Sebesta Ch 5) so local loop variables don't overwrite global element declarations. In C, is it fine to just use a linked list of Env structs where each one points to its parent scope, or is that going to be way too slow for lookups? \\ \hline
+Response (key part) & The response recommended using \code{Env} structs with a \code{parent} pointer and local linked-list symbols, explaining that insertion should use only the current scope while lookup walks outward. Key code included \code{Symbol *env\_lookup(Env *env, const char *name)} and \code{bool env\_define(Env *env, const char *name, SymbolKind kind, Type type)}. It also noted that this is fast enough for ANS Part 2 and can later be upgraded to hash buckets per scope. \\ \hline
+Accepted & We accepted the lexical environment structure using a parent pointer linked list. It is very simple to implement in C, matches Sebesta's static scoping rules, and keeps local variables isolated in nested scopes. \\ \hline
+Rejected / modified & The AI suggested that we allow variable shadowing for all symbols including elements and compounds. We rejected this and modified the implementation to forbid shadowing global compound and element names, as shadowing these in a chemistry DSL is highly confusing. \\ \hline
+Errors you caught & The AI suggested that lookup complexity was a non-issue because ``compilers rarely have deep nesting.'' While true for standard scripts, it did not account for the fact that a naive linear search on large codebases could scale poorly, though it is fine for our course project's constraints. \\ \hline
+Reflection & Designing scoping environments is simple if we treat scope as a first-class linked structure. Restricting shadowing is a design decision that improves reliability for domain-specific languages. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 6 of 7 [EXPERIMENT E2] \\ \hline
-Date & 2026-05-19 \\ \hline
-Phase & Type System \\ \hline
-AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
-Goal & Document the type-equivalence decision for ANS using Sebesta Chapter 6, including name/kind equivalence for domain records and structural equivalence for lists. \\ \hline
-Prompt & ``Next section! Can you help draft D1 Section 4.5: Type System for our chemistry language? Here are our rules: it is strongly typed and checked statically before execution; no implicit coercion; primitives are Number, String, Char, Bool; domain types are Quantity, Element, Compound, Formula, and Reaction. Can you explain our type categories and type-equivalence rules, like lists having to be homogeneous, using Sebesta's definitions?'' \\ \hline
-Response (key part) & The response described primitives, domain types, and constructed \code{List<T>} types. It stated that ANS has no automatic conversion and that \code{List<T>} is equivalent to \code{List<U>} only if the element types are equivalent. \\ \hline
-Accepted & I kept the strong static typing, no-coercion rule, and homogeneous \code{List<T>} decision. For E2, I used the output to separate two cases: domain record-like values such as \code{Compound} use kind/name-style equivalence, while parameterized lists use structural equivalence over the element type. \\ \hline
-Rejected / modified & The response did not clearly distinguish record-like domain objects from list constructors. I rewrote that part because saying only ``structural equivalence'' could imply that two compounds are different types based on their internal fields, which is not the ANS rule. \\ \hline
-Errors you caught & The mistake was mixing up chemistry record structure with type equivalence. I detected it by checking the intended function type rule: \code{function f(compound c)} must accept any compound, not only compounds with a particular formula shape. \\ \hline
-Reflection & E2 helped me understand why Sebesta's type-equivalence terms matter. Without a precise rule, the checker could become too strict for compounds or too weak for lists. \\ \hline
+Entry \# & 16 of 18 \\ \hline
+Date & 2026-05-22 \\ \hline
+Phase & Interpreter \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Fix memory ownership problems in the C11 ANS interpreter caused by shallow-copying pointers inside tagged-union values. \\ \hline
+Prompt & We got the interpreter mostly working, but I'm getting destroyed by Valgrind right now. When I assign a string or a formula to a variable, my tagged union just copies the pointer. So when the local scope ends, I either get double-free errors or memory leaks. How do I handle deep copying in a recursive AST walker without leaking memory everywhere? \\ \hline
+Response (key part) & The response recommended making ownership explicit: ``Every Value returned by eval\_expr owns its heap data'' and ``Every variable binding owns its stored Value.'' It introduced \code{value\_free}, \code{value\_clone}, \code{value\_move}, and \code{value\_replace} so strings and formulas are deep-copied or moved safely. It also recommended initializing temporaries to \code{VAL\_VOID} and using a single \code{cleanup:} block in recursive evaluator functions. \\ \hline
+Accepted & We accepted the rule of explicit value ownership (every returned \code{Value} owns its heap memory) and the C patterns of \code{value\_clone}, \code{value\_move}, and \code{value\_replace}, along with using a single \code{cleanup:} label in recursive evaluator functions. \\ \hline
+Rejected / modified & We rejected the suggestion of using C++ style smart pointers or complex reference counting, keeping it strictly to standard C allocations to avoid complicating the interpreter structure. \\ \hline
+Errors you caught & The AI's initial implementation of value cloning did not deeply clone formula parts, which would have led to shared formula arrays and double-frees during variable re-assignments. I detected this by checking the formula clone logic and added nested allocations. \\ \hline
+Reflection & Managing memory in a C interpreter requires a clear ownership model. Initializing all temporaries to a void state and freeing them in a unified cleanup block is the cleanest way to prevent resource leaks. \\ \hline
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 7 of 7 \\ \hline
-Date & 2026-05-20 \\ \hline
-Phase & Expressions / Assignment \\ \hline
-AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
-Goal & Draft D1 Section 4.7 using Sebesta Chapter 7 concepts and then correct it against the grammar and checker. \\ \hline
-Prompt & ``Can you help me write D1 section 4.7 for our ANS language? It needs to be about expressions and assignment using Sebesta Ch. 7. Our grammar has comparison operators, + - * /, unary -, function calls, indexing, and member access. Assignment is a statement, not an expression, and function calls cannot be assignment targets.'' \\ \hline
-Response (key part) & The response covered expression forms, precedence, associativity, operand evaluation order, static type rules, function calls, member access, indexing, assignment statements, and augmented assignment. Key ideas were that grammar structure defines precedence, operands evaluate left-to-right, and assignment is not an expression. \\ \hline
-Accepted & I kept the precedence/associativity explanation, left-to-right operand evaluation, and assignment-as-statement rule because they directly map to the parser and interpreter. \\ \hline
-Rejected / modified & The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned. \\ \hline
-Errors you caught & The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable. \\ \hline
-Reflection & This made me more careful about the difference between syntax and storage. An expression can parse correctly and still not be writable. \\ \hline
+Entry \# & 17 of 18 \\ \hline
+Date & 2026-05-22 \\ \hline
+Phase & Type Checker \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Design the recursive C11 type-checker pass for ANS expressions with no implicit coercion. \\ \hline
+Prompt & I need to write the actual type checker pass that runs before the interpreter. Since ANS has zero implicit coercion, we have to catch stuff like 5 mol + 2 g. How do I write a recursive C function that walks an expression AST and verifies types without actually executing the code? Do I just use a giant switch statement that returns a Type struct and throws an error if binary operator types don't match? \\ \hline
+Response (key part) & The response recommended implementing \code{bool check\_expr(TypeChecker *tc, const Expr *expr, Type *out, Error *err)}, where the type checker returns \code{Type} instead of runtime \code{Value}. It used a recursive switch over expression kinds and showed strict type equality with units, including rejecting \code{5 mol + 2 g} because \code{Quantity<mol>} and \code{Quantity<g>} are not equivalent. It also separated \code{check\_lvalue} from \code{check\_expr} so function calls cannot be assignment targets. \\ \hline
+Accepted & We accepted the recursive AST-walking \code{check\_expr} design using a type representation that includes the base type and unit, as well as separating \code{check\_lvalue} from \code{check\_expr}. \\ \hline
+Rejected / modified & We rejected the generic representation of lists as arbitrary objects, modifying the type system to enforce strict list homogeneity where lists must contain a single element type. \\ \hline
+Errors you caught & The AI's code for member access didn't verify if the accessed field existed on the specific type before returning its type (e.g. it allowed any field name on element objects). I caught this and hardcoded validation rules for element and compound fields. \\ \hline
+Reflection & Static type checking in C can be clean if we represent types as static structures and perform strict structure checks recursively. Separating type checking from execution is key to static safety. \\ \hline
+\end{journalentry}
+
+\begin{journalentry}
+Entry \# & 18 of 18 \\ \hline
+Date & 2026-05-22 \\ \hline
+Phase & Diagnostics \\ \hline
+AI tool & GPT-5.5 Thinking \\ \hline
+Goal & Design compiler diagnostics infrastructure to unwind recursive AST checker stack cleanly without calling exit(1). \\ \hline
+Prompt & our grading script uses make test which feeds bad .ans files to our program and expects it to exit with code 1 and a clean <file>:<line>: error: message. Right now, if my type checker finds an error deep in a recursive AST function, I just call exit(1). I know that's terrible C practice, but is it fine for a toy compiler? Or should I be setting a global g\_had\_error flag and letting the whole call stack unwind naturally? \\ \hline
+Response (key part) & The response advised against calling \code{exit(1)} deep inside the type checker because it causes memory leaks of AST nodes. It recommended using a \code{Diagnostics} struct to record errors, returning \code{false} from recursive checker functions to unwind the stack, and freeing all AST memory at the top level before exiting. \\ \hline
+Accepted & We accepted the pattern of returning \code{bool} in recursive functions and passing a diagnostics reporter struct to handle error collection while allowing the stack to unwind and clean up memory. \\ \hline
+Rejected / modified & We rejected using a global variable for tracking error flags. We instead encapsulated the state in a \code{Diagnostics} context passed down to ensure thread-safety and reusability of the compiler library. \\ \hline
+Errors you caught & The AI's code did not handle the case where a child node check fails but we still need to avoid evaluating subsequent children (e.g. evaluating the right side of a binary operator when the left side failed). I added early returns on child check failures. \\ \hline
+Reflection & Graceful error unwinding in recursive compilers is essential for preventing leaks. It is always better to design cleanup paths early rather than relying on the OS to clean up via abrupt exit calls. \\ \hline
 \end{journalentry}
 
 \end{document}
