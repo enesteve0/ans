@@ -1,0 +1,127 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% Project D5 (Part 2): Retrospective & Self-Assessment for ANS
+% Student: 220104004926 Yusuf Hamza Çelebi
+% Compile with: pdflatex 220104004926_D5_P2.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.25cm,top=2.0cm,bottom=2.15cm]{geometry}
+
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscaption}{HTML}{6B7280}
+\usepackage[colorlinks=true, linkcolor=ansblue, urlcolor=ansblue,
+            citecolor=ansblue, pdfborder={0 0 0}]{hyperref}
+
+\usepackage[explicit]{titlesec}
+\titleformat{\section}
+  {\large\bfseries\sffamily\color{black}}
+  {\thesection}{0.65em}{#1}
+\titlespacing*{\section}{0pt}{11pt}{5pt}
+\setlength{\parskip}{4.5pt plus 1pt minus 1pt}
+\setlength{\parindent}{0pt}
+\linespread{1.08}
+\setcounter{secnumdepth}{0}
+
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\renewcommand{\arraystretch}{1.18}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}%
+  CSE 341: ANS Retrospective \& Self-Assessment (D5, Part 2) \(\cdot\)
+  Student 220104004926 Yusuf Hamza \c{C}elebi}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\grade}[1]{\textbf{#1}}
+
+\hypersetup{
+  pdftitle  = {ANS Retrospective and Self-Assessment (D5, Part 2)},
+  pdfauthor = {220104004926 Yusuf Hamza Celebi},
+  pdfsubject= {CSE 341 Project Part 2},
+  pdfkeywords={DSL, chemistry, retrospective, self-assessment, ANS}
+}
+
+\begin{document}
+
+\begin{center}
+  {\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+  \vspace{3pt}
+  {\huge\bfseries\sffamily ANS: Alchemist's Notation Script\par}
+  \vspace{4pt}
+  {\large Retrospective \& Self-Assessment (D5), Part 2\par}
+  \vspace{6pt}
+  {\footnotesize\color{anscaption}
+    Student: 220104004926 Yusuf Hamza \c{C}elebi \(\cdot\)
+    Spring 2026 \(\cdot\)
+    Gebze Technical University\par}
+\end{center}
+\vspace{7pt}
+
+% =====================================================================
+\section{Retrospective}
+
+\textbf{What I would change if starting over.}\;
+The most consequential decision I would make earlier is committing to homogeneous \code{List<T>} from the first day of Part 1. In D1 Part 1 the sample program included a deliberately mixed list (\code{[1, "two", 3.45, water, methane.formula]}), and the type system section initially described lists as heterogeneous. Switching to \code{List<T>} happened in Part 2 on 20 May --- two days before the deadline --- which forced a retroactive fix to the sample program, the type equivalence rules, and the checker. A homogeneous-list decision in Week 1 would have made every subsequent section easier to write and the checker easier to implement, because the element type could be tracked statically from the first tool call.
+
+I would also write expression-statement-specific tests from the start. The parser test suite covered expressions inside conditions and variable declarations, but not as standalone statements. The bug where \code{1 + 2 * 3;} failed at the \code{*} token --- because the additive loop called \code{parse\_unary} instead of \code{parse\_multiplicative} as its right operand --- went undetected until a peer audit on the final day. A single two-line test case would have caught it in Part 1.
+
+\textbf{What had to be scoped out.}\;
+The D5 Part 1 plan mentioned changing \code{print} from a reserved keyword to a function-style construct like \code{mol()}. That change did not happen. Retrofitting \code{print} as a function would have required a grammar revision, a new parse rule for \code{print(expr)}, and updates to the checker and interpreter --- too large a scope change for the last week. The keyword form \code{print "text";} stayed, and the spec was updated to justify it as a deliberate writability choice.
+
+Quantity arithmetic between same-unit values (\code{5 kJ/mol + 890.3 kJ/mol}) was also left undefined in this subset. The type system correctly stores unit tags inside Quantity values, but the arithmetic operators accept only plain Numbers. Adding unit-aware arithmetic would require checking unit compatibility on every \code{+}/\code{-} and propagating units through the result --- a meaningful extension that would have displaced implementation time needed for the type checker and interpreter.
+
+\textbf{Single hardest design decision.}\;
+The hardest decision was the uppercase-leading lexical rule for formula literals: any token beginning with an uppercase letter is a \code{FORMULA\_LITERAL} (\code{H2O}, \code{CH4}), and any lowercase-leading token is an identifier. This rule is simple to state but pervasive to implement. It means the lexer cannot classify a token in isolation from surrounding context --- a single uppercase letter like \code{H} is a formula (the hydrogen element), not an identifier, even when it appears in a position where an identifier is expected. The parser, type checker, and interpreter all have to handle \code{ND\_FORMULA} and \code{ND\_IDENT} nodes differently at every point where a name could appear. Changing this rule would touch every module. Keeping it was the right choice for domain readability, but the cost in implementation complexity was higher than anticipated.
+
+% =====================================================================
+\section{Self-Assessment}
+
+Grades use the rubric in §5 of the project handout: A (Excellent), B (Good), C (Adequate), D (Weak).
+
+\vspace{4pt}
+\begin{tabularx}{\textwidth}{@{} L{3.5cm} L{1.0cm} Y @{}}
+\toprule
+\textbf{Dimension} & \textbf{Grade} & \textbf{Justification} \\
+\midrule
+Correctness &
+\grade{B} &
+All three D3 programs execute with the expected output and the type checker correctly rejects semantic errors; however, a parser precedence bug and a checker scoping bug (\code{tenv\_new(NULL)}) both reached the final day undetected and were found by a peer audit rather than our own tests, indicating gaps in test coverage. \\[4pt]
+
+Design Justification &
+\grade{A} &
+Every major decision in §4.5--4.8 is tied to a named Sebesta section (\S6.2, \S6.12, \S6.14, \S5.5, \S7.2, \S7.7) and closes with an explicit trade-off sentence written in my own voice after rejecting AI-generated drafts that were too vague. \\[4pt]
+
+Use of Sebesta Framework &
+\grade{B} &
+Grammar formalism (EBNF), operational semantics style, and binding/scoping/lifetime terminology are applied correctly throughout; one misapplication occurred in the first draft of §4.5, where Quantity was categorised as a primitive type rather than a domain type, and was corrected before submission. \\[4pt]
+
+Originality &
+\grade{A} &
+Formula literals as a lexer-level token category, \code{check = balanced} compile-time atom-balance verification, Quantity types with chemistry unit literals (\code{kJ/mol}, \code{g/mol}), and \code{for-in} iteration over both Formula and ReactionSide are domain-specific constructs with no analogue in a generic toy language. \\[4pt]
+
+Code Quality &
+\grade{B} &
+The C11 codebase has clean module separation (lexer, parser, checker, interpreter, value, AST each in their own \code{.c}/\code{.h} pair) and the interpreter correctly implements lexical scoping with linked environment frames; the main weakness is that the type checker represents types as plain strings (\code{"compound"}, \code{"list<number>"}), which makes type-equality checks fragile and harder to extend. \\[4pt]
+
+Exam Performance &
+\grade{B} &
+I can explain the scoping model, balance-check algorithm, formula-indexing semantics, and every trade-off in §4.8 from memory, and I wrote those sections by hand after reviewing AI drafts; I rate B rather than A because I am less confident about edge cases in the operational semantics for ReactionSide iteration under rapid exam-question pressure. \\
+\bottomrule
+\end{tabularx}
+
+\end{document}

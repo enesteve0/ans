@@ -19,14 +19,15 @@ Developed as the term project for **CSE 341 — Concepts of Programming Language
    - [Control Flow](#control-flow)
    - [Expressions](#expressions)
    - [Literals](#literals)
-4. [Lexical Structure](#lexical-structure)
-5. [Grammar (EBNF Summary)](#grammar-ebnf-summary)
-6. [Names, Scoping, and Lifetime](#names-scoping-and-lifetime)
-7. [Implementation](#implementation)
-8. [Build & Run](#build--run)
-9. [Error Reporting](#error-reporting)
-10. [Test Suite](#test-suite)
-11. [Project Layout](#project-layout)
+4. [Type System](#type-system)
+5. [Lexical Structure](#lexical-structure)
+6. [Grammar (EBNF Summary)](#grammar-ebnf-summary)
+7. [Names, Scoping, and Lifetime](#names-scoping-and-lifetime)
+8. [Implementation](#implementation)
+9. [Build & Run](#build--run)
+10. [Error Reporting](#error-reporting)
+11. [Test Suite](#test-suite)
+12. [Project Layout](#project-layout)
 
 ---
 
@@ -38,7 +39,7 @@ ANS applies Sebesta's four evaluation criteria (Ch. 1) as follows:
 |---|---|
 | **Readability** | Syntax mirrors chemistry vocabulary directly — `element`, `compound`, `reaction`, `reactants`, `products`, `balanced` — over a familiar C-like skeleton (`let`, braces, semicolons, `if`/`elif`/`else`). |
 | **Writability** | Common domain tasks are first-class constructs: declaring an element, writing a balanced equation as `CH4 + 2*O2`, querying `molar_mass(water)`. No boilerplate library imports required. |
-| **Reliability** | Formula literals (`H2O`, `CH4`) and unit literals (`mol`, `kJ/mol`) are distinct token categories. `check = balanced` reactions are verified for atomic equality at compile time. |
+| **Reliability** | Formula literals (`H2O`, `CH4`) and unit literals (`mol`, `kJ/mol`) are distinct token categories. `check = balanced` reactions are verified for atomic equality at compile time. Every type error is caught before execution. |
 | **Cost / Trade-offs** | Higher implementation cost for formula parsing, unit handling, and balance checking. Reduced generality (unsuited to non-chemistry tasks) and reduced orthogonality (fixed domain forms replace freely-combinable primitives). |
 
 ---
@@ -57,7 +58,7 @@ compound methane { formula = CH4, name = "Methane" };
 compound co2     { formula = CO2, name = "Carbon dioxide" };
 compound oxygen  { formula = O2,  name = "Oxygen" };
 
-// Declare a reaction and verify it is balanced at compile time
+// Declare a reaction — verified balanced at compile time
 reaction combustion {
     reactants = CH4 + 2*O2,
     products  = CO2 + 2*H2O,
@@ -65,7 +66,7 @@ reaction combustion {
     energy    = exothermic 890.3 kJ/mol
 };
 
-// Function using typed parameters
+// Function with typed parameter
 function molar_mass(compound c) {
     let formula = c.formula;
     let mass = 0.0;
@@ -75,7 +76,7 @@ function molar_mass(compound c) {
     return mass;
 };
 
-// Stoichiometric queries
+// Stoichiometric query
 molar_mass(water);
 
 if (molar_mass(water) > 18.0) {
@@ -85,7 +86,7 @@ elif (molar_mass(water) == 18.0) {
     print "Exactly 18 g/mol.";
 }
 else {
-    print "Lighter than expected.";
+    print "Light.";
 }
 ```
 
@@ -126,7 +127,7 @@ Required fields: `formula` (formula literal), `name` (string).
 
 #### `reaction`
 
-Declares a chemical reaction. Species in `reactants` and `products` may be formula literals (`CH4`, `O2`) or compound identifiers (`methane`, `water`). Stoichiometric coefficients are written `2*O2` — the `*` is required to distinguish coefficients from formula subscripts.
+Declares a chemical reaction. Species in `reactants` and `products` may be formula literals (`CH4`, `O2`) or compound identifiers (`methane`, `water`). Stoichiometric coefficients are written `2*O2` — the `*` is required.
 
 ```ans
 reaction combustion {
@@ -148,16 +149,16 @@ Fields:
 let x = 42;
 let name = "Hydrogen";
 let ch = 'H';
-let items = [H, O, C];
+let compounds = [water, methane, co2, oxygen];  // List<Compound>
 let n = 6.02e23;
 ```
 
-Variables are declared with `let`. Types are inferred at compile time. Augmented assignment operators `+=`, `-=`, `*=`, `/=` are supported.
+Variables are declared with `let`. Types are inferred from the right-hand side at compile time. Lists must be homogeneous (`List<T>`). Augmented assignment operators `+=`, `-=`, `*=`, `/=` are supported.
 
 ### Functions
 
 ```ans
-// Typed parameters
+// Typed parameter
 function molar_mass(compound c) {
     let mass = 0.0;
     return mass;
@@ -182,9 +183,17 @@ function get_avogadro() {
 
 #### `for` — iterator loop
 
+Iterates over a **Formula** (yields each Element in first-appearance order) or a **ReactionSide** (yields each species as a Compound):
+
 ```ans
+// Iterate over formula elements
 for (let element in formula) {
     mass += element.atomic_mass * formula[element];
+}
+
+// Iterate over reaction species
+for (let species in combustion.reactants) {
+    print species.name;
 }
 ```
 
@@ -224,13 +233,14 @@ Operator precedence (lowest to highest):
 | Postfix | call `()`, index `[]`, member `.` |
 | Primary | literals, identifiers, `(expr)` |
 
-Binary `+`, `-`, `*`, `/` are left-associative. A single comparison is allowed per expression (no chaining).
+Binary `+`, `-`, `*`, `/` are left-associative. A single comparison per expression — no chaining. Operands are evaluated left to right. Assignment is a statement, not an expression.
 
 Member access and indexing:
 
 ```ans
-c.formula          // property access
-formula[element]   // index access
+c.formula          // compound field access → Formula
+formula[element]   // formula indexing → Number (atom count)
+list[0]            // list indexing → element type T
 molar_mass(water)  // function call
 ```
 
@@ -243,7 +253,40 @@ molar_mass(water)  // function call
 | Character | `'H'`, `'\n'` |
 | Formula | `H`, `O2`, `H2O`, `CH4`, `CO2` |
 | Quantity | `5.0 mol`, `890.3 kJ/mol`, `18.0 g/mol` |
-| List | `[H, O, C]`, `[1, "two", 3.45]` |
+| List | `[water, methane, co2]`, `[1.008, 15.999, 12.011]` |
+
+---
+
+## Type System
+
+ANS is **statically and strongly typed**. All types are determined at compile time; there are no implicit coercions.
+
+### Primitive types
+
+| Type | Value set |
+|---|---|
+| `Number` | IEEE-754 double. `20` and `20.0` are the same value — no separate integer type. |
+| `String` | Unicode sequence with escapes `\"` `\\` `\n` `\r` `\t`. |
+| `Character` | Single Unicode character, same escapes. |
+| `Boolean` | Produced by comparison operators; consumed by `if`/`elif`. No `true`/`false` literals. |
+
+### Domain types
+
+| Type | Description |
+|---|---|
+| `Quantity` | A (Number, unit) pair. Units: `mol`, `g`, `kg`, `kJ`, `g/mol`, `kg/mol`, `kJ/mol`. |
+| `Formula` | Ordered map from element symbol to atom count. Iterable; indexable by Element. |
+| `List<T>` | Homogeneous sequence, 0-indexed, runtime bounds-checked. Element type `T` is inferred from the literal. Empty list `[]` is a semantic error (no context to fix `T`). |
+| `Element` | Record: `atomic_mass`, `valence`, `symbol`. Read-only after declaration. |
+| `Compound` | Record: `formula`, `name`. Read-only after declaration. |
+| `Reaction` | Record: `reactants`, `products`, energy fields. Read-only after declaration. |
+| `ReactionSide` | The type of `.reactants` and `.products`. Iterable over species. |
+
+### Type equivalence
+
+- **Name/kind equivalence** for primitive and domain types — `compound` matches `compound` regardless of formula.
+- **Unit-tag equality** for Quantities — `5 mol` and `7 mol` are compatible; `5 mol` and `7 g/mol` are not.
+- **Structural equivalence** for `List<T>` — `List<Number>` ≡ `List<Number>` when element types match.
 
 ---
 
@@ -257,7 +300,7 @@ ANS uses six token categories produced by a maximal-munch (longest-match) scanne
 [a-z_][A-Za-z0-9_]*
 ```
 
-User-defined names always start with a lowercase letter or `_`. Any token starting with an uppercase letter is classified as a **formula literal**, not an identifier — this is how `water` and `H2O` are kept visually and grammatically separate without extra keyword rules.
+User-defined names always start with a lowercase letter or `_`. Any token starting with an uppercase letter is classified as a **formula literal**, not an identifier.
 
 ### Formula Literals
 
@@ -265,7 +308,7 @@ User-defined names always start with a lowercase letter or `_`. Any token starti
 ([A-Z][a-z]?[0-9]*)+
 ```
 
-Examples: `H`, `O`, `Na`, `H2O`, `CH4`, `CO2`, `NaCl`. The lexer produces a single `FORMULA` token for a whole molecular formula; no lookahead or statefulness is required.
+Examples: `H`, `O`, `Na`, `H2O`, `CH4`, `CO2`, `NaCl`. The lexer produces a single `FORMULA` token for a whole molecular formula.
 
 ### Unit Literals
 
@@ -275,7 +318,7 @@ Compound units containing `/` are scanned as a single token before the `/` opera
 kg/mol | g/mol | kJ/mol
 ```
 
-Single-word units (`mol`, `g`, `kg`, `kJ`) are emitted as identifiers by the scanner and promoted to `<unit>` role by the parser only when they immediately follow a number literal.
+Single-word units (`mol`, `g`, `kg`, `kJ`) are emitted as identifiers and promoted to `<unit>` by the parser only when they immediately follow a number literal.
 
 ### Keywords
 
@@ -285,7 +328,7 @@ Single-word units (`mol`, `g`, `kg`, `kJ`) are emitted as identifiers by the sca
 let  function  return  for  in  if  elif  else  print
 ```
 
-**Contextual keywords** (valid identifiers in all other positions; promoted by the parser based on grammar context):
+**Contextual keywords** (valid identifiers elsewhere; promoted by the parser):
 
 | Position | Words |
 |---|---|
@@ -381,20 +424,19 @@ The full EBNF is in `D1/4.3/EBNF/ANS_complete_EBNF.ebnf`.
 
 ## Names, Scoping, and Lifetime
 
-**Case sensitivity.** ANS is fully case-sensitive. Tokens starting with uppercase are always formula literals; lowercase-starting tokens are identifiers. There is no ambiguity.
+**Case sensitivity.** ANS is fully case-sensitive. Tokens starting with uppercase are always formula literals; lowercase-starting tokens are identifiers.
 
-**Static (lexical) scoping.** Every name resolves to the nearest enclosing declaration in the source text, outward to the top-level program scope. This is required for compile-time formula validation and balance checking — the compiler must resolve names from source text alone without simulating execution.
+**Static (lexical) scoping.** Every name resolves to the nearest enclosing declaration in the source text, outward to the top-level program scope. This is required for compile-time formula validation and balance checking.
 
 **Compile-time vs. run-time bindings:**
 
 | Binding | When |
 |---|---|
-| Operator symbol → semantics | Language-design time |
 | Lexeme → token category | Compile time (lex) |
 | Identifier → declaration | Compile time (static scope walk) |
 | Variable → inferred type | Compile time |
 | Parameter → declared type | Compile time |
-| Formula validity | Compile time |
+| Formula symbol validity | Compile time |
 | `check = balanced` | Compile time |
 | Parameter → argument value | Run time (call) |
 | Local variable → storage cell | Run time (block entry) |
@@ -408,36 +450,55 @@ The full EBNF is in `D1/4.3/EBNF/ANS_complete_EBNF.ebnf`.
 | Top-level `let` variables | Static |
 | Function parameters | Stack-dynamic — allocated per call, supports recursion |
 | Local `let` inside a function/block | Stack-dynamic — freed on block exit |
-| `for` loop variable | Stack-dynamic — one allocation for the loop, rebound each iteration |
-| List/compound/reaction values | Implicit heap-dynamic (runtime-managed, no explicit `new`/`delete`) |
+| `for` loop variable | Stack-dynamic — rebound each iteration |
+| List/compound/reaction values | Implicit heap-dynamic (no explicit `new`/`delete`) |
 
-ANS has **no explicit-heap-dynamic storage**, no pointers, and no aliasing, eliminating use-after-free and dangling-pointer errors by design.
+ANS has **no explicit-heap-dynamic storage**, no pointers, and no aliasing.
 
 ---
 
 ## Implementation
 
-The current implementation is a hand-written C11 front end (lexer + parser + AST) in `D2/`.
+The implementation is a hand-written C11 pipeline in `D2/`: lexer → parser → type checker → interpreter.
 
 ### Components
 
 | File | Role |
 |---|---|
 | `src/lexer.c` | Maximal-munch scanner: whitespace/comment skipping, formula/unit/keyword scanning |
-| `src/parser.c` | Recursive-descent parser — one function per EBNF rule |
-| `src/ast.c` | AST node constructors and tree pretty-printer |
+| `src/parser.c` | Recursive-descent parser — one function per EBNF rule; produces AST |
+| `src/ast.c` | AST node constructors, tree pretty-printer |
 | `src/error.c` | `<file>:<line>:<col>: error:` formatting |
-| `src/main.c` | CLI entry point: reads file, runs lexer + parser, optionally dumps AST |
+| `src/value.c` | Runtime value types: FormulaVal, ReactionSideVal, Env (lexical scope frames) |
+| `src/checker.c` | Two-pass static type checker: collect declarations, then validate all expressions and statements |
+| `src/interpreter.c` | Tree-walk interpreter: eval\_expr, exec\_stmt, for-in dispatch, call\_function |
+| `src/main.c` | CLI entry point: `--dump-ast`, `--check`, `--run` |
 
-### Parser strategy
+### Pipeline
 
-The parser is a single-token lookahead recursive-descent parser matching the EBNF grammar exactly. Panic-mode error recovery skips to the next `;`, `}`, or EOF on any syntax error, allowing multiple errors to be reported per run.
+```
+source file
+    │
+    ▼
+  lexer.c        → token stream
+    │
+    ▼
+  parser.c       → AST
+    │
+    ▼
+  checker.c      → type errors (compile-time; halts before interpreter if any)
+    │
+    ▼
+  interpreter.c  → program output / runtime errors
+```
 
-**Contextual keyword disambiguation** happens entirely in the parser: `element`, `compound`, and `reaction` are contextual, resolved as declaration keywords vs. type annotations based on grammar position. The lexer emits plain `IDENT` for all three.
+### Key design notes
 
-**Formula vs. identifier disambiguation** is done in the lexer by case: uppercase-leading → `FORMULA`, lowercase/`_`-leading → `IDENT`.
-
-**Unit disambiguation**: compound units (`g/mol`, `kg/mol`, `kJ/mol`) are probed before consuming `/`, so they are emitted as `UNIT_LIT` without lexer statefulness. Single-word units (`mol`, `g`, `kg`, `kJ`) are always `IDENT`; the parser recognises them as `<unit>` only when they follow a number.
+- **Contextual keyword disambiguation** happens in the parser. `element`, `compound`, and `reaction` are plain `IDENT` tokens; the parser promotes them based on grammar position.
+- **Formula vs. identifier** disambiguation is done in the lexer by case: uppercase-leading → `FORMULA`, lowercase/`_`-leading → `IDENT`.
+- **Unit disambiguation**: compound units (`g/mol`, `kJ/mol`) are probed before consuming `/`; single-word units are `IDENT` tokens promoted by the parser.
+- **Static scoping**: function frames are created with the global environment as parent — functions see top-level declarations but not each other's locals.
+- **Balance check**: the checker accumulates atom maps for both sides of a reaction and reports an error if they differ.
 
 ---
 
@@ -451,11 +512,28 @@ cd D2
 make          # optimised build → ./ans
 make debug    # add -g -DDEBUG
 make clean
+make test     # run all 35 parse + semantic tests
 ```
 
+### Commands
+
 ```sh
-./ans <file.ans>                # parse; exit 0 on success, 1 on error
-./ans --dump-ast <file.ans>     # parse and print the AST to stdout
+./ans --dump-ast <file.ans>   # parse and print AST; exit 0 on success
+./ans --check   <file.ans>    # parse + type-check; exit 0 if clean, 1 on errors
+./ans --run     <file.ans>    # parse + check + execute; prints program output
+```
+
+### Examples
+
+```sh
+# Run the combustion analysis example
+./ans --run ../D3/programs/combustion_analysis.ans
+
+# Check a program for type errors without running it
+./ans --check ../D1/4.1/code\ sample/main.ans
+
+# Inspect the AST
+./ans --dump-ast tests/valid/functions.ans
 ```
 
 ### AST dump example
@@ -477,19 +555,33 @@ Program
 
 ## Error Reporting
 
+### Parse errors
+
 ```
 <file>:<line>:<col>: error: <message>
 ```
 
-Examples:
-
 ```
 tests/invalid/missing_semicolon.ans:7:1: error: expected ';' but got let
-tests/invalid/unknown_field.ans:5:5: error: unknown element field 'protons'
 tests/invalid/bad_char.ans:3:18: error: unexpected character '@'
 ```
 
-The parser uses panic-mode recovery (skips to the next `;`, `}`, or EOF) so multiple errors are reported in a single run.
+The parser uses panic-mode recovery (skips to the next `;`, `}`, or EOF) so multiple errors are reported per run.
+
+### Type errors (`--check`)
+
+```
+main.ans:45:5: error: argument 1 to 'compute_yield': expected compound, got number
+main.ans:64:5: error: reaction 'combustion' is not balanced: left={C:1,H:4,O:4} right={C:1,H:4,O:3}
+```
+
+### Runtime errors (`--run`)
+
+```
+<file>:<line>: runtime error: division by zero
+<file>:<line>: runtime error: list index 5 out of range (length 3)
+<file>:<line>: runtime error: formula element 'Xx' is not declared
+```
 
 ---
 
@@ -500,14 +592,20 @@ cd D2
 make test
 ```
 
-Runs all programs in `tests/valid/` (each must exit 0) and all programs in `tests/invalid/` (each must exit 1).
+Runs all programs in `tests/valid/` (each must exit 0) and all programs in `tests/invalid/` (each must exit 1). **35 tests total, all passing.**
 
 | Category | Count | Description |
 |---|---|---|
-| `tests/valid/` | 4 | `elements.ans`, `control_flow.ans`, `functions.ans`, `main.ans` |
-| `tests/invalid/` | varies | Missing semicolons, unknown fields, illegal characters, unmatched braces, unterminated strings |
+| `tests/valid/` | 8 | `elements.ans`, `compounds.ans`, `reactions.ans`, `control_flow.ans`, `functions.ans`, `main.ans`, `for_loop.ans`, `expressions.ans` |
+| `tests/invalid/` | 27 | Missing semicolons, unknown fields, illegal characters, unmatched braces, unterminated strings, and more |
 
-Additional test programs covering three valid and five malformed cases are documented in `D3/`.
+The three D3 example programs also serve as end-to-end integration tests and are run as part of verification:
+
+```sh
+./ans --run ../D3/programs/molar_mass_demo.ans
+./ans --run ../D3/programs/combustion_analysis.ans
+./ans --run ../D3/programs/multi_reaction_survey.ans
+```
 
 ---
 
@@ -515,26 +613,61 @@ Additional test programs covering three valid and five malformed cases are docum
 
 ```
 ans/
-├── D1/                        # Language design documents
-│   ├── 4.1/                   # Language overview & Sebesta evaluation
-│   ├── 4.2/                   # Lexical structure
-│   ├── 4.3/EBNF/              # Complete EBNF grammar
-│   ├── 4.6/                   # Names, binding, scope, lifetime
-│   └── Final Report/          # D1 LaTeX submissions
-├── D2/                        # Lexer + parser implementation (C11)
-│   ├── include/               # lexer.h  parser.h  ast.h  error.h
-│   ├── src/                   # lexer.c  parser.c  ast.c  error.c  main.c
+├── D1/                              # Language design specification
+│   ├── 4.1/                         # Language overview & sample program
+│   ├── 4.2/                         # Lexical structure
+│   ├── 4.3/EBNF/                    # Complete EBNF grammar
+│   ├── 4.4/                         # Operational semantics
+│   ├── 4.5/                         # Type system
+│   ├── 4.6/                         # Names, binding, scope, lifetime
+│   ├── 4.7/                         # Expressions & assignment
+│   ├── 4.8/                         # Design rationale
+│   └── Final Report/
+│       ├── v1/                      # D1 P1 PDFs (220104004926, 220104004931)
+│       └── v2/                      # D1 P2 PDFs (220104004926, 220104004931)
+├── D2/                              # Full interpreter implementation (C11)
+│   ├── include/                     # lexer.h  parser.h  ast.h  error.h
+│   │                                # value.h  checker.h  interpreter.h
+│   ├── src/                         # lexer.c  parser.c  ast.c  error.c  main.c
+│   │                                # value.c  checker.c  interpreter.c
 │   ├── tests/
-│   │   ├── valid/             # Programs that must be accepted
-│   │   └── invalid/           # Programs that must be rejected
+│   │   ├── valid/                   # Programs that must be accepted (8)
+│   │   └── invalid/                 # Programs that must be rejected (27)
+│   ├── ans                          # Compiled binary (not committed)
 │   ├── Makefile
 │   └── README.md
-├── D3/                        # Example programs & test report (LaTeX)
-├── D4/                        # AI usage journal
-├── D5/                        # Retrospective & self-assessment
-├── D6/                        # Contribution report
-├── CSE341_Project_Guidance_Files/
-└── Sebesta/                   # Concepts of Programming Languages (Sebesta)
+├── D3/                              # Example programs & test report
+│   ├── P1/                          # D3 P1 PDF + LaTeX
+│   ├── P2/                          # D3 P2 PDF + LaTeX
+│   ├── programs/                    # molar_mass_demo.ans  combustion_analysis.ans
+│   │                                # multi_reaction_survey.ans
+│   ├── malformed/                   # err1…err5 parser-error programs
+│   └── semantic/                    # sem1…sem4 type-error programs, rt1…rt2 runtime-error programs
+├── D4/                              # AI usage journal (per student)
+│   ├── 220104004926/
+│   │   ├── P1/                      # D4 P1 PDF + LaTeX
+│   │   └── P2/                      # D4 P2 PDF + LaTeX
+│   └── 220104004931/
+│       └── P1/                      # D4 P1 PDF + LaTeX
+├── D5/                              # Retrospective & self-assessment (per student)
+│   ├── 220104004926/
+│   │   ├── P1/                      # D5 P1 PDF + LaTeX
+│   │   └── P2/                      # D5 P2 PDF + LaTeX
+│   └── 220104004931/
+│       └── P1/                      # D5 P1 PDF + LaTeX
+├── D6/                              # Contribution report (pair)
+│   ├── P1/                          # D6 P1 PDF + LaTeX
+│   └── P2/                          # D6 P2 PDF + LaTeX
+├── Submission/
+│   ├── Part 1/                      # Ready-to-upload Part 1 files
+│   │   ├── 220104004926/
+│   │   └── 220104004931/
+│   └── Part 2/                      # Ready-to-upload Part 2 files
+│       ├── 220104004926/
+│       └── 220104004931/
+├── Archive/                         # Claude Code session JSONL logs
+├── CSE341_Project_Guidance_Files/   # Submission guide & project handout
+└── Sebesta_Course_Book/             # Concepts of Programming Languages (Sebesta)
 ```
 
 ---

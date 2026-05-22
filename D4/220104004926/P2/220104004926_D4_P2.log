@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.1.16)  22 MAY 2026 11:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.1.16)  22 MAY 2026 17:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**220104004926-220104004931_D3_P2.tex
-(./220104004926-220104004931_D3_P2.tex
+**220104004926_D4_P2.tex
+(./220104004926_D4_P2.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/base/article.cls
@@ -336,118 +336,48 @@ Package: titlesec 2025/01/04 v2.17 Sectioning titles
 \titlewidthlast=\dimen161
 \titlewidthfirst=\dimen162
 )
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/tools/tabularx.sty
-Package: tabularx 2023/12/11 v2.12a `tabularx' package (DPC)
-\TX@col@width=\dimen163
-\TX@old@table=\dimen164
-\TX@old@col=\dimen165
-\TX@target=\dimen166
-\TX@delta=\dimen167
-\TX@cols=\count290
-\TX@ftn=\toks26
-)
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/booktabs/booktabs.sty
-Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen168
-\lightrulewidth=\dimen169
-\cmidrulewidth=\dimen170
-\belowrulesep=\dimen171
-\belowbottomsep=\dimen172
-\aboverulesep=\dimen173
-\abovetopsep=\dimen174
-\cmidrulesep=\dimen175
-\cmidrulekern=\dimen176
-\defaultaddspace=\dimen177
-\@cmidla=\count291
-\@cmidlb=\count292
-\@aboverulesep=\dimen178
-\@belowrulesep=\dimen179
-\@thisruleclass=\count293
-\@lastruleclass=\count294
-\@thisrulewidth=\dimen180
-)
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/ragged2e/ragged2e.sty
-Package: ragged2e 2023/06/22 v3.6 ragged2e Package
-\CenteringLeftskip=\skip58
-\RaggedLeftLeftskip=\skip59
-\RaggedRightLeftskip=\skip60
-\CenteringRightskip=\skip61
-\RaggedLeftRightskip=\skip62
-\RaggedRightRightskip=\skip63
-\CenteringParfillskip=\skip64
-\RaggedLeftParfillskip=\skip65
-\RaggedRightParfillskip=\skip66
-\JustifyingParfillskip=\skip67
-\CenteringParindent=\skip68
-\RaggedLeftParindent=\skip69
-\RaggedRightParindent=\skip70
-\JustifyingParindent=\skip71
-)
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks26
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2025/02/06 v3.11 Customized lists
-\labelindent=\skip72
-\enit@outerparindent=\dimen181
+\labelindent=\skip58
+\enit@outerparindent=\dimen163
 \enit@toks=\toks27
 \enit@inbox=\box56
-\enit@count@id=\count295
-\enitdp@description=\count296
+\enit@count@id=\count290
+\enitdp@description=\count291
 )
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/upquote/upquote.sty
-Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
-tim
-
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/base/textcomp.sty
-Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
-))
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count297
-\lst@gtempboxa=\box57
-\lst@token=\toks28
-\lst@length=\count298
-\lst@currlwidth=\dimen182
-\lst@column=\count299
-\lst@pos=\count300
-\lst@lostspace=\dimen183
-\lst@width=\dimen184
-\lst@newlines=\count301
-\lst@lineno=\count302
-\lst@maxwidth=\dimen185
-
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/listings/lstpatch.sty
-File: lstpatch.sty 2024/09/23 1.10c (Carsten Heinz)
-)
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
-\c@lstnumber=\count303
-\lst@skipnumbers=\count304
-\lst@framebox=\box58
-)
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/listings/listings.cfg
-File: listings.cfg 2024/09/23 1.10c listings configuration
-))
-Package: listings 2024/09/23 1.10c (Carsten Heinz)
-
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 
-\f@nch@headwidth=\skip73
-\f@nch@offset@elh=\skip74
-\f@nch@offset@erh=\skip75
-\f@nch@offset@olh=\skip76
-\f@nch@offset@orh=\skip77
-\f@nch@offset@elf=\skip78
-\f@nch@offset@erf=\skip79
-\f@nch@offset@olf=\skip80
-\f@nch@offset@orf=\skip81
-\f@nch@height=\skip82
-\f@nch@footalignment=\skip83
-\f@nch@widthL=\skip84
-\f@nch@widthC=\skip85
-\f@nch@widthR=\skip86
-\@temptokenb=\toks29
+\f@nch@headwidth=\skip59
+\f@nch@offset@elh=\skip60
+\f@nch@offset@erh=\skip61
+\f@nch@offset@olh=\skip62
+\f@nch@offset@orh=\skip63
+\f@nch@offset@elf=\skip64
+\f@nch@offset@erf=\skip65
+\f@nch@offset@olf=\skip66
+\f@nch@offset@orf=\skip67
+\f@nch@height=\skip68
+\f@nch@footalignment=\skip69
+\f@nch@widthL=\skip70
+\f@nch@widthC=\skip71
+\f@nch@widthR=\skip72
+\@temptokenb=\toks28
 )
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
-1.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 63
+.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -455,43 +385,43 @@ File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/l3backend/l3backend-pdftex.d
 ef
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count305
-\l__pdf_internal_box=\box59
-) (./220104004926-220104004931_D3_P2.aux)
-\openout1 = `220104004926-220104004931_D3_P2.aux'.
+\l__color_backend_stack_int=\count292
+\l__pdf_internal_box=\box57
+) (./220104004926_D4_P2.aux)
+\openout1 = `220104004926_D4_P2.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Info: Redefining \microtypecontext on input line 111.
-Package microtype Info: Applying patch `item' on input line 111.
-Package microtype Info: Applying patch `toc' on input line 111.
-Package microtype Info: Applying patch `eqnum' on input line 111.
-Package microtype Info: Applying patch `footnote' on input line 111.
-Package microtype Info: Applying patch `verbatim' on input line 111.
-LaTeX Info: Redefining \microtypesetup on input line 111.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Info: Redefining \microtypecontext on input line 63.
+Package microtype Info: Applying patch `item' on input line 63.
+Package microtype Info: Applying patch `toc' on input line 63.
+Package microtype Info: Applying patch `eqnum' on input line 63.
+Package microtype Info: Applying patch `footnote' on input line 63.
+Package microtype Info: Applying patch `verbatim' on input line 63.
+LaTeX Info: Redefining \microtypesetup on input line 63.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 111.
+LaTeX Info: Redefining \showhyphens on input line 63.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -509,14 +439,14 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
 * h-part:(L,W,R)=(64.01869pt, 469.47049pt, 64.01869pt)
-* v-part:(T,H,B)=(64.01869pt, 717.00946pt, 64.01869pt)
+* v-part:(T,H,B)=(56.9055pt, 726.9681pt, 61.17325pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
 * \textwidth=469.47049pt
-* \textheight=717.00946pt
+* \textheight=726.9681pt
 * \oddsidemargin=-8.2513pt
 * \evensidemargin=-8.2513pt
-* \topmargin=-45.2513pt
+* \topmargin=-52.36449pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=11.0pt
@@ -536,27 +466,25 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count306
-\scratchdimen=\dimen186
-\scratchbox=\box60
-\nofMPsegments=\count307
-\nofMParguments=\count308
-\everyMPshowfont=\toks30
-\MPscratchCnt=\count309
-\MPscratchDim=\dimen187
-\MPnumerator=\count310
-\makeMPintoPDFobject=\count311
-\everyMPtoPDFconversion=\toks31
+\scratchcounter=\count293
+\scratchdimen=\dimen164
+\scratchbox=\box58
+\nofMPsegments=\count294
+\nofMParguments=\count295
+\everyMPshowfont=\toks29
+\MPscratchCnt=\count296
+\MPscratchDim=\dimen165
+\MPnumerator=\count297
+\makeMPintoPDFobject=\count298
+\everyMPtoPDFconversion=\toks30
 )
-Package hyperref Info: Link coloring ON on input line 111.
- (./220104004926-220104004931_D3_P2.out)
-(./220104004926-220104004931_D3_P2.out)
+Package hyperref Info: Link coloring ON on input line 63.
+ (./220104004926_D4_P2.out) (./220104004926_D4_P2.out)
 \@outlinefile=\write3
-\openout3 = `220104004926-220104004931_D3_P2.out'.
+\openout3 = `220104004926_D4_P2.out'.
 
-\c@lstlisting=\count312
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 1
-20.
+LaTeX Font Info:    Trying to load font information for T1+lmss on input line 6
+8.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -565,38 +493,56 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmss' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-26.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 7
+3.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-26.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 7
+3.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-126.
+73.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-126.
+73.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 126.
+(Font)              <9> on input line 73.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 126.
+(Font)              <6> on input line 73.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 126.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-40.
+(Font)              <5> on input line 73.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 73.
+
+
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 73.
+
+
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+)
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 8
+6.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -605,112 +551,114 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <9> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 179.
-
-
-Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 179.
-
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 189.
+(Font)              <10.95> on input line 91.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 189.
-
-Underfull \hbox (badness 10000) in alignment at lines 209--209
-[][][][][] 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
+(Font)              <8> on input line 91.
 
 
 [1
 
 {/usr/local/texlive/2025basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/us
 r/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/t
-exlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texliv
-e/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/202
-5basic/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 232.
+exlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
+Underfull \hbox (badness 2653) in paragraph at lines 105--105
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / 5fb50579 -[] 254d -[]
+ []
 
-Underfull \hbox (badness 1163) in paragraph at lines 253--259
-\T1/lmr/m/n/10.95 (+20) across loop it-er-a-tions; \T1/lmtt/m/n/10.95 character
- \T1/lmr/m/n/10.95 (+20) lit-eral; \T1/lmtt/m/n/10.95 string \T1/lmr/m/n/10.95 
-(+20) lit-eral; \T1/lmtt/m/n/10.95 for\T1/lmr/m/n/10.95 (+20) -in over a Re-ac-
-tion-Side in
+
+Underfull \hbox (badness 2653) in paragraph at lines 119--119
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / 37e46d72 -[] c73b -[]
  []
 
 
 
-[2{/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-381.
-
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmtt' (encoding: TS1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-Package microtype Info: Character `texttrademark ' is missing
-(microtype)             in font `TS1/lmtt/m/n/8'.
-(microtype)             Ignoring protrusion settings for this character.
-
-
-[3{/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-Overfull \hbox (1.69853pt too wide) in paragraph at lines 423--423
-[]|[]\T1/lmr/bx/n/10 (-20) Rejected[]\T1/lmr/m/n/10 (-20) , 
+[2]
+Underfull \hbox (badness 2653) in paragraph at lines 133--133
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / d187f89a -[] c178 -[]
  []
 
 
-Overfull \hbox (1.69853pt too wide) in paragraph at lines 423--423
-[]|[]\T1/lmr/bx/n/10 (-20) Rejected[]\T1/lmr/m/n/10 (-20) , 
+
+[3]
+Underfull \hbox (badness 2653) in paragraph at lines 147--147
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / d187f89a -[] c178 -[]
  []
 
 
 
 [4]
+Underfull \hbox (badness 2653) in paragraph at lines 161--161
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / d187f89a -[] c178 -[]
+ []
 
-[5] (./220104004926-220104004931_D3_P2.aux)
+
+Underfull \hbox (badness 2653) in paragraph at lines 175--175
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / 1221c730 -[] cc2e -[]
+ []
+
+
+
+[5]
+Underfull \hbox (badness 2653) in paragraph at lines 189--189
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / 597d86e4 -[] d5ec -[]
+ []
+
+
+
+[6]
+Underfull \hbox (badness 2653) in paragraph at lines 203--203
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / 597d86e4 -[] d5ec -[]
+ []
+
+
+
+[7]
+Underfull \hbox (badness 2653) in paragraph at lines 237--237
+[]\T1/lmr/bx/n/10.95 (+20) Session log. [][]$\T1/lmtt/m/n/10.95 /Users / yhcele
+bi / Desktop / ans / Archive / YHC / claude _ code / 597d86e4 -[] d5ec -[]
+ []
+
+
+
+[8] (./220104004926_D4_P2.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-Package rerunfilecheck Info: File `220104004926-220104004931_D3_P2.out' has not
- changed.
-(rerunfilecheck)             Checksum: 9F1E99F103AE464ADD14FECFDCAA23E0;2825.
+Package rerunfilecheck Info: File `220104004926_D4_P2.out' has not changed.
+(rerunfilecheck)             Checksum: 3892BF7BDDB726B6F7C9BFBCA78824E5;1338.
  ) 
 Here is how much of TeX's memory you used:
- 15780 strings out of 474662
- 251491 string characters out of 5751109
- 773030 words of memory out of 5000000
- 38409 multiletter control sequences out of 15000+600000
- 663720 words of font info for 172 fonts, out of 8000000 for 9000
+ 14310 strings out of 474662
+ 228559 string characters out of 5751109
+ 684279 words of memory out of 5000000
+ 36982 multiletter control sequences out of 15000+600000
+ 622485 words of font info for 165 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 75i,15n,79p,1028b,2020s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,11n,79p,1015b,581s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></u
-sr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/lo
-cal/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/t
-exlive/2025basic/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive
-/2025basic/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025b
-asic/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025basic/te
-xmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2025basic/texmf-dis
-t/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts
-/type1/public/lm/lmri10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type
-1/public/lm/lmssbx10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/p
-ublic/lm/lmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public
-/lm/lmsy9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lm
-tk10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt10.
-pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></
-usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on 220104004926-220104004931_D3_P2.pdf (5 pages, 347587 bytes).
+sr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/loc
+al/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/tex
+live/2025basic/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/20
+25basic/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2025bas
+ic/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2025basic/
+texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2025basic/texmf
+-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2025basic/texmf-dist/
+fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts
+/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on 220104004926_D4_P2.pdf (8 pages, 238595 bytes).
 PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
- 152 compressed objects within 2 object streams
- 37 named destinations out of 1000 (max. 500000)
- 65105 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 148 PDF objects out of 1000 (max. 8388607)
+ 116 compressed objects within 2 object streams
+ 9 named destinations out of 1000 (max. 500000)
+ 33873 words of extra memory for PDF output out of 35830 (max. 10000000)
 
