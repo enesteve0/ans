@@ -265,10 +265,10 @@ Reflection & The useful part was not just the final grammar. The iteration expos
 \section{Part 2 Continuation Entries}
 
 \begin{journalentry}
-Entry \# & 1 of 9 \\ \hline
+Entry \# & 1 of 7 \\ \hline
 Date & 2026-05-10 \\ \hline
 Phase & Planning / Requirements \\ \hline
-AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
+AI tool & ChatGPT (GPT-4o) \\ \hline
 Goal & Turn the Part 2 handout and submission guide into a concrete work plan before changing the project. \\ \hline
 Prompt & ``Read the CSE341\_Project\_Guidance\_Files folder files accordingly and properly and then understand where we are. We have finished Part 1 and now we have to work on Part 2 and make this assignment finished done absolute. Plan that accordingly and properly.'' \\ \hline
 Response (key part) & Codex identified Part 2 as a full revised submission: final D1, D2 type checker and interpreter, executed D3 examples, continued D4 journals, D5 retrospectives, and D6 contribution report. It separated individual files (\code{D1}, \code{D4}, \code{D5}) from shared pair files (\code{D2}, \code{D3}, \code{D6}). \\ \hline
@@ -279,24 +279,10 @@ Reflection & This helped me turn a broad deadline into a checklist. The importan
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 2 of 9 [EXPERIMENT E3] \\ \hline
-Date & 2026-05-10 \\ \hline
-Phase & Implementation / Type Checker \\ \hline
-AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
-Goal & Ask AI to implement the Part 2 type-checker/interpreter work and then test its code on known cases. \\ \hline
-Prompt & ``Implement the plan.'' \\ \hline
-Response (key part) & Codex added the Part 2 semantic layer, command-line checking/execution modes, runtime value handling, and tests. In the same session it ran D3 check/run commands and found real failures before I accepted the code. \\ \hline
-Accepted & I accepted the two-stage idea: parse first, then type-check, then interpret only if semantic checks pass. I also kept the negative-test strategy: known type errors, known runtime errors, and the three D3 examples. \\ \hline
-Rejected / modified & I did not trust the generated implementation by inspection. The first version exposed problems: D3 programs failed around expression statements, and character equality needed explicit handling. Those were fixed only after running known inputs. \\ \hline
-Errors you caught & This is the required E3 case. The tests caught parser/expression-statement failures and missing comparison behavior. If I had only read the generated code, those bugs would have stayed hidden until D3 execution. \\ \hline
-Reflection & AI helped with a large C feature quickly, but the code still needed tough tests. The most important part was using inputs where I already knew the expected result. \\ \hline
-\end{journalentry}
-
-\begin{journalentry}
-Entry \# & 3 of 9 \\ \hline
+Entry \# & 2 of 7 \\ \hline
 Date & 2026-05-13 \\ \hline
 Phase & Exam Preparation / Understanding \\ \hline
-AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
+AI tool & ChatGPT (GPT-4o) \\ \hline
 Goal & Prepare for the personalized written exam by studying the actual submitted PDFs and C code. \\ \hline
 Prompt & ``I need to be ready for the Part 1 exam and I need you to teach me everything about my submission like I know nothing about it. I'm Enes btw in case you need to read according to that.'' \\ \hline
 Response (key part) & Codex read the submitted PDFs and code, then made an Enes-specific exam-prep document around D1, D2 lexer/parser code, D3 tests, and Sebesta chapters. It focused on parser flow, AST dump, token handling, and the difference between Part 1 parsing and Part 2 semantics. \\ \hline
@@ -307,7 +293,7 @@ Reflection & This session showed me that AI tutoring is only useful when it is t
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 4 of 9 \\ \hline
+Entry \# & 3 of 7 \\ \hline
 Date & 2026-05-19 \\ \hline
 Phase & Design / Operational Semantics \\ \hline
 AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
@@ -321,7 +307,7 @@ Reflection & I learned that formal logic-style operational semantics are clean b
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 5 of 9 \\ \hline
+Entry \# & 4 of 7 \\ \hline
 Date & 2026-05-19 \\ \hline
 Phase & Design / Operational Semantics \\ \hline
 AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
@@ -335,7 +321,7 @@ Reflection & The AI gave the right general shape, but not enough precision. In s
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 6 of 9 \\ \hline
+Entry \# & 5 of 7 \\ \hline
 Date & 2026-05-19 \\ \hline
 Phase & Design Review / Semantics \\ \hline
 AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
@@ -349,7 +335,7 @@ Reflection & This session was useful because the AI acted more like a reviewer t
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 7 of 9 [EXPERIMENT E2] \\ \hline
+Entry \# & 6 of 7 [EXPERIMENT E2] \\ \hline
 Date & 2026-05-19 \\ \hline
 Phase & Type System \\ \hline
 AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
@@ -363,7 +349,7 @@ Reflection & E2 helped me understand why Sebesta's type-equivalence terms matter
 \end{journalentry}
 
 \begin{journalentry}
-Entry \# & 8 of 9 \\ \hline
+Entry \# & 7 of 7 \\ \hline
 Date & 2026-05-20 \\ \hline
 Phase & Expressions / Assignment \\ \hline
 AI tool & ChatGPT web app, GPT-5.5 Thinking \\ \hline
@@ -374,20 +360,6 @@ Accepted & I kept the precedence/associativity explanation, left-to-right operan
 Rejected / modified & The response made assignment targets look broader than the final checker allows. I narrowed the final description so read-only values, formula counts, record fields, and function-call results cannot be assigned. \\ \hline
 Errors you caught & The AI treated all postfix-looking expressions as possible storage locations. I caught this by comparing the output with the implementation goal: only mutable locations should be assignable. \\ \hline
 Reflection & This made me more careful about the difference between syntax and storage. An expression can parse correctly and still not be writable. \\ \hline
-\end{journalentry}
-
-\begin{journalentry}
-Entry \# & 9 of 9 \\ \hline
-Date & 2026-05-22 \\ \hline
-Phase & Submission Audit / Enes Individual Files \\ \hline
-AI tool & OpenAI Codex, GPT-5 coding agent \\ \hline
-Goal & Check the almost-final submission folder and make Enes's individual Part 2 upload complete without editing Hamza's files. \\ \hline
-Prompt & ``The current structures and files for the project are almost the final ones, so check deeply and tell me for the submission what things are left and if anything is wrong that needs fixing. Then create a detailed plan for me Enes, make it ready, and do not touch Hamza's stuff.'' \\ \hline
-Response (key part) & Codex found that Enes's submission folder had only \code{220104004931\_D1\_P2.pdf}; Enes \code{D4\_P2} and \code{D5\_P2} were missing. It also found the D1 PDF was 13 pages while the handout limit was 8--12 pages. \\ \hline
-Accepted & I accepted the strict boundary: only Enes D1/D4/D5 and Enes's submission folder should change. The shared pair package and Hamza's individual documents stay outside this fix. \\ \hline
-Rejected / modified & I did not allow a broad ``fix everything'' pass, because that could modify Hamza's upload folder or shared pair artifacts without permission. \\ \hline
-Errors you caught & The audit caught a packaging-level issue that would not appear from reading D1 or D2 alone: Enes's Teams upload set was incomplete even though the shared project files looked mostly ready. \\ \hline
-Reflection & This final session reminded me that submission readiness is file-specific. A deliverable can be technically good but still not ready if my student folder does not contain the correct PDFs. \\ \hline
 \end{journalentry}
 
 \end{document}
