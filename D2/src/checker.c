@@ -108,6 +108,20 @@ static char *list_element_type(const char *list_type) {
     return out;
 }
 
+static int type_is_quantity(const char *type) {
+    if (!type) return 0;
+    return strncmp(type, "quantity:", 9) == 0;
+}
+
+static char *make_quantity_type(const char *unit) {
+    const char *u = unit ? unit : "unknown";
+    size_t len = strlen(u) + 10; /* "quantity:" (9) + unit + '\0' (1) */
+    char *out = malloc(len);
+    snprintf(out, len, "quantity:%s", u);
+    return out;
+}
+
+
 /* ================================================================
    Lookup helpers
    ================================================================ */
@@ -260,7 +274,7 @@ static const char *check_call(const AstNode *call, TypeEnv *tenv) {
         }
         const char *arg_type = check_expr(call->children[1], tenv);
         if (strcmp(arg_type, "number") != 0 &&
-            strcmp(arg_type, "quantity") != 0 &&
+            !type_is_quantity(arg_type) &&
             strcmp(arg_type, "unknown") != 0) {
             error_at(call->children[1]->line, 0,
                 "mol() expects number or quantity, got %s", arg_type);
@@ -300,7 +314,7 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
         case ND_STRING:   return "string";
         case ND_CHAR:     return "char";
         case ND_FORMULA:  return "formula";
-        case ND_QUANTITY: return "quantity";
+        case ND_QUANTITY: return make_quantity_type(node->text);
         case ND_LIST: {
             if (node->n_children == 0) {
                 error_at(node->line, 0,
@@ -353,7 +367,18 @@ static const char *check_expr(const AstNode *node, TypeEnv *tenv) {
                 return "number";
             }
             /* Comparison */
-            (void)ltype; (void)rtype;
+            if (strcmp(op, "==") == 0 || strcmp(op, "!=") == 0 ||
+                strcmp(op, "<") == 0 || strcmp(op, "<=") == 0 ||
+                strcmp(op, ">") == 0 || strcmp(op, ">=") == 0) {
+                if (strcmp(ltype, "unknown") != 0 && strcmp(rtype, "unknown") != 0) {
+                    if (strcmp(ltype, rtype) != 0) {
+                        error_at(node->line, 0,
+                            "comparison type mismatch: left is %s, right is %s",
+                            ltype, rtype);
+                    }
+                }
+                return "bool";
+            }
             return "bool";
         }
 

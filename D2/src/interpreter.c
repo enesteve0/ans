@@ -420,21 +420,52 @@ static Value eval_expr(const AstNode *node, Env *env) {
                     return make_bool(left.boolean == right.boolean);
                 if (left.type == VAL_STRING && right.type == VAL_STRING)
                     return make_bool(strcmp(left.string, right.string) == 0);
+                if (left.type == VAL_CHAR && right.type == VAL_CHAR)
+                    return make_bool(left.ch == right.ch);
+                if (left.type == VAL_QUANTITY && right.type == VAL_QUANTITY) {
+                    if (left.quantity.unit != right.quantity.unit) {
+                        runtime_error(node->line, "cannot compare quantities with different units: %s vs %s",
+                            unit_name(left.quantity.unit), unit_name(right.quantity.unit));
+                    }
+                    return make_bool(left.quantity.value == right.quantity.value);
+                }
                 return make_bool(0);
             }
             if (strcmp(op, "!=") == 0) {
                 if (left.type == VAL_NUMBER && right.type == VAL_NUMBER)
                     return make_bool(left.number != right.number);
+                if (left.type == VAL_BOOL && right.type == VAL_BOOL)
+                    return make_bool(left.boolean != right.boolean);
+                if (left.type == VAL_STRING && right.type == VAL_STRING)
+                    return make_bool(strcmp(left.string, right.string) != 0);
+                if (left.type == VAL_CHAR && right.type == VAL_CHAR)
+                    return make_bool(left.ch != right.ch);
+                if (left.type == VAL_QUANTITY && right.type == VAL_QUANTITY) {
+                    if (left.quantity.unit != right.quantity.unit) {
+                        runtime_error(node->line, "cannot compare quantities with different units: %s vs %s",
+                            unit_name(left.quantity.unit), unit_name(right.quantity.unit));
+                    }
+                    return make_bool(left.quantity.value != right.quantity.value);
+                }
                 return make_bool(1);
             }
-            if (left.type != VAL_NUMBER || right.type != VAL_NUMBER) {
-                runtime_error(node->line,
-                    "operator '%s' requires numbers", op);
+            if (left.type == VAL_NUMBER && right.type == VAL_NUMBER) {
+                if (strcmp(op, "<")  == 0) return make_bool(left.number <  right.number);
+                if (strcmp(op, "<=") == 0) return make_bool(left.number <= right.number);
+                if (strcmp(op, ">")  == 0) return make_bool(left.number >  right.number);
+                if (strcmp(op, ">=") == 0) return make_bool(left.number >= right.number);
+            } else if (left.type == VAL_QUANTITY && right.type == VAL_QUANTITY) {
+                if (left.quantity.unit != right.quantity.unit) {
+                    runtime_error(node->line, "cannot compare quantities with different units: %s vs %s",
+                        unit_name(left.quantity.unit), unit_name(right.quantity.unit));
+                }
+                if (strcmp(op, "<")  == 0) return make_bool(left.quantity.value <  right.quantity.value);
+                if (strcmp(op, "<=") == 0) return make_bool(left.quantity.value <= right.quantity.value);
+                if (strcmp(op, ">")  == 0) return make_bool(left.quantity.value >  right.quantity.value);
+                if (strcmp(op, ">=") == 0) return make_bool(left.quantity.value >= right.quantity.value);
+            } else {
+                runtime_error(node->line, "operator '%s' requires numbers or quantities of the same unit", op);
             }
-            if (strcmp(op, "<")  == 0) return make_bool(left.number <  right.number);
-            if (strcmp(op, "<=") == 0) return make_bool(left.number <= right.number);
-            if (strcmp(op, ">")  == 0) return make_bool(left.number >  right.number);
-            if (strcmp(op, ">=") == 0) return make_bool(left.number >= right.number);
             /* Arithmetic */
             if (strcmp(op, "+") == 0) return make_number(left.number + right.number);
             if (strcmp(op, "-") == 0) return make_number(left.number - right.number);

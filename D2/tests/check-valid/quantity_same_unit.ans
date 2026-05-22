@@ -1,0 +1,5 @@
+let amount1 = 5.0 mol;
+let amount2 = 10.0 mol;
+let list = [amount1, amount2];
+let eq = amount1 == amount2;
+let lt = amount1 < amount2;
