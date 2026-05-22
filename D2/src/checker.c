@@ -691,10 +691,11 @@ static void parse_param_text(const char *text,
     }
 }
 
-static void check_function_decl(const AstNode *decl) {
+static void check_function_decl(const AstNode *decl, TypeEnv *global_tenv) {
     /* Parameters: all children except last (body block) */
     int n_params = decl->n_children - 1;
-    TypeEnv *inner = tenv_new(NULL); /* function scope; no parent needed for checker */
+    /* Parent = global_tenv so top-level lets are visible inside functions */
+    TypeEnv *inner = tenv_new(global_tenv);
 
     for (int i = 0; i < n_params; i++) {
         const AstNode *param = decl->children[i];
@@ -822,7 +823,7 @@ static void validate_all(const AstNode *prog) {
                 tenv_bind(global_tenv, node->text, "reaction");
                 break;
             case ND_FUNCTION_DECL:
-                check_function_decl(node);
+                check_function_decl(node, global_tenv);
                 tenv_bind(global_tenv, node->text, "function");
                 break;
             case ND_VAR_DECL: {

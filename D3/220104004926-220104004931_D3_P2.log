@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.1.16)  22 MAY 2026 00:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.1.16)  22 MAY 2026 11:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -672,9 +672,6 @@ Overfull \hbox (1.69853pt too wide) in paragraph at lines 423--423
  []
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
 
 [4]
 
@@ -710,7 +707,7 @@ ublic/lm/lmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public
 tk10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt10.
 pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></
 usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on 220104004926-220104004931_D3_P2.pdf (5 pages, 347248 bytes).
+Output written on 220104004926-220104004931_D3_P2.pdf (5 pages, 347587 bytes).
 PDF statistics:
  196 PDF objects out of 1000 (max. 8388607)
  152 compressed objects within 2 object streams

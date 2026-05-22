@@ -39,7 +39,7 @@ let name = "Hydrogen";
 let char = 'H';
 let elements = [H, O, C];
 let n = 21.2;
-let list = [1, "two", 3.45, 4, 5, water, methane.formula, co2.name, H];
+let list = [water, methane, co2, oxygen];
 
 // Function declaration for computing yield of a compound in a reaction
 function compute_yield(reaction r, compound c) {
@@ -77,15 +77,15 @@ reaction combustion2 {
 
 // Stoichiometric query
 molar_mass(water);
-compute_yield(combustion, CH4);
+compute_yield(combustion, methane);
 
 // if statements
-if (compute_yield(combustion, 5.0 mol, CH4) > 0) {
-    print "The yield of CH4 is positive, so combustion is possible.";
+if (compute_yield(combustion, methane) > 0.0) {
+    print "The yield is positive, so combustion is possible.";
 }
-elif (compute_yield(combustion, 5.0 mol, CH4) == 0) {
-    print "The yield of CH4 is zero, so combustion is not possible.";
+elif (compute_yield(combustion, methane) == 0.0) {
+    print "The yield is zero.";
 }
 else {
-    print "The yield of CH4 is negative, so combustion is not possible.";
+    print "No product formed.";
 }

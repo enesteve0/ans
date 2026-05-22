@@ -711,13 +711,11 @@ static AstNode *parse_statement(Parser *p) {
             return aug;
         }
 
-        /* finish as comparison (lhs may be just the start of a longer expr) */
-        /* We already consumed postfix — wrap into comparison from there */
-        /* Handle binary comparisons / additive on top of lhs */
+        /* expression statement — rebuild full precedence from the already-consumed postfix */
         AstNode *expr = lhs;
 
-        /* additive continuation */
-        while (check(p, TOK_PLUS) || check(p, TOK_MINUS)) {
+        /* multiplicative (higher precedence first) */
+        while (check(p, TOK_STAR) || check(p, TOK_SLASH)) {
             Token op = p->current; advance(p);
             AstNode *bin = ast_new(ND_BINARY, op.line);
             ast_set_text(bin, op.start, op.length);
@@ -725,15 +723,13 @@ static AstNode *parse_statement(Parser *p) {
             ast_add_child(bin, parse_unary(p));
             expr = bin;
         }
-        /* multiplicative was already consumed inside postfix/unary —
-           but we entered via parse_postfix, not parse_multiplicative.
-           Handle * and / continuation here. */
-        while (check(p, TOK_STAR) || check(p, TOK_SLASH)) {
+        /* additive — right operand via parse_multiplicative for correct precedence */
+        while (check(p, TOK_PLUS) || check(p, TOK_MINUS)) {
             Token op = p->current; advance(p);
             AstNode *bin = ast_new(ND_BINARY, op.line);
             ast_set_text(bin, op.start, op.length);
             ast_add_child(bin, expr);
-            ast_add_child(bin, parse_unary(p));
+            ast_add_child(bin, parse_multiplicative(p));
             expr = bin;
         }
         /* comparison */
@@ -844,8 +840,9 @@ static AstNode *parse_top_level(Parser *p) {
             return aug;
         }
 
-        /* expression statement — finish off higher-precedence levels */
+        /* expression statement — rebuild full precedence from the already-consumed postfix */
         AstNode *expr = lhs;
+        /* multiplicative (higher precedence first) */
         while (check(p, TOK_STAR) || check(p, TOK_SLASH)) {
             Token op = p->current; advance(p);
             AstNode *bin = ast_new(ND_BINARY, op.line);
@@ -854,12 +851,13 @@ static AstNode *parse_top_level(Parser *p) {
             ast_add_child(bin, parse_unary(p));
             expr = bin;
         }
+        /* additive — right operand via parse_multiplicative for correct precedence */
         while (check(p, TOK_PLUS) || check(p, TOK_MINUS)) {
             Token op = p->current; advance(p);
             AstNode *bin = ast_new(ND_BINARY, op.line);
             ast_set_text(bin, op.start, op.length);
             ast_add_child(bin, expr);
-            ast_add_child(bin, parse_unary(p));
+            ast_add_child(bin, parse_multiplicative(p));
             expr = bin;
         }
         if (check(p, TOK_EQ_EQ) || check(p, TOK_BANG_EQ) ||

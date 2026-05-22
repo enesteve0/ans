@@ -436,9 +436,8 @@ D3/semantic/rt2_index_out_of_range.ans:12: runtime error: list index 5 out of ra
 \section{D1 Consistency Checklist}
 \sectionrule
 
-\begin{table}[h]
 \vspace{2pt}
-\centering\small
+\small
 \rowcolors{2}{anscodebg}{white}
 \begin{tabularx}{\textwidth}{@{} L{3.8cm} L{1.0cm} Y @{}}
 \toprule
@@ -458,10 +457,10 @@ Strong typing, no coercion &
 §4.5 &
 \code{sem4}: wrong arg count; \code{sem2}: undeclared element; type mismatches
 reported, not coerced. \\
-Name equivalence for domain types &
+Kind-based type checking for domain types &
 §4.5 &
-Each \code{compound} is a distinct named type; formula equality does not
-imply type equality. \\
+All \code{compound} values share the type \code{compound}; typed parameters accept
+any compound regardless of formula. Formula equality is not type equality. \\
 Reaction balance verification &
 §4.4 &
 \code{sem1} rejected at check time; \code{combustion} balance verified at
@@ -486,7 +485,7 @@ Index-out-of-range error &
 \code{rt2}: detected at run time; file, line, index, valid range. Exit 1. \\
 \bottomrule
 \end{tabularx}
-\end{table}
+\normalsize
 
 % =====================================================================
 \section{Conclusion}
