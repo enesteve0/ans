@@ -1,0 +1,201 @@
+% =====================================================================
+% CSE 341: Concepts of Programming Languages
+% ANS Language - Exam Preparation Guide (Part 2)
+% Student: 220104004931 Enes Özkan
+% Compile with: pdflatex 220104004931_Part2_ExamPrep.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage[a4paper,margin=2.0cm,top=2.0cm,bottom=2.15cm]{geometry}
+
+\usepackage[table]{xcolor}
+\definecolor{ansblue}{HTML}{1E3A8A}
+\definecolor{anscaption}{HTML}{6B7280}
+\definecolor{anscodebg}{HTML}{F9FAFB}
+\definecolor{ansborder}{HTML}{E5E7EB}
+\usepackage[colorlinks=true, linkcolor=ansblue, urlcolor=ansblue,
+            citecolor=ansblue, pdfborder={0 0 0}]{hyperref}
+
+\usepackage{listings}
+\lstset{
+    backgroundcolor=\color{anscodebg},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{ansborder},
+    captionpos=b,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{green!50!black},
+    showstringspaces=false
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize\color{anscaption}%
+  CSE 341: ANS Part 2 Exam Prep \(\cdot\)
+  Student 220104004931 Enes Özkan}
+\fancyfoot[R]{\footnotesize\color{anscaption}Page \thepage}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.08}
+\setcounter{secnumdepth}{1}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+\hypersetup{
+  pdftitle  = {ANS Exam Prep (Part 2)},
+  pdfauthor = {220104004931 Enes Özkan},
+  pdfsubject= {CSE 341 Exam Preparation},
+}
+
+\begin{document}
+
+\begin{center}
+  {\footnotesize\color{anscaption}CSE 341: Concepts of Programming Languages\par}
+  \vspace{3pt}
+  {\Large\bfseries\sffamily ANS: Alchemist's Notation Script\par}
+  \vspace{3pt}
+  {\large Part 2 Exam Preparation Guide\par}
+  \vspace{6pt}
+  {\footnotesize\color{anscaption}
+    Student: 220104004931 Enes Özkan \(\cdot\) Spring 2026 \(\cdot\) Gebze Technical University\par}
+\end{center}
+\vspace{10pt}
+
+\section*{Overview}
+This personalized exam preparation guide bridges the practical implementation of the \textbf{ANS Language} with the theoretical concepts detailed in Robert Sebesta's \textit{Concepts of Programming Languages}. 
+Focusing on the Part 2 scope, it connects your specific design decisions natively back to Sebesta Chapters 3, 5, 6, and 7.
+
+% =========================================================
+\section{Names, Bindings, Scope, and Lifetime (Sebesta Ch. 5)}
+\subsection*{Theoretical Foundations}
+\begin{itemize}
+    \item \textbf{Binding:} An association between an attribute and an entity, such as between a variable and its type or value, or between an operation and a symbol.
+    \item \textbf{Static Scoping:} The scope of a variable is determined prior to execution, strictly based on the spatial layout of the code (blocks/nested structures).
+    \item \textbf{Lifetime:} The period during which a variable is bound to a specific memory location.
+\end{itemize}
+
+\subsection*{ANS Implementation Rules}
+\begin{itemize}
+    \item \textbf{Legal Identifiers:} Must match \code{[a-z\_][A-Za-z0-9\_]*}. \textit{Note:} Identifiers are strictly case-sensitive. All items starting with an uppercase letter are lexed as \code{FORMULA\_LITERAL}s (e.g., \code{H2O}), separating chemistry formulas from variables seamlessly.
+    \item \textbf{Compile-Time vs. Run-Time Bindings:} ANS strongly favors compile-time bindings. Formula validity (ensuring \code{H2O} is composed of declared \code{H} and \code{O} elements), Type Inference (\code{let n = 21.2} $\rightarrow$ Float), and Static Scope walking all occur prior to execution. Value assignments (\code{mass += ...}) occur at run-time.
+    \item \textbf{Shadowing and Scope:} ANS supports standard nested-block static scoping. \code{let} inner-scope declarations can shadow outer variables, which the semantic checker emits warnings for.
+\end{itemize}
+
+% =========================================================
+\section{Type System (Sebesta Ch. 6)}
+\subsection*{Theoretical Foundations}
+\begin{itemize}
+    \item \textbf{Static vs. Dynamic Typing:} Static requires type checks at compile-time; Dynamic resolves types during runtime execution.
+    \item \textbf{Strong Typing:} Language aggressively enforces type consistency, prohibiting unsupported inter-type interactions without explicit conversions.
+\end{itemize}
+
+\subsection*{ANS Implementation Rules}
+\begin{itemize}
+    \item \textbf{Strong \& Static:} ANS relies completely on a statically checked, strongly typed architecture. No implicit coercions (e.g., between Strings and Numbers) are permitted.
+    \item \textbf{Primitive Types:} ANS recognizes four distinct primitives: \code{Number} (Double precision, no distinct integer type), \code{Quantity} (number + physical unit like \code{kJ/mol}), \code{String}, and \code{Character}.
+    \item \textbf{Domain Specific Types:} Beyond typical primitives, ANS natively recognizes \code{Element}, \code{Compound}, and \code{Reaction} natively.
+\end{itemize}
+
+% =========================================================
+\section{Expressions and Assignment (Sebesta Ch. 7)}
+\subsection*{Theoretical Foundations}
+\begin{itemize}
+    \item \textbf{Operator Precedence:} The pre-defined rules specifying the order of evaluation when expressions contain multiple operators.
+    \item \textbf{Side Effects:} Occur when an expression modifies state outside its local scope or parameters. 
+    \item \textbf{Assignment Statements:} The fundamental mechanism of imperative programming for mutating machine state.
+\end{itemize}
+
+\subsection*{ANS Implementation Rules}
+\begin{itemize}
+    \item \textbf{Expression Separation:} ANS strictly separates expressions from assignments. Operations do not cause implicit side effects; assignment is deterministic.
+    \item \textbf{Domain Expressions:} First-class language expressions include computations on formula literals (\code{CH4 + 2*O2}).
+    \item \textbf{Target Verification:} The compiler validates assignment targets. Operator variants (\code{+=}) must align securely with the declared variable types.
+\end{itemize}
+
+% =========================================================
+\section{Operational Semantics (Sebesta Ch. 3)}
+\subsection*{Theoretical Foundations}
+\begin{itemize}
+    \item \textbf{Operational Semantics:} Describes the meaning of a language construct by translating it into effects on an abstract machine state.
+\end{itemize}
+
+\subsection*{ANS Implementation Rules}
+\begin{itemize}
+    \item \textbf{Abstract State Machine:} ANS maintains a runtime state containing the global chemistry table, runtime store, and lexical context.
+    \item \textbf{Evaluation Step:} Construct executions, like the \code{for-in} loop iterating predictably through chemistry \code{Formula} objects, map directly back to operational steps (query count, increment stack size) inside the interpreter architecture. 
+    \item \textbf{Reaction checking (\code{check = balanced}):} Analysed before execution as a semantic constraint mapped sequentially element-by-element on reacting components.
+\end{itemize}
+
+% =========================================================
+\newpage
+\section*{Practice Questions}
+\textit{Attempt these questions using Sebesta's core terminology as you analyze the ANS architecture.}
+
+\vspace{10pt}
+\textbf{Question 1: Binding Time (Ch. 5)} \\
+Analyze the following ANS code snippet:
+\begin{lstlisting}[language=C]
+element O { atomic_mass = 15.999, valence = 2, symbol = "O" };
+compound oxygen { formula = O2, name = "Oxygen" };
+\end{lstlisting}
+Identify \textbf{two} compile-time bindings and \textbf{one} run-time binding that occur during the evaluation of these declarations within the ANS lifecycle.
+
+\textit{Answer Sketch:} 
+\begin{itemize}
+    \item Compile-time: 1) Resolving that the lexeme \code{O2} identifies a \code{FORMULA\_LITERAL}. 2) Binding the identifier \code{oxygen} to the \code{Compound} type space.
+    \item Run-time: Constructing the object data string \code{"Oxygen"} in the runtime store.
+\end{itemize}
+
+\vspace{10pt}
+\textbf{Question 2: Static Scoping \& Variables (Ch. 5)} \\
+Why does ANS emit a semantic warning when an inner block variable declared with \code{let} shadows an outer scope definition? Connect this to Sebesta's definition of referential environment.
+
+\textit{Answer Sketch:} The referential environment of a statement is the collection of all names visible at that statement. Because ANS enforces static scoping, shadowing intercepts the reference path, potentially masking chemistry logic bugs. The warning prevents silent bugs in formula loops without restricting standard procedural logic.
+
+\vspace{10pt}
+\textbf{Question 3: Type Systems \& Equivalence (Ch. 6)} \\
+In ANS, the numbers \code{20} and \code{20.0} are parsed and matched without requiring type-casting. Contrast this design decision against a system relying on strict coercion rules. Does this make ANS weakly typed?
+
+\textit{Answer Sketch:} No, ANS remains Strong statically typed. ANS inherently implements all Numbers as IEEE-754 double precision values to naturally map to chemistry atomic masses and molar amounts. This avoids runtime coercion cost (as integers internally map immediately to floating points).
+
+\vspace{10pt}
+\textbf{Question 4: Side Effects in Expressions (Ch. 7)} \\
+Consider the difference between a functional language's expression execution and ANS expressions:
+\begin{lstlisting}[language=C]
+let mass = 0.0;
+mass += element.atomic_mass * formula[element];
+\end{lstlisting}
+Describe how structural predictability is enforced in ANS's \code{+=} assignment operation. 
+
+\textit{Answer Sketch:} Following Sebesta's rule of state-mutation tracking, ANS entirely strips expression evaluations of implicit side effects. Modifying state requires explicit imperative mapping (\code{let} and \code{+=}). The AST explicitly treats assignments differently from binary expression nodes to enforce structural intent cleanly.
+
+\vspace{10pt}
+\textbf{Question 5: Named Constants and Lifetimes (Ch. 5)} \\
+Does ANS feature traditional "named constants" (like \code{const} in C or \code{final} in Java)? Explain how domain types like \code{element} and \code{compound} fulfill this role once their bindings are established.
+
+\textit{Answer Sketch:} While there is no explicit \code{const} keyword for variables, declarations of \code{element} and \code{compound} are inherently immutable once bound in the global chemistry table. Their lifetime corresponds to the entire execution of the program, acting exactly as named constants within the domain logic.
+
+\vspace{10pt}
+\textbf{Question 6: Operator Overloading and Type Checking (Ch. 7)} \\
+Analyze the use of the \code{+} operator in \code{CH4 + 2*O2} versus its use in a standard arithmetic expression like \code{mass + 5.0}. How does the static type checker resolve this operator overloading?
+
+\textit{Answer Sketch:} Operator overloading allows multiple meanings for the same symbol. The ANS type checker resolves this statically by inspecting the operand types. If operands involve \code{FORMULA\_LITERAL}s, \code{+} creates a reaction composition. If operands are \code{Number}s, it performs standard arithmetic addition.
+
+\vspace{10pt}
+\textbf{Question 7: Operational Semantics of Loops (Ch. 3)} \\
+When executing a \code{for (let element in formula)} loop, describe the operational steps the interpreter applies to modify the abstract machine state on each iteration.
+
+\textit{Answer Sketch:} 1. The interpreter evaluates the target \code{formula} to retrieve its element iteration order. 2. A new lexical scope is pushed onto the environment stack. 3. The loop binds the \code{element} variable to the first symbol. 4. The body executes. 5. This repeats (updating the item binding) until the collection is exhausted, after which the local environment frame is popped.
+
+\end{document}
