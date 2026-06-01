@@ -138,6 +138,23 @@ Focusing on the Part 2 scope, it connects your specific design decisions nativel
 \end{itemize}
 
 % =========================================================
+\section{Design Rationale \& Language Evaluation (Sebesta Ch. 1 \& Section 4.8)}
+\subsection*{Theoretical Foundations}
+\begin{itemize}
+    \item \textbf{Readability \& Writability:} The ease with which programs can be read, understood, and created.
+    \item \textbf{Reliability:} How well a program conforms to its specifications under all conditions.
+    \item \textbf{Orthogonality:} A relatively small set of primitive constructs can be combined in a relatively small number of ways. High orthogonality means fewer exceptions to rules.
+    \item \textbf{Cost:} System costs involving execution, compilation, training, and testing.
+\end{itemize}
+
+\subsection*{ANS Implementation Rules}
+\begin{itemize}
+    \item \textbf{Writability Focus:} ANS syntax mirrors actual chemistry terminology (\code{element}, \code{compound}, \code{reaction}). Constructs like \code{CH4 + 2*O2} make it highly writable for its target domain.
+    \item \textbf{High Reliability:} Validating formula tokens against previously declared elements and ensuring reactions are statically \code{balanced} at compile time heavily prioritizes reliability for theoretical stoichiometry.
+    \item \textbf{Cost \& Orthogonality Trade-off:} ANS explicitly sacrifices general-purpose orthogonality. Instead of lists or generic classes, users strictly rely on domain structural types. This increases compiler complexity (cost of lexing/parsing unique literal rules) but secures domain safety.
+\end{itemize}
+
+% =========================================================
 \newpage
 \section*{Practice Questions}
 \textit{Attempt these questions using Sebesta's core terminology as you analyze the ANS architecture.}
@@ -197,5 +214,11 @@ Analyze the use of the \code{+} operator in \code{CH4 + 2*O2} versus its use in 
 When executing a \code{for (let element in formula)} loop, describe the operational steps the interpreter applies to modify the abstract machine state on each iteration.
 
 \textit{Answer Sketch:} 1. The interpreter evaluates the target \code{formula} to retrieve its element iteration order. 2. A new lexical scope is pushed onto the environment stack. 3. The loop binds the \code{element} variable to the first symbol. 4. The body executes. 5. This repeats (updating the item binding) until the collection is exhausted, after which the local environment frame is popped.
+
+\vspace{10pt}
+\textbf{Question 8: Language Evaluation \& Readability/Writability Trade-offs (Ch. 1 \& Section 4.8)} \\
+Why does ANS lack general-purpose data structures like generic Lists or Classes, and how does this affect its Orthogonality?
+
+\textit{Answer Sketch:} ANS intentionally sacrifices Orthogonality to maximize Writability and Reliability within its specific domain (Chemistry). Introducing general-purpose classes would clutter the strictly imperative/declarative approach of declaring stoichiometric constants. By restricting structures purely to \code{element}, \code{compound}, and \code{reaction}, ANS enforces safety at the cost of being useless for non-chemical scripting tasks.
 
 \end{document}

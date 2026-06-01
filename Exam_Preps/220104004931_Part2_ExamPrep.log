@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  1 JUN 2026 14:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  1 JUN 2026 14:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -622,28 +622,35 @@ exlive/2026basic/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texliv
 e/2026basic/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 137.
- [2]
+ [2] [3]
 (/usr/local/texlive/2026basic/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
 (/usr/local/texlive/2026basic/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
 )
-[3] [4] (./220104004931_Part2_ExamPrep.aux)
+[4] [5] (./220104004931_Part2_ExamPrep.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
-Package rerunfilecheck Info: File `220104004931_Part2_ExamPrep.out' has not cha
-nged.
-(rerunfilecheck)             Checksum: 083918278234CCA7B0784D3A1B93D305;1046.
+
+
+Package rerunfilecheck Warning: File `220104004931_Part2_ExamPrep.out' has chan
+ged.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `220104004931_Part2_ExamPrep.out':
+(rerunfilecheck)             Before: 083918278234CCA7B0784D3A1B93D305;1046
+(rerunfilecheck)             After:  E1332335A58BF4AFEEEB85ABEF9098C3;1471.
  ) 
 Here is how much of TeX's memory you used:
- 15536 strings out of 469006
- 244244 string characters out of 5454814
- 935092 words of memory out of 5000000
+ 15554 strings out of 469006
+ 244439 string characters out of 5454814
+ 935381 words of memory out of 5000000
  43906 multiletter control sequences out of 15000+600000
- 681614 words of font info for 130 fonts, out of 8000000 for 9000
+ 682228 words of font info for 137 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  75i,13n,83p,1024b,1246s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></u
@@ -657,10 +664,10 @@ xmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2026basic/texmf
 /fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2026basic/texmf-dist/fonts
 /type1/public/lm/lmtk10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type
 1/public/lm/lmtt10.pfb>
-Output written on 220104004931_Part2_ExamPrep.pdf (4 pages, 266757 bytes).
+Output written on 220104004931_Part2_ExamPrep.pdf (5 pages, 270960 bytes).
 PDF statistics:
- 124 PDF objects out of 1000 (max. 8388607)
- 94 compressed objects within 1 object stream
- 25 named destinations out of 1000 (max. 500000)
+ 131 PDF objects out of 1000 (max. 8388607)
+ 100 compressed objects within 1 object stream
+ 29 named destinations out of 1000 (max. 500000)
  32289 words of extra memory for PDF output out of 35830 (max. 10000000)
 
